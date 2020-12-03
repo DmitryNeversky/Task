@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -25,6 +27,14 @@ public class User {
     private String avatarPath;
 
     @Enumerated(EnumType.STRING)
-    private IdeaStatus ideaStatus;
+    private Role role;
+
+    @OneToMany(mappedBy = "user")
+    @ElementCollection
+    private List<Idea> ideas = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    @ElementCollection
+    private List<Notification> notifications = new ArrayList<>();
 
 }

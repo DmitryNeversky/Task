@@ -1,25 +1,21 @@
 package org.magnit.task.entities;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Data
-@NoArgsConstructor
-public class Idea {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private long id;
 
     private String title;
-    private String description;
-
-    @Enumerated(EnumType.STRING)
-    private IdeaStatus ideaStatus;
+    private String notify;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
+
 }
