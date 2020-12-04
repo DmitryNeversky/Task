@@ -18,7 +18,7 @@ public class Idea {
     private String description;
 
     @Enumerated(EnumType.STRING)
-    private IdeaStatus ideaStatus;
+    private IdeaStatus status;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;

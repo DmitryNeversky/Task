@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,18 +19,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    private String name;
-    private String serName;
-    private String secondName;
+    private @NotEmpty(message = "Поле не должно быть пустым") String name;
+    private @NotEmpty(message = "Поле не должно быть пустым") String serName;
+    private @NotEmpty(message = "Поле не должно быть пустым") String secondName;
 
-    private String division;
+    private @NotEmpty(message = "Поле не должно быть пустым") String division;
 
-    private String email;
-    private String password;
+    private @NotEmpty(message = "Поле не должно быть пустым") @Email String username;
+    private @NotEmpty(message = "Поле не должно быть пустым") String password;
+
     private String avatarPath;
 
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Roles role;
 
     @OneToMany(mappedBy = "user")
     @ElementCollection
