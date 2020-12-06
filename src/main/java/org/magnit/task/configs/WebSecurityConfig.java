@@ -29,10 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login", "/registration").anonymous()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
+                .formLogin().loginPage("/login")
                 .defaultSuccessUrl("/", true)
                 .and()
                 .logout()
+                .deleteCookies("JSESSIONID")
                 .logoutSuccessUrl("/");
     }
 

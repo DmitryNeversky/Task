@@ -77,21 +77,14 @@
                         <div class="dropdown for-notification">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="notification" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-bell"></i>
-                                <span class="count bg-danger">~3~</span>
+                                <span class="count bg-danger" th:text="${user.getNotifications().size()}">~3~</span>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="notification">
                                 <p class="red">Уведомления</p>
-                                <a class="dropdown-item media" href="#">
+                                <a class="dropdown-item media" th:each="notify : ${user.getNotifications()}" href="#">
                                     <i class="fa fa-check"></i>
-                                    <p>Ваша идея ~Idea~ одобрена</p>
-                                </a>
-                                <a class="dropdown-item media" href="#">
-                                    <i class="fa fa-info"></i>
-                                    <p>Ваша идея ~Idea~ не принята</p>
-                                </a>
-                                <a class="dropdown-item media" href="#">
-                                    <i class="fa fa-warning"></i>
-                                    <p>Ваша идея ~Idea~ на рассмотрении</p>
+                                    <p th:text="${notify.getTitle()}">Ваша идея ~Idea~ одобрена</p>
+                                    <p th:text="${notify.getNotify()}">Ваша идея ~Idea~ одобрена</p>
                                 </a>
                             </div>
                         </div>
@@ -122,7 +115,9 @@
 
                         <div class="user-menu dropdown-menu">
                             <a class="nav-link" th:href="${'/profile/id' + user.id}"><i class="fa fa-user"></i>Аккаунт</a>
-                            <a class="nav-link" href="/logout"><i class="fa fa-power-off"></i>Выйти</a>
+                            <form th:action="@{/logout}" th:method="POST">
+                                <input type="submit" value="Выйти">
+                            </form>
                         </div>
                     </div>
 
@@ -145,7 +140,7 @@
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">~23569~</span></div>
+                                            <div class="stat-text"><span class="count" th:text="${ideaCount}">~23569~</span></div>
                                             <div class="stat-heading">Идей</div>
                                         </div>
                                     </div>
@@ -163,7 +158,7 @@
                                     </div>
                                     <div class="stat-content">
                                         <div class="text-left dib">
-                                            <div class="stat-text"><span class="count">~2986~</span></div>
+                                            <div class="stat-text"><span class="count" th:text="${userCount}">~2986~</span></div>
                                             <div class="stat-heading">Зарегистрировано</div>
                                         </div>
                                     </div>
@@ -173,15 +168,15 @@
                     </div>
                 </div>
                 <!-- /Widgets -->
-                <div class="card">
+                <div class="card" th:each="idea : ${ideas}">
                     <div class="card-body row">
-                        <h4 class="box-title col-lg-11">~Title~</h4>
-                        <h4 class="box-title col-lg-1">~Status~</h4>
+                        <h4 class="box-title col-lg-11" th:text="${idea.title}">~Title~</h4>
+                        <h4 class="box-title col-lg-1" th:text="${idea.status}">~Status~</h4>
                     </div>
-                    <div class="card-body"><p>~Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.~</p></div>
+                    <div class="card-body" th:text="${idea.description}"><p>~Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.~</p></div>
                     <div class="card-body row">
-                        <h4 class="box-title col-lg-10">~Name~</h4>
-                        <h4 class="box-title col-lg-2">~Check~</h4>
+                        <h4 class="box-title col-lg-10" th:text="${idea.user.getFullName() + '(' + idea.user.division + ')'}">~Name~</h4>
+                        <a th:href="${'idea-' + idea.id}" class="box-title col-lg-2">Посмотреть</a>
                     </div>
                 </div>
                 <div class="clearfix"></div>
@@ -199,8 +194,7 @@
                         Краснодар 2020
                     </div>
                     <div class="col-sm-6 text-right">
-                        Designed by <a href="https://colorlib.com">Colorlib</a>,
-                        Functionalized by <a href="https://vk.com/id194203407">Dmitry</a>
+                        Powered by <a href="https://vk.com/id194203407">Dmitry</a>
                     </div>
                 </div>
             </div>

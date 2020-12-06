@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,4 +40,7 @@ public class User {
     @ElementCollection
     private List<Notification> notifications = new ArrayList<>();
 
+    public String getFullName(){
+        return name + " " + serName + " " + secondName;
+    }
 }

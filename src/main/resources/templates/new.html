@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание идеи</title>
+</head>
+<body>
+<form action="/" th:action="@{/add}" th:method="POST" th:object="${idea}">
+    <label><input type="text" th:field="*{title}"></label>
+    <label><input type="text" th:field="*{description}"></label>
+    <input type="submit" value="Publish">
+</form>
+</body>
+</html>

@@ -1,28 +1,48 @@
 package org.magnit.task.controllers;
 
-import org.magnit.task.entities.Idea;
-import org.magnit.task.entities.User;
+import org.magnit.task.entities.*;
 import org.magnit.task.repositories.IdeaRepository;
+import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
-@RequestMapping("idea")
 public class IdeaController {
 
-    private final UserRepository userRepository;
     private final IdeaRepository ideaRepository;
+    private final UserRepository userRepository;
+    private final NotificationRepository notificationRepository;
 
-    public IdeaController(UserRepository userRepository, IdeaRepository ideaRepository) {
-        this.userRepository = userRepository;
+    public IdeaController(IdeaRepository ideaRepository, UserRepository userRepository, NotificationRepository notificationRepository) {
         this.ideaRepository = ideaRepository;
+        this.userRepository = userRepository;
+        this.notificationRepository = notificationRepository;
+    }
+
+    @GetMapping
+    public String getIndexPage(Model model){
+
+        List<Idea> ideas = ideaRepository.findAll();
+        model.addAttribute("ideas", ideas);
+        model.addAttribute("userCount", userRepository.count());
+        model.addAttribute("ideaCount", ideaRepository.count());
+
+        return "index";
+    }
+
+    @GetMapping("/idea-{idea}")
+    public String getIdea(@PathVariable Idea idea, Model model){
+
+        model.addAttribute("idea", idea);
+
+        model.addAttribute("status", IdeaStatus.values());
+
+        return "/idea";
     }
 
     @GetMapping("/new")
@@ -30,7 +50,7 @@ public class IdeaController {
 
         model.addAttribute("idea", new Idea());
 
-        return "idea";
+        return "/new";
     }
 
     @PostMapping("/add")
@@ -43,6 +63,12 @@ public class IdeaController {
         ideaRepository.save(idea);
 
         return "redirect:/";
+    }
+
+    @ModelAttribute
+    public void getModel(Principal principal, Model model){
+        User user = userRepository.findByUsername(principal.getName());
+        model.addAttribute("user", user);
     }
 
 }
