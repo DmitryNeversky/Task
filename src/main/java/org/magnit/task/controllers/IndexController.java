@@ -2,7 +2,6 @@ package org.magnit.task.controllers;
 
 import org.magnit.task.entities.*;
 import org.magnit.task.repositories.IdeaRepository;
-import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,16 +11,14 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-public class IdeaController {
+public class IndexController {
 
     private final IdeaRepository ideaRepository;
     private final UserRepository userRepository;
-    private final NotificationRepository notificationRepository;
 
-    public IdeaController(IdeaRepository ideaRepository, UserRepository userRepository, NotificationRepository notificationRepository) {
+    public IndexController(IdeaRepository ideaRepository, UserRepository userRepository) {
         this.ideaRepository = ideaRepository;
         this.userRepository = userRepository;
-        this.notificationRepository = notificationRepository;
     }
 
     @GetMapping
