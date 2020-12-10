@@ -31,7 +31,7 @@ public class IndexController {
     }
 
     @GetMapping
-    public String getIndexPage(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 2) Pageable pageable, Model model){
+    public String getIndexPage(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model){
 
         Page<Idea> ideas = ideaRepository.findAll(pageable);
         model.addAttribute("ideas", ideas);
@@ -40,48 +40,6 @@ public class IndexController {
         model.addAttribute("ideaCount", ideaRepository.count());
 
         model.addAttribute("pageable", pageable);
-
-        return "index";
-    }
-
-//    @PostMapping
-//    public Model doFilter(
-//            @RequestParam(required = false) IdeaStatus status,
-//            @RequestParam(required = false) int size,
-//            Model model
-//    ){
-//        // Сортировка по статусу
-//        if (status != null)
-//            model.addAttribute(ideaRepository.findByStatus(status));
-//
-//        // Сортировка по релевантности
-//            // <Скоро появится>
-//
-//        // Кол-во отображаемых идей
-//        model.addAttribute("ideas", ideaRepository.findAll(PageRequest.of(0, size)));
-//
-//        // Сортировка по ключевым словам
-//            // <Скоро появится>
-//
-//
-//        return model;
-//    }
-
-//  Зачем мне отдельная страница идеи? Планирую разворачивать полностью идею из списка по клику на кнопку "Подробнее".
-//    @GetMapping("/idea-{idea}")
-//    public String getIdea(@PathVariable Idea idea, Model model){
-//
-//        model.addAttribute("idea", idea);
-//
-//        model.addAttribute("status", IdeaStatus.values());
-//
-//        return "index";
-//    }
-
-    @GetMapping("/new")
-    public String getNewIdea(Model model){
-
-        model.addAttribute("idea", new Idea());
 
         return "index";
     }

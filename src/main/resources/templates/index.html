@@ -83,17 +83,6 @@
                             </label>
                         </div>
                         <div class="form-group">
-                            <label>
-                                <select class="form-control">
-                                    <option>Кол-во видимых идей</option>
-                                    <option>4</option>
-                                    <option>6</option>
-                                    <option>8</option>
-                                    <option>10</option>
-                                </select>
-                            </label>
-                        </div>
-                        <div class="form-group">
                             <label for="exampleFormControlInput1"></label><input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Найти">
                         </div>
                         <div class="form-group">
@@ -121,13 +110,21 @@
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${pageable.pageNumber eq 0} ? 'disabled'">
-                            <a class="page-link" th:href="@{/(page=${pageable.pageNumber -1})}"><i class="fa fa-arrow-left"></i></a>
+                            <a class="page-link" th:href="@{/(page=${pageable.pageNumber -1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-left"></i></a>
                         </li>
-                        <li class="page-item" th:each="i : ${#numbers.sequence( 0, ideas.size)}" th:classappend="${pageable.pageNumber eq i} ? 'active'">
-                            <a class="page-link" th:href="@{/(page=${i})}" th:text="${i+1}">~1~</a>
+                        <li class="page-item" th:each="i : ${#numbers.sequence( 0, ideas.totalPages -1)}" th:classappend="${pageable.pageNumber eq i} ? 'active'">
+                            <a class="page-link" th:href="@{/(page=${i}, size=${pageable.pageSize})}" th:text="${i+1}">~1~</a>
                         </li>
                         <li class="page-item" th:classappend="${pageable.pageNumber eq ideas.size} ? 'disabled'">
-                            <a class="page-link" th:href="@{/(page=${pageable.pageNumber +1})}"><i class="fa fa-arrow-right"></i></a>
+                            <a class="page-link" th:href="@{/(page=${pageable.pageNumber +1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
+                            <a class="page-link" th:href="@{/(page=${pageable.pageNumber}, size=${i})}" th:text="${i}">~1~</a>
                         </li>
                     </ul>
                 </nav>
