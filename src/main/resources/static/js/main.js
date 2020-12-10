@@ -100,6 +100,10 @@ jQuery(document).ready(function($) {
 		} 
 		
 	});
-  
- 
+
+	function truncateText(selector, maxLength) {
+		$(selector).text((i, txt) => txt.length > maxLength ? txt.substr(0,maxLength) + "..." : txt);
+	}
+
+	truncateText(".description", 200);
 });

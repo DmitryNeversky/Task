@@ -17,6 +17,7 @@
 
         <!-- Content -->
         <div class="content">
+
             <!-- Animated -->
             <div class="animated fadeIn">
 
@@ -86,10 +87,19 @@
                             <label for="exampleFormControlInput1"></label><input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Найти">
                         </div>
                         <div class="form-group">
-                            <input type="submit" class="btn btn-danger" value="Поиск">
+                            <input type="submit" class="btn btn-outline-danger" value="Поиск">
                         </div>
                     </form>
                 </div>
+
+                <nav aria-label="Page navigation example" class="float-left">
+                    <ul class="pagination">
+                        <li class="page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
+                            <a class="page-link" th:href="@{/(page=0, size=${i})}" th:text="${i}">~1~</a>
+                        </li>
+                    </ul>
+                </nav>
+                <a href="#" class="btn btn-danger float-right">Добавить <i class="fa fa-plus"></i></a>
 
                 <!-- Idea -->
                 <div class="card" th:each="idea : ${ideas}">
@@ -100,7 +110,7 @@
                         <span class="badge badge-danger float-right mt-1" th:if="${idea.status == idea.status.DENIED}">Отказано</span>
                     </div>
                     <div class="card-body">
-                        <p class="card-text" th:text="${idea.description}">~Description~</p>
+                        <p class="card-text description" th:text="${idea.description}">~Description~</p>
                     </div>
                     <div class="card-body">
                         <a href="#"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
@@ -115,16 +125,8 @@
                         <li class="page-item" th:each="i : ${#numbers.sequence( 0, ideas.totalPages -1)}" th:classappend="${pageable.pageNumber eq i} ? 'active'">
                             <a class="page-link" th:href="@{/(page=${i}, size=${pageable.pageSize})}" th:text="${i+1}">~1~</a>
                         </li>
-                        <li class="page-item" th:classappend="${pageable.pageNumber eq ideas.size} ? 'disabled'">
+                        <li class="page-item" th:classappend="${pageable.pageNumber eq ideas.totalPages - 1} ? 'disabled'">
                             <a class="page-link" th:href="@{/(page=${pageable.pageNumber +1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-right"></i></a>
-                        </li>
-                    </ul>
-                </nav>
-
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-center">
-                        <li class="page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
-                            <a class="page-link" th:href="@{/(page=${pageable.pageNumber}, size=${i})}" th:text="${i}">~1~</a>
                         </li>
                     </ul>
                 </nav>

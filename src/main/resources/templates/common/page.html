@@ -37,15 +37,14 @@
         <div class="top-right">
             <div class="header-menu">
                 <div class="header-left">
-                    <a href="#" class="btn btn-primary">Добавить <i class="fa fa-plus"></i></a>
                     <div class="dropdown for-message">
                         <button class="btn btn-secondary dropdown-toggle notification-button" type="button" id="message" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="fa fa-bell"></i>
                             <span class="count bg-danger notification-counter" th:if="${userNotifyCount > 0}" th:text="${userNotifyCount}">~1~</span>
                         </button>
-                        <div class="dropdown-menu" aria-labelledby="message">
+                        <div class="dropdown-menu border rounded" aria-labelledby="message">
 <!--                            <p class="red">Уведомления</p>-->
-                            <a class="notify dropdown-item media" href="#" th:each="notify : ${userNotifies}" th:data-id="${notify.id}">
+                            <a class="notify dropdown-item media border-bottom pb-2" href="#" th:each="notify : ${userNotifies}" th:data-id="${notify.id}" th:style="${notify.look eq false} ? 'background-color: #ff00000a'">
                                 <div class="message media-body">
                                     <span class="name float-left" th:text="${notify.title}">~Title~</span>
                                     <span class="time float-right" th:text="${notify.date}">~12:34~</span>
@@ -61,7 +60,7 @@
                         <img class="user-avatar rounded-circle" src="/static/images/admin.jpg" alt="User Avatar">
                     </a>
 
-                    <div class="user-menu dropdown-menu">
+                    <div class="user-menu dropdown-menu border rounded">
                         <a class="nav-link" href="profile"><i class="fa fa-user"></i>Аккаунт</a>
                         <a class="nav-link" th:href="@{/logout}"><i class="fa fa-power-off"></i>Выйти</a>
                     </div>
