@@ -75,21 +75,15 @@ public class IndexController {
         notificationRepository.save(notification);
     }
 
-    @ModelAttribute
-    public void getModel(Principal principal, Model model){
-        User user = userRepository.findByUsername(principal.getName());
-        model.addAttribute("user", user);
-    }
-
     // Header panel
     @ModelAttribute
     public void getHeader(Principal principal, Model model){
         User user = userRepository.findByUsername(principal.getName());
         model.addAttribute("userNotifies", user.getNotifications());
+        model.addAttribute("user", user);
 
         List<Notification> notifications = notificationRepository.findByLook(false);
 
         model.addAttribute("userNotifyCount", notifications.size());
     }
-
 }

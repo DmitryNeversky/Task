@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Еще одна идея</title>
+    <th:block th:insert="common/page :: head"/>
+</head>
+
+<body>
+<!-- Left Panel -->
+<th:block th:insert="common/page :: leftPanel"/>
+
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+
+    <!-- Header-->
+    <th:block th:insert="common/page :: header"/>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Animated -->
+        <div class="animated fadeIn">
+            <form th:method="POST" th:action="@{/ideas/add}" th:object="${idea}">
+
+                <div class="form-group">
+                    <label><input type="text" class="form-control" th:field="*{title}"></label>
+                </div>
+
+                <div class="form-group">
+                    <label><input type="text" class="form-control" th:field="*{description}"></label>
+                </div>
+
+                <button type="submit">Готово</button>
+            </form>
+        </div><!-- .animated -->
+    </div><!-- /.content -->
+
+    <div class="clearfix"></div>
+
+    <!-- Footer -->
+    <th:block th:insert="common/page :: footer"/>
+
+</div><!-- /#right-panel -->
+</body>
+</html>

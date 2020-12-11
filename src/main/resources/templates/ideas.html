@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Идеи</title>
+    <th:block th:insert="common/page :: head"/>
+</head>
+
+<body>
+<!-- Left Panel -->
+<th:block th:insert="common/page :: leftPanel"/>
+
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+
+    <!-- Header-->
+    <th:block th:insert="common/page :: header"/>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Animated -->
+        <div class="animated fadeIn">
+
+            <!-- Filter -->
+            <div class="filter">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label>
+                            <select class="form-control">
+                                <option>Выберите статус</option>
+                                <option>Одобрено</option>
+                                <option>На рассмотрении</option>
+                                <option>Отказано</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <select class="form-control">
+                                <option>Выберите фильтр</option>
+                                <option>Популярное</option>
+                                <option>Менее популярное</option>
+                                <option>Сначала свежее</option>
+                                <option>Сначала старое</option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1"></label><input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Найти">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-outline-danger" value="Поиск">
+                    </div>
+                </form>
+            </div>
+
+            <nav aria-label="Page navigation example" class="float-left">
+                <ul class="pagination">
+                    <li class="page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
+                        <a class="page-link" th:href="@{/ideas/(page=0, size=${i})}" th:text="${i}">~1~</a>
+                    </li>
+                </ul>
+            </nav>
+            <a th:href="@{/ideas/new}" class="btn btn-danger float-right">Добавить <i class="fa fa-plus"></i></a>
+
+            <!-- Idea -->
+            <div class="card" th:each="idea : ${ideas}">
+                <div class="card-header">
+                    <span th:text="${idea.title}">~Title~</span>
+                    <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
+                    <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
+                    <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
+                    <span class="badge badge-light float-right mt-1" th:if="${idea.status == null}">Без статуса</span>
+                </div>
+                <div class="card-body">
+                    <p class="card-text description" th:text="${idea.description}">~Description~</p>
+                </div>
+                <div class="card-body">
+                    <a href="#"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                    <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
+                </div>
+            </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${pageable.pageNumber eq 0} ? 'disabled'">
+                        <a class="page-link" th:href="@{/ideas/(page=${pageable.pageNumber -1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-left"></i></a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence( 0, ideas.totalPages)}" th:classappend="${pageable.pageNumber eq i} ? 'active'">
+                        <a class="page-link" th:href="@{/ideas/(page=${i}, size=${pageable.pageSize})}" th:text="${i+1}">~1~</a>
+                    </li>
+                    <li class="page-item" th:classappend="${pageable.pageNumber eq ideas.totalPages} ? 'disabled'">
+                        <a class="page-link" th:href="@{/ideas/(page=${pageable.pageNumber +1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-right"></i></a>
+                    </li>
+                </ul>
+            </nav>
+        </div><!-- .animated -->
+    </div><!-- /.content -->
+
+    <div class="clearfix"></div>
+
+    <!-- Footer -->
+    <th:block th:insert="common/page :: footer"/>
+
+</div><!-- /#right-panel -->
+</body>
+</html>

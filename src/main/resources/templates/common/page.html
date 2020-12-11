@@ -43,7 +43,6 @@
                             <span class="count bg-danger notification-counter" th:if="${userNotifyCount > 0}" th:text="${userNotifyCount}">~1~</span>
                         </button>
                         <div class="dropdown-menu border rounded" aria-labelledby="message">
-<!--                            <p class="red">Уведомления</p>-->
                             <a class="notify dropdown-item media border-bottom pb-2" href="#" th:each="notify : ${userNotifies}" th:data-id="${notify.id}" th:style="${notify.look eq false} ? 'background-color: #ff00000a'">
                                 <div class="message media-body">
                                     <span class="name float-left" th:text="${notify.title}">~Title~</span>
@@ -96,7 +95,7 @@
                         <a href="/"><i class="menu-icon fa fa-laptop"></i>Dashboard </a>
                     </li>
                     <li class="menu-title">UI elements</li><!-- /.menu-title -->
-                    <li><a href="#"><i class="menu-icon fa fa-tasks"></i>Идеи</a></li>
+                    <li><a href="/ideas"><i class="menu-icon fa fa-tasks"></i>Идеи</a></li>
                     <li><a href="popular"><i class="menu-icon fa fa-bar-chart-o"></i>Популярные идеи</a></li>
                     <li><a href="profile"><i class="menu-icon fa fa-user"></i>Профиль</a></li>
                 </ul>

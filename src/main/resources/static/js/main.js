@@ -105,5 +105,5 @@ jQuery(document).ready(function($) {
 		$(selector).text((i, txt) => txt.length > maxLength ? txt.substr(0,maxLength) + "..." : txt);
 	}
 
-	truncateText(".description", 200);
+	truncateText(".preDescription", 200);
 });

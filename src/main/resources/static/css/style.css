@@ -2067,7 +2067,7 @@ header .form-inline {
 .card .dropdown.float-right .dropdown-menu {
   left: inherit !important;
   right: 0 !important;
-  top: 93% !important; }
+  top: 100% !important; }
 
 .dataTables_paginate .pagination {
   border-radius: 0; }
@@ -2545,5 +2545,23 @@ footer.site-footer {
 
 .page-item.active .page-link{
   background-color: #ff00009e;
+  border: none;
+}
+
+.status-dropdown button{
+  border: none;
+  background: none;
+}
+
+.status-dropdown button:after{
+  display: none;
+}
+
+.status-dropdown .dropdown-menu{
+  width: auto;
+  justify-content: center;
+}
+
+.status-dropdown .dropdown-menu input{
   border: none;
 }

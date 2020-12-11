@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Идея</title>
+    <th:block th:insert="common/page :: head"/>
+</head>
+
+<body>
+<!-- Left Panel -->
+<th:block th:insert="common/page :: leftPanel"/>
+
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+
+    <!-- Header-->
+    <th:block th:insert="common/page :: header"/>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Animated -->
+        <div class="animated fadeIn">
+            <div class="card">
+                <div class="card-header">
+                    <span class="float-left" th:text="${idea.title}">~Title~</span>
+                    <div th:if="${user}">
+                        <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
+                        <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
+                        <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
+                        <span class="badge badge-light float-right mt-1" th:if="${idea.status == null}">Без статуса</span>
+                    </div>
+                    <div th:if="${admin}" class="dropdown status-dropdown float-right">
+                        <button class="dropdown-toggle" data-toggle="dropdown">
+                            <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
+                            <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
+                            <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
+                            <span class="badge badge-light float-right mt-1" th:if="${idea.status == null}">Без статуса</span>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="message">
+                            <form method="post" id="load-status" th:action="@{'/ideas/setStatus-' + ${idea.id}}">
+                                <input type="submit" class="badge-success" name="status" th:value="${status.APPROVED.name}">
+                                <input type="submit" class="mt-1 badge-warning" name="status" th:value="${status.LOOKING.name}">
+                                <input type="submit" class="mt-1 badge-danger" name="status" th:value="${status.DENIED.name}">
+                            </form>
+                        </div>
+                    </div>
+                    </div>
+                <div class="card-body">
+                    <p class="card-text" th:text="${idea.description}">~Description~</p>
+                </div>
+                <div class="card-body">
+                    <a href="#"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                </div>
+            </div>
+        </div><!-- .animated -->
+    </div><!-- /.content -->
+
+    <div class="clearfix"></div>
+
+    <!-- Footer -->
+    <th:block th:insert="common/page :: footer"/>
+
+</div><!-- /#right-panel -->
+</body>
+</html>

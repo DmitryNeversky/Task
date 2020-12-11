@@ -18,14 +18,13 @@ public class Idea {
 
     private String title;
     private String description;
+    private long likes;
 
     @Enumerated(EnumType.STRING)
     private IdeaStatus status;
 
     @DateTimeFormat
     private Date date;
-
-    private long likes;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;

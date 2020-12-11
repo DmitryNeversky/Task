@@ -14,4 +14,13 @@ public enum IdeaStatus {
     IdeaStatus(String name) {
         this.name = name;
     }
+
+    public static IdeaStatus getValueByName(String name){
+        return switch (name) {
+            case "Одобрено" -> APPROVED;
+            case "На рассмотрении" -> LOOKING;
+            case "Отказано" -> DENIED;
+            default -> null;
+        };
+    }
 }
