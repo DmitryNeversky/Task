@@ -20,14 +20,23 @@
 
         <!-- Animated -->
         <div class="animated fadeIn">
-            <form th:method="POST" th:action="@{/ideas/add}" th:object="${idea}">
+            <form method="post" th:action="@{/ideas/upload}" enctype="multipart/form-data">
 
                 <div class="form-group">
-                    <label><input type="text" class="form-control" th:field="*{title}"></label>
+                    <label><input type="text" class="form-control" id="title"></label>
                 </div>
 
                 <div class="form-group">
-                    <label><input type="text" class="form-control" th:field="*{description}"></label>
+                    <label><input type="text" class="form-control" id="description"></label>
+                </div>
+
+                <div class="form-group">
+                    <label for="partImages"><i class="fa fa-file-image-o"></i></label>
+                    <input type="file" id="partImages" name="file" accept="image/*" multiple />
+                </div>
+                <div class="form-group">
+                    <label for="partFiles"><i class="fa fa-file-o"></i></label>
+                    <input type="file" id="partFiles" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple />
                 </div>
 
                 <button type="submit">Готово</button>

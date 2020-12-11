@@ -12,24 +12,24 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("ideas")
 public class IdeaController {
-
-    @Value("upload.path")
-    private String upPath;
 
     private final IdeaRepository ideaRepository;
     private final UserRepository userRepository;
@@ -64,15 +64,42 @@ public class IdeaController {
         return "new";
     }
 
+    private final String UPLOAD_DIR = "C:/Users/Koshey/IdeaProjects/task/src/main/resources/uploads/images/";
+
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
+
+        // check if file is empty
+        if (file.isEmpty()) {
+            attributes.addFlashAttribute("message", "Please select a file to upload.");
+            return "redirect:/";
+        }
+
+        // normalize the file path
+        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+
+        // save the file on the local file system
+        try {
+            Path path = Paths.get(UPLOAD_DIR + UUID.randomUUID() + "_" + fileName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // return success response
+        attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
+
+        return "redirect:/";
+    }
+
     @PostMapping("/add")
-    public String doAdd(@ModelAttribute Idea idea, Principal principal){
-        User user = userRepository.findByUsername(principal.getName());
-
-        idea.setStatus(IdeaStatus.LOOKING);
-        idea.setDate(new Date());
-        idea.setUser(user);
-
-        ideaRepository.save(idea);
+    public String add(@RequestParam String title, @RequestParam String description, @RequestParam(required = false) List<MultipartFile> multipartImages, @RequestParam(required = false) List<MultipartFile> multipartFiles, Principal principal){
+        System.out.println(
+                "title: " + title +
+                " description: " + description +
+                " images: " + multipartImages.size() +
+                " files: " + multipartFiles.size() +
+                " user: " + principal.getName());
 
         return "redirect:/ideas";
     }
