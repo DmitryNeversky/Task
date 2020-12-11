@@ -16,6 +16,7 @@ public class Notification {
 
     private String title;
     private String message;
+    private long ideaId;
 
     @DateTimeFormat
     private Date date;
@@ -25,4 +26,20 @@ public class Notification {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
 
+    public Notification(){
+
+    }
+
+    public Notification(String title, String message, User user, long ideaId) {
+        this.title = title;
+        this.message = message;
+        this.user = user;
+        this.ideaId = ideaId;
+    }
+
+    @PrePersist
+    private void prePersist(){
+        setDate(new Date());
+        setLook(false);
+    }
 }

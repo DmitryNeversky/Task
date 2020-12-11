@@ -82,6 +82,15 @@ public class IdeaController {
         idea.setStatus(IdeaStatus.getValueByName(status));
         ideaRepository.save(idea);
 
+        User user = idea.getUser();
+
+        Notification notification = new Notification(
+                "Изменение статуса",
+                "Статус вашей идеи с заголовком " + idea.getTitle() + " был изменен.",
+                user, idea.getId());
+
+        notificationRepository.save(notification);
+
         return "redirect:idea-" + idea.getId();
     }
 
