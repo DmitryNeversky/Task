@@ -89,13 +89,13 @@ public class IdeaController {
                 continue;
 
             // normalize the file path
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
 
             // save the file on the local file system
             try {
-                Path path = Paths.get(UPLOAD_IMAGE_DIR + UUID.randomUUID() + "_" + fileName);
+                Path path = Paths.get(UPLOAD_IMAGE_DIR + fileName);
                 Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                idea.addImage(path.toString());
+                idea.addImage(pair.getOriginalFilename(), fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -108,19 +108,20 @@ public class IdeaController {
                 continue;
 
             // normalize the file path
-            String fileName = StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
 
             // save the file on the local file system
             try {
-                Path path = Paths.get(UPLOAD_FILE_DIR + UUID.randomUUID() + "_" + fileName);
+                Path path = Paths.get(UPLOAD_FILE_DIR + fileName);
                 Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                idea.addFile(path.toString());
+                idea.addFile(pair.getOriginalFilename(), fileName);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         ideaRepository.save(idea);
+        ideaRepository.flush();
 
         return "redirect:/";
     }
@@ -146,13 +147,9 @@ public class IdeaController {
     public void getHeader(Principal principal, Model model){
 
         User user = userRepository.findByUsername(principal.getName());
+        model.addAttribute("user", user);
 
         model.addAttribute("userNotifies", user.getNotifications());
-
-        if (user.getRole() == Roles.USER)
-            model.addAttribute("user", user);
-        else
-            model.addAttribute("admin", user);
 
         List<Notification> notifications = notificationRepository.findByLook(false);
 
@@ -160,6 +157,9 @@ public class IdeaController {
 
         for(IdeaStatus pair : IdeaStatus.values()){
             model.addAttribute("status", pair);
+        }
+        for(Roles pair : Roles.values()){
+            model.addAttribute("roles", pair);
         }
     }
 }

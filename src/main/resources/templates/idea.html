@@ -23,13 +23,13 @@
             <div class="card">
                 <div class="card-header">
                     <span class="float-left" th:text="${idea.title}">~Title~</span>
-                    <div th:if="${user}">
+                    <div th:if="${user.role == roles.USER}">
                         <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
                         <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
                         <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
                         <span class="badge badge-light float-right mt-1" th:if="${idea.status == null}">Без статуса</span>
                     </div>
-                    <div th:if="${admin}" class="dropdown status-dropdown float-right">
+                    <div th:if="${user.role == roles.MODERATOR}" class="dropdown status-dropdown float-right">
                         <button class="dropdown-toggle" data-toggle="dropdown">
                             <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
                             <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
@@ -44,12 +44,30 @@
                             </form>
                         </div>
                     </div>
-                    </div>
+                    <div class="float-right" th:if="${user.id == idea.user.id}">FFFFFFF</div>
+                </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${idea.description}">~Description~</p>
                 </div>
-                <div class="card-body">
-                    <a href="#"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                <div class="card-body border-top" th:if="!${idea.images.isEmpty()}">
+                    <p class="font-italic">Прикрепленные изображения</p>
+                    <img th:each="image : ${idea.images}" th:src="${'/uploads/images/' + image.value}" alt="image">
+                </div>
+                <div class="card-body" th:if="!${idea.files.isEmpty()}">
+                    <p class="font-italic">Прикрепленные файлы</p>
+                    <div class="attachments">
+                        <a class="mx-2" th:if="${idea.files != null}" th:each="file : ${idea.files}" th:href="@{'/uploads/files/' + ${file.value}}" th:target="_blank">
+                            <img th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">
+                            <img th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">
+                            <img th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">
+                            <br>
+                            <span class="subdescription" th:text="${file.key}"></span>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body border-top">
+                    <a th:href="@{'/profile/id' + ${idea.user.id}}" class="float-left"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                    <p class="float-right" th:text="${idea.date}"></p>
                 </div>
             </div>
         </div><!-- .animated -->

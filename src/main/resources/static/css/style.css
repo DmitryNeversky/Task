@@ -2565,3 +2565,21 @@ footer.site-footer {
 .status-dropdown .dropdown-menu input{
   border: none;
 }
+
+.card-body .attachments{
+  display: flex;
+  text-align: center;
+}
+
+.card-body .attachments a{
+  max-width: 120px;
+}
+
+.card-body .attachments a:hover{
+  opacity: .6;
+}
+
+.card-body .attachments .subdescription{
+  color: #00aced;
+  text-decoration: underline;
+}

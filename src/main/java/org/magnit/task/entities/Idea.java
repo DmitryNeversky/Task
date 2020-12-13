@@ -5,9 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Data
@@ -31,29 +29,33 @@ public class Idea {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
 
-    @ElementCollection
-    @Column(name = "image_name")
-    @JoinColumn(name = "idea_id")
-    private List<String> imageNames = new ArrayList<>();
-
-    @ElementCollection
-    @Column(name = "file_name")
-    @JoinColumn(name = "idea_id")
-    private List<String> fileNames = new ArrayList<>();
-
-    public void addImage(String path){
-        imageNames.add(path);
-    }
-
-    public void addFile(String path){
-        fileNames.add(path);
-    }
-
     public Idea(String title, String description, IdeaStatus status, Date date, User user) {
         this.title = title;
         this.description = description;
         this.status = status;
         this.date = date;
         this.user = user;
+    }
+
+    @ElementCollection
+    @CollectionTable(name = "idea_images_mapping",
+            joinColumns = {@JoinColumn(name = "idea_id", referencedColumnName = "id")})
+    @MapKeyColumn(name = "image_name")
+    @Column(name = "image_uuid")
+    private Map<String, String> images = new HashMap<>();
+
+    public void addImage(String key, String value){
+        images.put(key, value);
+    }
+
+    @ElementCollection
+    @CollectionTable(name = "idea_files_mapping",
+            joinColumns = {@JoinColumn(name = "file_id", referencedColumnName = "id")})
+    @MapKeyColumn(name = "file_name")
+    @Column(name = "file_uuid")
+    private Map<String, String> files = new HashMap<>();
+
+    public void addFile(String key, String value){
+        files.put(key, value);
     }
 }
