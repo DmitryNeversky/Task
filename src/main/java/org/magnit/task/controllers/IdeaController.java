@@ -64,44 +64,65 @@ public class IdeaController {
         return "new";
     }
 
-    private final String UPLOAD_DIR = "C:/Users/Koshey/IdeaProjects/task/src/main/resources/uploads/images/";
+    // It need for optimization
 
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, RedirectAttributes attributes) {
-
-        // check if file is empty
-        if (file.isEmpty()) {
-            attributes.addFlashAttribute("message", "Please select a file to upload.");
-            return "redirect:/";
-        }
-
-        // normalize the file path
-        String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-
-        // save the file on the local file system
-        try {
-            Path path = Paths.get(UPLOAD_DIR + UUID.randomUUID() + "_" + fileName);
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // return success response
-        attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
-
-        return "redirect:/";
-    }
+    private final String UPLOAD_IMAGE_DIR = "C:/Users/Koshey/IdeaProjects/task/src/main/resources/uploads/images/";
+    private final String UPLOAD_FILE_DIR = "C:/Users/Koshey/IdeaProjects/task/src/main/resources/uploads/files/";
 
     @PostMapping("/add")
-    public String add(@RequestParam String title, @RequestParam String description, @RequestParam(required = false) List<MultipartFile> multipartImages, @RequestParam(required = false) List<MultipartFile> multipartFiles, Principal principal){
-        System.out.println(
-                "title: " + title +
-                " description: " + description +
-                " images: " + multipartImages.size() +
-                " files: " + multipartFiles.size() +
-                " user: " + principal.getName());
+    public String uploadFile(
+            @RequestParam String title,
+            @RequestParam String description,
+            @RequestParam(required = false) List<MultipartFile> images,
+            @RequestParam(required = false) List<MultipartFile> files,
+            Principal principal
+    ) {
 
-        return "redirect:/ideas";
+        User user = userRepository.findByUsername(principal.getName());
+
+        Idea idea = new Idea(title, description, IdeaStatus.LOOKING, new Date(), user);
+
+        // Upload Images
+
+        for(MultipartFile pair : images) {
+            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
+                continue;
+
+            // normalize the file path
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+
+            // save the file on the local file system
+            try {
+                Path path = Paths.get(UPLOAD_IMAGE_DIR + UUID.randomUUID() + "_" + fileName);
+                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                idea.addImage(path.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Upload Files
+
+        for(MultipartFile pair : files) {
+            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
+                continue;
+
+            // normalize the file path
+            String fileName = StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+
+            // save the file on the local file system
+            try {
+                Path path = Paths.get(UPLOAD_FILE_DIR + UUID.randomUUID() + "_" + fileName);
+                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                idea.addFile(path.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        ideaRepository.save(idea);
+
+        return "redirect:/";
     }
 
     @PostMapping("setStatus-{idea}")

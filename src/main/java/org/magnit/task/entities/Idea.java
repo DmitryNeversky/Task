@@ -5,7 +5,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -28,4 +30,30 @@ public class Idea {
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
+
+    @ElementCollection
+    @Column(name = "image_name")
+    @JoinColumn(name = "idea_id")
+    private List<String> imageNames = new ArrayList<>();
+
+    @ElementCollection
+    @Column(name = "file_name")
+    @JoinColumn(name = "idea_id")
+    private List<String> fileNames = new ArrayList<>();
+
+    public void addImage(String path){
+        imageNames.add(path);
+    }
+
+    public void addFile(String path){
+        fileNames.add(path);
+    }
+
+    public Idea(String title, String description, IdeaStatus status, Date date, User user) {
+        this.title = title;
+        this.description = description;
+        this.status = status;
+        this.date = date;
+        this.user = user;
+    }
 }
