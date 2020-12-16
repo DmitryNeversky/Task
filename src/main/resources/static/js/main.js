@@ -1,6 +1,20 @@
 $.noConflict();
 
+let remFiles = []
+
 jQuery(document).ready(function($) {
+
+	// console.log($('#0').data('index'))
+	//
+	// let files = document.getElementsByClassName('editFile')
+	// for(let i = 0; i < files.length; i++)
+	// 	console.log(files[i])
+
+	// let images = document.getElementsByClassName('editImage')
+
+	// $('.notify').on('click', function(event) {
+	//
+	// });
 
 	"use strict";
 

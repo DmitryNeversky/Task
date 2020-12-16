@@ -4,8 +4,8 @@ import org.magnit.task.entities.*;
 import org.magnit.task.repositories.IdeaRepository;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
+import org.magnit.task.services.MailSender;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.List;
 
@@ -44,6 +43,12 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("hello")
+    public String getResult(){
+
+        return null;
+    }
+
     @PostMapping("/add")
     public String addIdea(@ModelAttribute Idea idea, Principal principal){
 
@@ -57,22 +62,18 @@ public class IndexController {
         return "redirect:/#idea-" + idea.getId();
     }
 
-    @PostMapping
-    public String setIdeaStatus(@RequestParam int ideaID, @RequestParam("ideaStatus") IdeaStatus ideaStatus){
-
-        Idea idea = ideaRepository.findById(ideaID);
-        idea.setStatus(ideaStatus);
-
-        ideaRepository.save(idea);
-
-        return "redirect:/#idea-" + ideaID;
-    }
-
     @PostMapping("/setNotifyLook")
     public void setNotifyLook(@RequestParam long id ){
         Notification notification = notificationRepository.findById(id);
         notification.setLook(true);
+
         notificationRepository.save(notification);
+    }
+
+    @PostMapping("/removeNotify-{notify}")
+    public String removeNotify(@PathVariable Notification notify){
+        notificationRepository.delete(notify);
+        return "redirect:/ideas";
     }
 
     // Header panel
@@ -82,7 +83,7 @@ public class IndexController {
         model.addAttribute("userNotifies", user.getNotifications());
         model.addAttribute("user", user);
 
-        List<Notification> notifications = notificationRepository.findByLook(false);
+        List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
 
         model.addAttribute("userNotifyCount", notifications.size());
     }

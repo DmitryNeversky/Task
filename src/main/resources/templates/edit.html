@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Изменение идеи</title>
+    <th:block th:insert="common/page :: head"/>
+</head>
+
+<body>
+<!-- Left Panel -->
+<th:block th:insert="common/page :: leftPanel"/>
+
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+
+    <!-- Header-->
+    <th:block th:insert="common/page :: header"/>
+
+    <!-- Content -->
+    <div class="content">
+
+        <!-- Animated -->
+        <div class="animated fadeIn">
+            <form class="card" th:method="POST" th:action="@{'/ideas/idea-' + ${idea.id} + '/edit'}" th:object="${idea}">
+                <div class="card-header">
+                    <input type="text" class="float-left" th:text="${idea.title}"/>
+<!--                    Close & Save-->
+                </div>
+                <div class="card-body">
+                    <input type="text" class="card-text" th:text="${idea.description}"/>
+                </div>
+                <div class="card-body border-top" th:if="!${idea.images.isEmpty()}">
+                    <p class="font-italic">Прикрепленные изображения</p>
+                    <div th:each="image : ${idea.images}">
+                        <img class="editImage" th:src="${'/uploads/images/' + image.value}" th:id="${image.id}" alt="image">
+                    </div>
+                </div>
+                <div class="card-body" th:if="!${idea.files.isEmpty()}">
+                    <p class="font-italic">Прикрепленные файлы</p>
+                    <div class="attachments files">
+                        <div th:each="file, p : ${idea.files}" th:id="${p.index}" th:data-index="${file.value}">
+                            <a class="mx-2 editFile" th:if="${idea.files != null}" href="#">
+                                <img th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">
+                                <img th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">
+                                <img th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">
+                                <br>
+                                <span class="subdescription" th:text="${file.key}"></span>
+                            </a>
+                            <input type="button" th:onclick="'remFile(' + ${p.index} + ')'">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body border-top">
+                    <a th:href="@{'/profile/id' + ${idea.user.id}}" class="float-left"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                    <p class="float-right" th:text="${idea.date}"></p>
+                </div>
+            </form>
+        </div><!-- .animated -->
+    </div><!-- /.content -->
+
+    <div class="clearfix"></div>
+
+    <!-- Footer -->
+    <th:block th:insert="common/page :: footer"/>
+
+</div><!-- /#right-panel -->
+
+</body>
+</html>

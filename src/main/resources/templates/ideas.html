@@ -66,7 +66,7 @@
             <!-- Idea -->
             <div class="card" th:each="idea : ${ideas}">
                 <div class="card-header">
-                    <span th:text="${idea.title}">~Title~</span>
+                    <span th:text="${idea.title}">~Title~</span><span class="color-gray small" th:text="' #' + ${idea.id}">~ID~</span>
                     <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
                     <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
                     <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
@@ -76,7 +76,7 @@
                     <p class="card-text description" th:text="${idea.description}">~Description~</p>
                 </div>
                 <div class="card-body">
-                    <a href="#"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                    <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
                     <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
                 </div>
             </div>

@@ -4,27 +4,23 @@ import org.magnit.task.entities.*;
 import org.magnit.task.repositories.IdeaRepository;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
+import org.magnit.task.services.MailSender;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -34,11 +30,13 @@ public class IdeaController {
     private final IdeaRepository ideaRepository;
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
+    private final MailSender mailSender;
 
-    public IdeaController(IdeaRepository ideaRepository, UserRepository userRepository, NotificationRepository notificationRepository) {
+    public IdeaController(IdeaRepository ideaRepository, UserRepository userRepository, NotificationRepository notificationRepository, MailSender mailSender) {
         this.ideaRepository = ideaRepository;
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
+        this.mailSender = mailSender;
     }
 
     @GetMapping
@@ -64,10 +62,17 @@ public class IdeaController {
         return "new";
     }
 
+    @GetMapping("/idea-{idea}/edit")
+    public String getEdit(@PathVariable Idea idea, Model model){
+        model.addAttribute("idea", idea);
+
+        return "edit";
+    }
+
     // It need for optimization
 
-    private final String UPLOAD_IMAGE_DIR = "C:/Users/Koshey/IdeaProjects/task/src/main/resources/uploads/images/";
-    private final String UPLOAD_FILE_DIR = "C:/Users/Koshey/IdeaProjects/task/src/main/resources/uploads/files/";
+    private final String UPLOAD_IMAGE_DIR = "/home/koshey/IdeaProjects/task/src/main/resources/uploads/images/";
+    private final String UPLOAD_FILE_DIR = "/home/koshey/IdeaProjects/task/src/main/resources/uploads/files/";
 
     @PostMapping("/add")
     public String uploadFile(
@@ -128,6 +133,7 @@ public class IdeaController {
 
     @PostMapping("setStatus-{idea}")
     public String setStatus(@PathVariable Idea idea, @RequestParam String status){
+        IdeaStatus ideaStatus = IdeaStatus.getValueByName(status);
         idea.setStatus(IdeaStatus.getValueByName(status));
         ideaRepository.save(idea);
 
@@ -140,6 +146,14 @@ public class IdeaController {
 
         notificationRepository.save(notification);
 
+        mailSender.send(
+                idea.getUser().getUsername(),
+                "Статус идеи изменен",
+                "Статус вашей идеи " + idea.getTitle()
+                        + " #" + idea.getId() + " изменен на " + ideaStatus.getName()
+                        + ". Просмотреть идею: " + "http://localhost:4040/ideas/idea-" + idea.getId()
+        );
+
         return "redirect:idea-" + idea.getId();
     }
 
@@ -151,7 +165,7 @@ public class IdeaController {
 
         model.addAttribute("userNotifies", user.getNotifications());
 
-        List<Notification> notifications = notificationRepository.findByLook(false);
+        List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
 
         model.addAttribute("userNotifyCount", notifications.size());
 

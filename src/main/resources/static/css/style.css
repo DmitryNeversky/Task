@@ -1193,7 +1193,8 @@ header .form-inline {
 .content {
   float: left;
   padding: 1.875em;
-  width: 100%; }
+  width: 100%;
+  min-height: 455px;}
 
 .card {
   min-width: 100%;
@@ -2582,4 +2583,34 @@ footer.site-footer {
 .card-body .attachments .subdescription{
   color: #00aced;
   text-decoration: underline;
+}
+
+.card-body .images img{
+  width: 10%;
+}
+
+.logout{
+  color: #607d8b;
+  display: flex;
+}
+
+.logout .fa{
+  line-height: 1.9;
+}
+
+.logout input{
+  border: none;
+  background: none;
+}
+
+.removeNotify input{
+  float: right;
+  background: none;
+  border: none;
+  color: silver;
+  line-height: 1.2;
+}
+
+.removeNotify input:hover{
+  color: red;
 }

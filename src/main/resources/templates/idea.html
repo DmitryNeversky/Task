@@ -44,12 +44,12 @@
                             </form>
                         </div>
                     </div>
-                    <div class="float-right" th:if="${user.id == idea.user.id}">FFFFFFF</div>
+                    <a class="float-right" th:if="${user.id == idea.user.id}" th:href="@{'/ideas/idea-' + ${idea.id} + '/edit'}">FFFFFFF</a>
                 </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${idea.description}">~Description~</p>
                 </div>
-                <div class="card-body border-top" th:if="!${idea.images.isEmpty()}">
+                <div class="card-body images border-top" th:if="!${idea.images.isEmpty()}">
                     <p class="font-italic">Прикрепленные изображения</p>
                     <img th:each="image : ${idea.images}" th:src="${'/uploads/images/' + image.value}" alt="image">
                 </div>

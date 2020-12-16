@@ -6,66 +6,27 @@
 </head>
 
 <body>
-    <!-- Left Panel -->
-    <th:block th:insert="common/page :: leftPanel"/>
+<!-- Left Panel -->
+<th:block th:insert="common/page :: leftPanel"/>
 
-    <!-- Right Panel -->
-    <div id="right-panel" class="right-panel">
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
 
-        <!-- Header-->
-        <th:block th:insert="common/page :: header"/>
+    <!-- Header-->
+    <th:block th:insert="common/page :: header"/>
 
-        <!-- Content -->
-        <div class="content">
+    <!-- Content -->
+    <div class="content">
+        <div class="animated fadeIn" id="replace">
+<!--            <th:block th:replace="${fragment}"/>-->
+        </div><!-- .animated -->
+    </div><!-- /.content -->
 
-            <!-- Animated -->
-            <div class="animated fadeIn">
+    <div class="clearfix"></div>
 
-                <div class="row">
-                    <div class="col-lg-6 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon dib flat-color-1">
-                                        <i class="pe-7s-light"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left dib">
-                                            <div class="stat-text"><span class="count" th:text="${ideaCount}">23569</span></div>
-                                            <div class="stat-heading">Идей</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Footer -->
+    <th:block th:insert="common/page :: footer"/>
 
-                    <div class="col-lg-6 col-md-6">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="stat-widget-five">
-                                    <div class="stat-icon dib flat-color-4">
-                                        <i class="pe-7s-users"></i>
-                                    </div>
-                                    <div class="stat-content">
-                                        <div class="text-left dib">
-                                            <div class="stat-text"><span class="count" th:text="${userCount}">2986</span></div>
-                                            <div class="stat-heading">Регистраций</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div><!-- .animated -->
-        </div><!-- /.content -->
-
-        <div class="clearfix"></div>
-
-        <!-- Footer -->
-        <th:block th:insert="common/page :: footer"/>
-
-    </div><!-- /#right-panel -->
+</div><!-- /#right-panel -->
 </body>
 </html>

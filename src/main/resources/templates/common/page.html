@@ -48,6 +48,9 @@
                                     <span class="name float-left" th:text="${notify.title}">~Title~</span>
                                     <span class="time float-right" th:text="${notify.date}">~12:34~</span>
                                     <p th:text="${notify.message}">~Hello, this is an example msg~</p>
+                                    <form th:method="POST" class="removeNotify" th:action="@{'/removeNotify-' + ${notify.id}}">
+                                        <input type="submit" value="удалить">
+                                    </form>
                                 </div>
                             </a>
                         </div>
@@ -60,8 +63,13 @@
                     </a>
 
                     <div class="user-menu dropdown-menu border rounded">
-                        <a class="nav-link" href="profile"><i class="fa fa-user"></i>Аккаунт</a>
-                        <a class="nav-link" th:href="@{/logout}"><i class="fa fa-power-off"></i>Выйти</a>
+                        <a class="nav-link" th:href="@{'/profile/id' + ${user.id}}"><i class="fa fa-user"></i>Аккаунт</a>
+                        <form method="post" th:action="@{/logout}">
+                            <div class="logout">
+                                <i class="fa fa-power-off"></i>
+                                <input type="submit" class="nav-link rounded-0" value=" Выйти">
+                            </div>
+                        </form>
                     </div>
                 </div>
 

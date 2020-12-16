@@ -26,7 +26,6 @@ public class UserController {
 
     @GetMapping("/profile/id{user}")
     public String getUserPage(@PathVariable User user, Model model){
-
         model.addAttribute("user", user);
 
         return "profile";
@@ -38,5 +37,12 @@ public class UserController {
         notificationRepository.save(notification);
         return "redirect:/ideas/idea-" + notification.getIdeaId();
     }
+
+//    @GetMapping("/profile/id{user}/edit")
+//    public String getUserPage(@PathVariable User user, Model model){
+//        model.addAttribute("user", user);
+//
+//        return "profileEdit";
+//    }
 
 }
