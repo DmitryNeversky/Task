@@ -72,6 +72,7 @@ public class IndexController {
 
     @PostMapping("/removeNotify-{notify}")
     public String removeNotify(@PathVariable Notification notify){
+        System.out.println(notify.getId());
         notificationRepository.delete(notify);
         return "redirect:/ideas";
     }

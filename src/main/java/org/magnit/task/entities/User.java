@@ -33,11 +33,9 @@ public class User {
     private Roles role;
 
     @OneToMany(mappedBy = "user")
-    @ElementCollection
     private List<Idea> ideas = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
-    @ElementCollection
     private List<Notification> notifications = new ArrayList<>();
 
     public String getFullName(){

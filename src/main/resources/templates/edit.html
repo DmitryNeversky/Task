@@ -31,7 +31,7 @@
                 <div class="card-body border-top" th:if="!${idea.images.isEmpty()}">
                     <p class="font-italic">Прикрепленные изображения</p>
                     <div th:each="image : ${idea.images}">
-                        <img class="editImage" th:src="${'/uploads/images/' + image.value}" th:id="${image.id}" alt="image">
+                        <img class="editImage" th:src="${'/uploads/images/' + image.value}" alt="image">
                     </div>
                 </div>
                 <div class="card-body" th:if="!${idea.files.isEmpty()}">

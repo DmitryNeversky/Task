@@ -23,7 +23,7 @@ public class Notification {
 
     private boolean look;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private User user;
 
     public Notification(){

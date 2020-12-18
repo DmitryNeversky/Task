@@ -71,8 +71,8 @@ public class IdeaController {
 
     // It need for optimization
 
-    private final String UPLOAD_IMAGE_DIR = "/home/koshey/IdeaProjects/task/src/main/resources/uploads/images/";
-    private final String UPLOAD_FILE_DIR = "/home/koshey/IdeaProjects/task/src/main/resources/uploads/files/";
+    private final String UPLOAD_IMAGE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/images/";
+    private final String UPLOAD_FILE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/files/";
 
     @PostMapping("/add")
     public String uploadFile(
