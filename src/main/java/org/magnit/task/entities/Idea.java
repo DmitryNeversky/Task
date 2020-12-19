@@ -18,7 +18,14 @@ public class Idea {
 
     private String title;
     private String description;
-    private long likes;
+
+    @ManyToMany
+    @JoinTable(
+            name = "idea_likes",
+            joinColumns = { @JoinColumn(name = "idea_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    private Set<User> likes = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private IdeaStatus status;
@@ -57,5 +64,20 @@ public class Idea {
 
     public void addFile(String key, String value){
         files.put(key, value);
+    }
+
+    public void like(User user){
+        boolean search = false;
+        for(User pair : likes){
+            if(pair.getId() == user.getId()) {
+                search = true;
+                break;
+            }
+        }
+
+        if(search == true)
+            likes.remove(user);
+        else
+            likes.add(user);
     }
 }

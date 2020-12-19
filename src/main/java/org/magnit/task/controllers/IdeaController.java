@@ -157,6 +157,16 @@ public class IdeaController {
         return "redirect:idea-" + idea.getId();
     }
 
+    @PostMapping("setLike-{idea}")
+    public String setLike(@PathVariable Idea idea, Principal principal){
+        User user = userRepository.findByUsername(principal.getName());
+
+        idea.like(user);
+        ideaRepository.save(idea);
+
+        return "redirect:";
+    }
+
     @ModelAttribute
     public void getHeader(Principal principal, Model model){
 
