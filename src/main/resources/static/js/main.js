@@ -1,20 +1,4 @@
-$.noConflict();
-
-let remFiles = []
-
 jQuery(document).ready(function($) {
-
-	// console.log($('#0').data('index'))
-	//
-	// let files = document.getElementsByClassName('editFile')
-	// for(let i = 0; i < files.length; i++)
-	// 	console.log(files[i])
-
-	// let images = document.getElementsByClassName('editImage')
-
-	// $('.notify').on('click', function(event) {
-	//
-	// });
 
 	"use strict";
 
@@ -120,4 +104,33 @@ jQuery(document).ready(function($) {
 	}
 
 	truncateText(".preDescription", 200);
+
+	$( "#valStatus" ).change(function(event) {
+		event.preventDefault()
+
+		$('.ideas').fadeOut('slow','linear', function(){
+			const formData = new FormData();
+			formData.append("status", $('#valStatus').val());
+
+			send(formData, window.location)
+		});
+	});
+
+	function send(formData, url){
+		$.ajax ({
+			url: url,
+			type: "POST",
+			data: formData,
+			dataType: "html",
+			processData: false,
+			contentType: false,
+			async: false,
+			success: function(res) {
+				$(".ideas").html($('.ideas', res).html()).ready(function (){
+					$('.ideas').fadeIn('slow','linear')
+				})
+
+			}
+		});
+	}
 });

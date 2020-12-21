@@ -19,7 +19,7 @@ public class Idea {
     private String title;
     private String description;
 
-    @ManyToMany
+    @ManyToMany()
     @JoinTable(
             name = "idea_likes",
             joinColumns = { @JoinColumn(name = "idea_id") },

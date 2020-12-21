@@ -1,5 +1,7 @@
 package org.magnit.task.controllers;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.magnit.task.entities.*;
 import org.magnit.task.repositories.IdeaRepository;
 import org.magnit.task.repositories.NotificationRepository;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,7 +35,10 @@ public class IdeaController {
     private final NotificationRepository notificationRepository;
     private final MailSender mailSender;
 
-    public IdeaController(IdeaRepository ideaRepository, UserRepository userRepository, NotificationRepository notificationRepository, MailSender mailSender) {
+    public IdeaController(IdeaRepository ideaRepository,
+                          UserRepository userRepository,
+                          NotificationRepository notificationRepository,
+                          MailSender mailSender) {
         this.ideaRepository = ideaRepository;
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
@@ -165,6 +171,46 @@ public class IdeaController {
         ideaRepository.save(idea);
 
         return "redirect:";
+    }
+
+    @PostMapping("getIdeasDataBase")
+    public String getIdeasDataBase(){
+
+        JSONObject jo = new JSONObject();
+
+        List<Idea> ideaList = ideaRepository.findAll();
+
+        for(Idea pair : ideaList){
+            try {
+                jo.put("Номер", pair.getId());
+                jo.put("Заголовок", pair.getTitle());
+                jo.put("Описание", pair.getDescription());
+                jo.put("Статус", pair.getStatus().getName());
+                jo.put("Лайков", pair.getLikes().size());
+                jo.put("Создано", pair.getDate());
+                jo.put("Автор", pair.getUser().getFullName() + " (" + pair.getUser().getDivision() + ") ");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println(jo.toString());
+
+        return "redirect:";
+    }
+
+    @PostMapping
+    @ResponseBody
+    public Model doFilter(@RequestParam String status, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model){
+
+        IdeaStatus ideaStatus = IdeaStatus.getValueByName(status);
+
+        Page<Idea> ideas = ideaRepository.findAllByStatus(pageable, ideaStatus);
+
+        model.addAttribute("ideas", ideas);
+        model.addAttribute("pageable", pageable);
+
+        return model;
     }
 
     @ModelAttribute

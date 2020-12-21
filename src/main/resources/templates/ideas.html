@@ -23,11 +23,11 @@
 
             <!-- Filter -->
             <div class="filter">
-                <form class="form-inline">
+                <form class="form-filter" id="filter">
                     <div class="form-group">
                         <label>
-                            <select class="form-control">
-                                <option>Выберите статус</option>
+                            <select class="form-control" id="valStatus">
+                                Выберите статус
                                 <option>Одобрено</option>
                                 <option>На рассмотрении</option>
                                 <option>Отказано</option>
@@ -36,8 +36,8 @@
                     </div>
                     <div class="form-group">
                         <label>
-                            <select class="form-control">
-                                <option>Выберите фильтр</option>
+                            <select class="form-control" id="valSort">
+                                Сортировать
                                 <option>Популярное</option>
                                 <option>Менее популярное</option>
                                 <option>Сначала свежее</option>
@@ -45,12 +45,13 @@
                             </select>
                         </label>
                     </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlInput1"></label><input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Найти">
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" class="btn btn-outline-danger" value="Поиск">
-                    </div>
+                </form>
+                <form action="#" th:method="POST" th:action="@{/searchKeyWord}">
+                    <input type="text" name="keyword">
+                    <input type="submit" class="btn btn-outline-danger" value="Поиск">
+                </form>
+                <form action="#" th:method="POST" th:action="@{/ideas/getIdeasDataBase}">
+                    <input type="submit" value="Download">
                 </form>
             </div>
 
@@ -63,40 +64,44 @@
             </nav>
             <a th:href="@{/ideas/new}" class="btn btn-danger float-right">Добавить <i class="fa fa-plus"></i></a>
 
-            <!-- Idea -->
-            <div class="card" th:each="idea : ${ideas}">
-                <div class="card-header">
-                    <span th:text="${idea.title}">~Title~</span><span class="color-gray small" th:text="' #' + ${idea.id}">~ID~</span>
-                    <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
-                    <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
-                    <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
-                    <span class="badge badge-light float-right mt-1" th:if="${idea.status == null}">Без статуса</span>
+            <div class="ideas">
+
+                <!-- Idea -->
+                <div class="card" th:each="idea : ${ideas}">
+                    <div class="card-header">
+                        <span th:text="${idea.title}">~Title~</span><span class="color-gray small" th:text="' #' + ${idea.id}">~ID~</span>
+                        <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
+                        <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
+                        <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
+                        <span class="badge badge-light float-right mt-1" th:if="${idea.status == null}">Без статуса</span>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text description" th:text="${idea.description}">~Description~</p>
+                    </div>
+                    <div class="card-body">
+                        <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                        <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
+                        <span th:text="${idea.likes.size}"></span>
+                        <form action="#" th:method="POST" th:action="@{'/ideas/setLike-' + ${idea.id}}">
+                            <input type="submit">
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p class="card-text description" th:text="${idea.description}">~Description~</p>
-                </div>
-                <div class="card-body">
-                    <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
-                    <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
-                    <span th:text="${idea.likes.size}"></span>
-                    <form action="#" th:method="POST" th:action="@{'/ideas/setLike-' + ${idea.id}}">
-                        <input type="submit">
-                    </form>
-                </div>
+
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${pageable.pageNumber eq 0} ? 'disabled'">
+                            <a class="page-link" th:href="@{/ideas/(page=${pageable.pageNumber -1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-left"></i></a>
+                        </li>
+                        <li class="page-item" th:each="i : ${#numbers.sequence( 0, ideas.totalPages)}" th:classappend="${pageable.pageNumber eq i} ? 'active'">
+                            <a class="page-link" th:href="@{/ideas/(page=${i}, size=${pageable.pageSize})}" th:text="${i+1}">~1~</a>
+                        </li>
+                        <li class="page-item" th:classappend="${pageable.pageNumber eq ideas.totalPages} ? 'disabled'">
+                            <a class="page-link" th:href="@{/ideas/(page=${pageable.pageNumber +1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${pageable.pageNumber eq 0} ? 'disabled'">
-                        <a class="page-link" th:href="@{/ideas/(page=${pageable.pageNumber -1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-left"></i></a>
-                    </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence( 0, ideas.totalPages)}" th:classappend="${pageable.pageNumber eq i} ? 'active'">
-                        <a class="page-link" th:href="@{/ideas/(page=${i}, size=${pageable.pageSize})}" th:text="${i+1}">~1~</a>
-                    </li>
-                    <li class="page-item" th:classappend="${pageable.pageNumber eq ideas.totalPages} ? 'disabled'">
-                        <a class="page-link" th:href="@{/ideas/(page=${pageable.pageNumber +1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-right"></i></a>
-                    </li>
-                </ul>
-            </nav>
         </div><!-- .animated -->
     </div><!-- /.content -->
 
