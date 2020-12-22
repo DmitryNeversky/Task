@@ -8,6 +8,7 @@ import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
 import org.magnit.task.services.MailSender;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -48,9 +49,13 @@ public class IdeaController {
     @GetMapping
     public String getIdeas(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model){
 
+//        PageRequest pageRequest = PageRequest.of(0, 5, Sort.Direction.ASC, "id");
+
         Page<Idea> ideas = ideaRepository.findAll(pageable);
         model.addAttribute("ideas", ideas);
         model.addAttribute("pageable", pageable);
+
+//        PageRequest.of(0, 5, Sort.by("price").descending().and(Sort.by("name")));
 
         return "ideas";
     }
@@ -201,12 +206,18 @@ public class IdeaController {
 
     @PostMapping
     @ResponseBody
-    public Model doFilter(@RequestParam String status, @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model){
+    public Model doFilter(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String direction,
+            @RequestParam(required = false) String property,
+            Pageable pageable, Model model){
 
-        IdeaStatus ideaStatus = IdeaStatus.getValueByName(status);
+//        IdeaStatus ideaStatus = IdeaStatus.getValueByName(status);
 
-        Page<Idea> ideas = ideaRepository.findAllByStatus(pageable, ideaStatus);
-
+//        Page<Idea> ideas = ideaRepository.findAllByStatus(pageable, ideaStatus);
+        Pageable pages = PageRequest.of(0, pageable.getPageSize(), Sort.Direction.valueOf(direction), property);
+        Page<Idea> ideas = ideaRepository.findAll(pages);
+        // id_direct - new/old, likes_direct - popular/unpopular,
         model.addAttribute("ideas", ideas);
         model.addAttribute("pageable", pageable);
 

@@ -116,6 +116,39 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	$( "#valSort" ).change(function(event) {
+		event.preventDefault()
+
+		$('.ideas').fadeOut('slow','linear', function(){
+			let value = $('#valSort').val()
+			let direction
+			let property
+			switch (value){
+				case "Популярное":
+					direction = "DESC"
+					property = "likes"
+					break
+				case "Менее популярное":
+					direction = "ASC"
+					property = "likes"
+					break
+				case "Сначала свежее":
+					direction = "DESC"
+					property = "id"
+					break
+				case "Сначала старое":
+					direction = "ASC"
+					property = "id"
+					break
+			}
+			const formData = new FormData();
+			formData.append("direction", direction);
+			formData.append("property", property);
+
+			send(formData, window.location)
+		});
+	});
+
 	function send(formData, url){
 		$.ajax ({
 			url: url,
@@ -129,7 +162,6 @@ jQuery(document).ready(function($) {
 				$(".ideas").html($('.ideas', res).html()).ready(function (){
 					$('.ideas').fadeIn('slow','linear')
 				})
-
 			}
 		});
 	}
