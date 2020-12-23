@@ -109,10 +109,43 @@ jQuery(document).ready(function($) {
 		event.preventDefault()
 
 		$('.ideas').fadeOut('slow','linear', function(){
-			const formData = new FormData();
-			formData.append("status", $('#valStatus').val());
+			let status = $('#valStatus').val()
+			let value = $('#valSort').val()
+			let direction
+			let property
+			switch (value){
+				case "Популярное":
+					direction = "DESC"
+					property = "likes"
+					break
+				case "Менее популярное":
+					direction = "ASC"
+					property = "likes"
+					break
+				case "Сначала свежее":
+					direction = "DESC"
+					property = "id"
+					break
+				case "Сначала старое":
+					direction = "ASC"
+					property = "id"
+					break
+				default:
+					direction = "DESC"
+					property = "id"
+					break
+			}
 
-			send(formData, window.location)
+			const formData = new FormData();
+			formData.append("direction", direction);
+			formData.append("property", property);
+			formData.append("status", status);
+
+			send(formData, window.location, function(res) {
+				$(".ideas").html($('.ideas', res).html()).ready(function (){
+					$('.ideas').fadeIn('slow','linear')
+				})
+			})
 		});
 	});
 
@@ -120,6 +153,7 @@ jQuery(document).ready(function($) {
 		event.preventDefault()
 
 		$('.ideas').fadeOut('slow','linear', function(){
+			let status = $('#valStatus').val()
 			let value = $('#valSort').val()
 			let direction
 			let property
@@ -144,12 +178,17 @@ jQuery(document).ready(function($) {
 			const formData = new FormData();
 			formData.append("direction", direction);
 			formData.append("property", property);
+			formData.append("status", status);
 
-			send(formData, window.location)
+			send(formData, window.location, function(res) {
+				$(".ideas").html($('.ideas', res).html()).ready(function (){
+					$('.ideas').fadeIn('slow','linear')
+				})
+			})
 		});
 	});
 
-	function send(formData, url){
+	function send(formData, url, func){
 		$.ajax ({
 			url: url,
 			type: "POST",
@@ -158,11 +197,7 @@ jQuery(document).ready(function($) {
 			processData: false,
 			contentType: false,
 			async: false,
-			success: function(res) {
-				$(".ideas").html($('.ideas', res).html()).ready(function (){
-					$('.ideas').fadeIn('slow','linear')
-				})
-			}
+			success: func
 		});
 	}
 });

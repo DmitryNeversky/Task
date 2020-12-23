@@ -169,13 +169,12 @@ public class IdeaController {
     }
 
     @PostMapping("setLike-{idea}")
-    public String setLike(@PathVariable Idea idea, Principal principal){
+    public void setLike(@PathVariable Idea idea, Principal principal, Model model){
         User user = userRepository.findByUsername(principal.getName());
 
         idea.like(user);
         ideaRepository.save(idea);
-
-        return "redirect:";
+        ideaRepository.flush();
     }
 
     @PostMapping("getIdeasDataBase")
@@ -210,14 +209,26 @@ public class IdeaController {
             @RequestParam(required = false) String status,
             @RequestParam(required = false) String direction,
             @RequestParam(required = false) String property,
-            Pageable pageable, Model model){
+            Pageable pageable, Model model) {
+//
+        Pageable pages;
 
-//        IdeaStatus ideaStatus = IdeaStatus.getValueByName(status);
+        if(direction != null)
+            pages = PageRequest.of(0, pageable.getPageSize(), Sort.Direction.valueOf(direction), property);
+        else
+            pages = PageRequest.of(0, pageable.getPageSize(), pageable.getSort());
 
-//        Page<Idea> ideas = ideaRepository.findAllByStatus(pageable, ideaStatus);
-        Pageable pages = PageRequest.of(0, pageable.getPageSize(), Sort.Direction.valueOf(direction), property);
-        Page<Idea> ideas = ideaRepository.findAll(pages);
-        // id_direct - new/old, likes_direct - popular/unpopular,
+//        Page<Idea> ideas = ideaRepository.findAllByStatus(pageable, IdeaStatus.getValueByName(status), property, Sort.Direction.valueOf(direction));
+        IdeaStatus ideaStatus;
+        Page<Idea> ideas;
+
+        if (!status.equals("Все статусы")) {
+            ideaStatus = IdeaStatus.getValueByName(status);
+            ideas = ideaRepository.findAllByStatus(pages, ideaStatus);
+        } else {
+            ideas = ideaRepository.findAll(pages);
+        }
+
         model.addAttribute("ideas", ideas);
         model.addAttribute("pageable", pageable);
 
