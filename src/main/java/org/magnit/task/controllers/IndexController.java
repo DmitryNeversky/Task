@@ -1,10 +1,12 @@
 package org.magnit.task.controllers;
 
-import org.magnit.task.entities.*;
+import org.magnit.task.entities.Idea;
+import org.magnit.task.entities.IdeaStatus;
+import org.magnit.task.entities.Notification;
+import org.magnit.task.entities.User;
 import org.magnit.task.repositories.IdeaRepository;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
-import org.magnit.task.services.MailSender;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -43,12 +45,6 @@ public class IndexController {
         return "index";
     }
 
-    @GetMapping("hello")
-    public String getResult(){
-
-        return null;
-    }
-
     @PostMapping("/add")
     public String addIdea(@ModelAttribute Idea idea, Principal principal){
 
@@ -82,7 +78,7 @@ public class IndexController {
     public void getHeader(Principal principal, Model model){
         User user = userRepository.findByUsername(principal.getName());
         model.addAttribute("userNotifies", user.getNotifications());
-        model.addAttribute("user", user);
+        model.addAttribute("currentUser", user);
 
         List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
 

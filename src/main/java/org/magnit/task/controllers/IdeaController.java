@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -192,13 +194,27 @@ public class IdeaController {
                 jo.put("Статус", pair.getStatus().getName());
                 jo.put("Лайков", pair.getLikes().size());
                 jo.put("Создано", pair.getDate());
-                jo.put("Автор", pair.getUser().getFullName() + " (" + pair.getUser().getDivision() + ") ");
+                jo.put("Автор", pair.getUser().getName() + " (" + pair.getUser().getDivision() + ") \n");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        System.out.println(jo.toString());
+        FileWriter fileWriter = null;
+
+        try {
+            fileWriter = new FileWriter(UPLOAD_FILE_DIR + UUID.randomUUID() + ".txt");
+            fileWriter.write(String.valueOf(jo));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                fileWriter.flush();
+                fileWriter.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         return "redirect:";
     }
@@ -206,31 +222,12 @@ public class IdeaController {
     @PostMapping
     @ResponseBody
     public Model doFilter(
-            @RequestParam(required = false) String status,
+            @RequestParam(required = false) IdeaStatus status,
             @RequestParam(required = false) String direction,
             @RequestParam(required = false) String property,
             Pageable pageable, Model model) {
-//
-        Pageable pages;
 
-        if(direction != null)
-            pages = PageRequest.of(0, pageable.getPageSize(), Sort.Direction.valueOf(direction), property);
-        else
-            pages = PageRequest.of(0, pageable.getPageSize(), pageable.getSort());
-
-//        Page<Idea> ideas = ideaRepository.findAllByStatus(pageable, IdeaStatus.getValueByName(status), property, Sort.Direction.valueOf(direction));
-        IdeaStatus ideaStatus;
-        Page<Idea> ideas;
-
-        if (!status.equals("Все статусы")) {
-            ideaStatus = IdeaStatus.getValueByName(status);
-            ideas = ideaRepository.findAllByStatus(pages, ideaStatus);
-        } else {
-            ideas = ideaRepository.findAll(pages);
-        }
-
-        model.addAttribute("ideas", ideas);
-        model.addAttribute("pageable", pageable);
+        String query = "Select * from Idea where status = " + status + " order by " + property + " " + direction;
 
         return model;
     }
@@ -239,7 +236,7 @@ public class IdeaController {
     public void getHeader(Principal principal, Model model){
 
         User user = userRepository.findByUsername(principal.getName());
-        model.addAttribute("user", user);
+        model.addAttribute("currentUser", user);
 
         model.addAttribute("userNotifies", user.getNotifications());
 
@@ -253,5 +250,7 @@ public class IdeaController {
         for(Roles pair : Roles.values()){
             model.addAttribute("roles", pair);
         }
+
+        model.addAttribute("statuses", IdeaStatus.values());
     }
 }

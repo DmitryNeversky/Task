@@ -5,7 +5,7 @@
     <title>Главная</title>
 </head>
 
-<body>
+<body class="open">
     <!-- Left Panel -->
     <th:block th:insert="common/page :: leftPanel"/>
 
@@ -23,9 +23,9 @@
                     <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card">
                             <div class="card-body">
-                                <center class="m-t-30"> <img src="#" class="img-circle rounded-circle" width="150">
-                                    <h4 class="card-title m-t-10" th:text="${user.name} + ' ' + ${user.serName}">Hanna Gover</h4>
-                                    <h6 class="card-subtitle" th:text="${user.division}">Accoubts Manager Amix corp</h6>
+                                <center class="m-t-30"> <img th:src="${user.avatarPath}" class="img-circle rounded-circle" width="150">
+                                    <h4 class="card-title m-t-10" th:text="${user.name}">~Name~</h4>
+                                    <h6 class="card-subtitle" th:text="${user.division}">~Division~</h6>
                                     <div class="row text-center justify-content-md-center">
                                         <div class="col-4"><a href="#" class="link"><i class="icon-people"></i>
                                                 <font class="font-medium" th:text="${user.ideas.size()}">254</font>
@@ -39,63 +39,11 @@
                         <div class="card">
                             <!-- Tab panes -->
                             <div class="card-body">
-                                <form class="form-horizontal form-material">
-                                    <div class="form-group">
-                                        <label class="col-md-12">Full Name</label>
-                                        <div class="col-md-12">
-                                            <label>
-                                                <input type="text" placeholder="Johnathan Doe" class="form-control form-control-line">
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="example-email" class="col-md-12">Email</label>
-                                        <div class="col-md-12">
-                                            <input type="email" placeholder="johnathan@admin.com" class="form-control form-control-line" name="example-email" id="example-email">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-12">Password</label>
-                                        <div class="col-md-12">
-                                            <label>
-                                                <input type="password" value="password" class="form-control form-control-line">
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-12">Phone No</label>
-                                        <div class="col-md-12">
-                                            <label>
-                                                <input type="text" placeholder="123 456 7890" class="form-control form-control-line">
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-12">Message</label>
-                                        <div class="col-md-12">
-                                            <textarea rows="5" class="form-control form-control-line"></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-12">Select Country</label>
-                                        <div class="col-sm-12">
-                                            <label>
-                                                <select class="form-control form-control-line">
-                                                    <option>London</option>
-                                                    <option>India</option>
-                                                    <option>Usa</option>
-                                                    <option>Canada</option>
-                                                    <option>Thailand</option>
-                                                </select>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <button class="btn btn-danger">Update Profile</button>
-                                        </div>
-                                    </div>
-                                </form>
+                                <p><span>День рождения: </span><p th:if="${user.birthday} != null" th:text="${user.birthday}">Не указано</p></p>
+                                <p><span>Телефон: </span><span th:if="${user.phone} != 0" th:text="${user.phone}">Не указано</span></p>
+                                <p><span>Доп. язык: </span><span th:if="${user.lang} != null" th:text="${user.lang}">Не указано</span></p>
+                                <p><span>Обо мне: </span><span th:if="${user.about} != null" th:text="${user.about}">Не указано</span></p>
+                                <a th:if="${user.username == currentUser.username}" href="/profile/edit" class="btn btn-danger float-left">Изменить</a>
                             </div>
                         </div>
                     </div>

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 public enum IdeaStatus {
 
+    ALL("Все статусы"),
     APPROVED("Одобрено"),
     LOOKING("На рассмотрении"),
     DENIED("Отказано");
