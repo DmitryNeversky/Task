@@ -92,6 +92,7 @@ public class UserController {
         }
 
         userRepository.save(user);
+        userRepository.flush();
 
         return "redirect:/profile/id" + user.getId();
     }
