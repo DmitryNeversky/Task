@@ -1117,6 +1117,7 @@ header .form-inline {
         margin-right: 10px; }
   .user-area .user-avatar {
     float: right;
+    height: 40px;
     width: 40px; }
   .user-area .user-info .name {
     color: #8c8c8c;

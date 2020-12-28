@@ -88,7 +88,7 @@ public class IdeaController {
     private final String UPLOAD_FILE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/files/";
 
     @PostMapping("/add")
-    public String uploadFile(
+    public String add(
             @RequestParam String title,
             @RequestParam String description,
             @RequestParam(required = false) List<MultipartFile> images,

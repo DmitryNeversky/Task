@@ -23,7 +23,8 @@
                     <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card">
                             <div class="card-body">
-                                <center class="m-t-30"> <img th:src="${user.avatarPath}" class="img-circle rounded-circle" width="150">
+                                <center class="m-t-30">
+                                    <img th:src="${user.avatarPath}" class="img-circle rounded-circle mb-3" width="150" height="150">
                                     <h4 class="card-title m-t-10" th:text="${user.name}">~Name~</h4>
                                     <h6 class="card-subtitle" th:text="${user.division}">~Division~</h6>
                                     <div class="row text-center justify-content-md-center">
@@ -39,10 +40,10 @@
                         <div class="card">
                             <!-- Tab panes -->
                             <div class="card-body">
-                                <p><span>День рождения: </span><p th:if="${user.birthday} != null" th:text="${user.birthday}">Не указано</p></p>
-                                <p><span>Телефон: </span><span th:if="${user.phone} != 0" th:text="${user.phone}">Не указано</span></p>
-                                <p><span>Доп. язык: </span><span th:if="${user.lang} != null" th:text="${user.lang}">Не указано</span></p>
-                                <p><span>Обо мне: </span><span th:if="${user.about} != null" th:text="${user.about}">Не указано</span></p>
+                                <p><span>День рождения: </span><b th:if="${user.birthday} != null" th:text="${user.birthday}">Не указано</b></p>
+                                <p><span>Телефон: </span><b th:if="${user.phone} != 0" th:text="${user.phone}">Не указано</b></p>
+                                <p><span>Доп. язык: </span><b th:if="${user.lang} != null" th:text="${user.lang}">Не указано</b></p>
+                                <p><span>Обо мне: </span><b th:if="${user.about} != null" th:text="${user.about}">Не указано</b></p>
                                 <a th:if="${user.username == currentUser.username}" href="/profile/edit" class="btn btn-danger float-left">Изменить</a>
                             </div>
                         </div>

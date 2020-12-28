@@ -21,27 +21,26 @@
         <div class="animated fadeIn">
             <div class="row">
                 <div class="col-md-12 align-content-center">
-                    <form th:method="POST" th:action="@{/profile/edit}" th:object="${currentUser}">
-                        <input type="hidden" th:value="${currentUser.id}" th:field="${currentUser.id}">
-                            <div class="card">
-                                <div class="card-body">
-                                    <center class="m-t-30"> <img th:src="${currentUser.avatarPath}" class="img-circle rounded-circle" width="150">
-                                        <input type="hidden" th:text="${currentUser.username}" th:field="*{username}"/>
-                                        <input type="text" th:value="${currentUser.name}" th:field="*{name}">
-                                        <input type="text" th:value="${currentUser.division}" th:field="*{division}">
-                                        <input type="hidden" th:value="${currentUser.password}" th:field="*{password}"/>
-                                    </center>
-                                </div>
+                    <form th:method="post" th:action="@{/profile/edit}" id="editProfileForm" enctype="multipart/form-data">
+                        <div class="card">
+                            <div class="card-body">
+                                <center class="m-t-30">
+                                    <img th:src="${currentUser.avatarPath}" id="previewAvatar" class="img-circle rounded-circle" width="150" height="150">
+                                    <input type="file" accept="image/*" name="avatar"/>
+                                    <input type="text" th:value="${currentUser.name}" name="name">
+                                    <input type="text" th:value="${currentUser.division}" name="division">
+                                </center>
                             </div>
-                            <div class="card">
-                                <!-- Tab panes -->
-                                <div class="card-body">
-                                    <p><span>День рождения: </span><input type="date" th:value="${currentUser.birthday} != null ? ${currentUser.birthday} : ''" th:field="*{birthday}">
-                                    <p><span>Телефон: </span><input type="tel" th:value="${currentUser.phone} != 0 ? ${currentUser.phone} : ''" th:field="*{phone}">
-                                    <p><span>Доп. язык: </span><input type="text" th:value="${currentUser.lang} != null ? ${currentUser.lang} : ''" th:field="*{lang}">
-                                    <p><span>Обо мне: </span><input type="text" th:value="${currentUser.about} != null ? ${currentUser.about} : ''" th:field="*{about}">
-                                </div>
+                        </div>
+                        <div class="card">
+                            <!-- Tab panes -->
+                            <div class="card-body">
+                                <p><span>День рождения: </span><input type="date" th:value="${currentUser.birthday} != null ? ${currentUser.birthday} : ''" name="birthday">
+                                <p><span>Телефон: </span><input type="tel" th:value="${currentUser.phone} != 0 ? ${currentUser.phone} : ''" name="phone">
+                                <p><span>Доп. язык: </span><input type="text" th:value="${currentUser.lang} != null ? ${currentUser.lang} : ''" name="lang">
+                                <p><span>Обо мне: </span><input type="text" th:value="${currentUser.about} != null ? ${currentUser.about} : ''" name="about">
                             </div>
+                        </div>
                         <input type="submit" value="Сохранить">
                     </form>
                 </div>

@@ -29,9 +29,9 @@ public class User {
 
     private String avatarPath;
 
-    private int phone;
+    private String phone;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date birthday;
 
     private String lang;
