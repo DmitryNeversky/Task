@@ -160,11 +160,11 @@ jQuery(document).ready(function($) {
 			switch (value){
 				case "Популярное":
 					direction = "DESC"
-					property = "likes"
+					property = "likeCount"
 					break
 				case "Менее популярное":
 					direction = "ASC"
-					property = "likes"
+					property = "likeCount"
 					break
 				case "Сначала свежее":
 					direction = "DESC"

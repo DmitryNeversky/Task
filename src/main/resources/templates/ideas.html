@@ -77,7 +77,7 @@
                     <div class="card-body">
                         <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
                         <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
-                        <span th:text="${idea.likes.size}"></span>
+                        <span th:text="${idea.likeCount}"></span>
 <!--                        <a href="#" id="like"><i class="fa fa-heart"></i></a>-->
                         <form action="#" th:method="POST" th:action="@{'/ideas/setLike-' + ${idea.id}}">
                             <input type="submit">

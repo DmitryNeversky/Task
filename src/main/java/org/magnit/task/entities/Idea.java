@@ -19,6 +19,8 @@ public class Idea {
     private String title;
     private String description;
 
+    private long likeCount;
+
     @ManyToMany()
     @JoinTable(
             name = "idea_likes",
@@ -66,18 +68,21 @@ public class Idea {
         files.put(key, value);
     }
 
-    public void like(User user){
+    public void like(User user) {
         boolean search = false;
-        for(User pair : likes){
-            if(pair.getId() == user.getId()) {
+        for (User pair : likes) {
+            if (pair.getId() == user.getId()) {
                 search = true;
                 break;
             }
         }
 
-        if(search == true)
+        if (search) {
+            setLikeCount(getLikeCount() - 1);
             likes.remove(user);
-        else
+        } else {
+            setLikeCount(getLikeCount() + 1);
             likes.add(user);
+        }
     }
 }

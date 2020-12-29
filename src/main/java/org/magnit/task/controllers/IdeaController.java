@@ -192,7 +192,7 @@ public class IdeaController {
                 jo.put("Заголовок", pair.getTitle());
                 jo.put("Описание", pair.getDescription());
                 jo.put("Статус", pair.getStatus().getName());
-                jo.put("Лайков", pair.getLikes().size());
+                jo.put("Лайков", pair.getLikeCount());
                 jo.put("Создано", pair.getDate());
                 jo.put("Автор", pair.getUser().getName() + " (" + pair.getUser().getDivision() + ") \n");
             } catch (JSONException e) {
@@ -264,7 +264,8 @@ public class IdeaController {
         User user = userRepository.findByUsername(principal.getName());
         model.addAttribute("currentUser", user);
 
-        model.addAttribute("userNotifies", user.getNotifications());
+        if(user.getNotifications() != null)
+            model.addAttribute("userNotifies", user.getNotifications());
 
         List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
 
