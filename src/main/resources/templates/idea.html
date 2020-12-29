@@ -23,13 +23,13 @@
             <div class="card">
                 <div class="card-header">
                     <span class="float-left" th:text="${idea.title}">~Title~</span>
-                    <div th:if="${user.role == roles.USER}">
+                    <div th:if="${currentUser.role == roles.USER}">
                         <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
                         <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
                         <span class="badge badge-danger float-right mt-1" th:if="${idea.status == status.DENIED}">Отказано</span>
                         <span class="badge badge-light float-right mt-1" th:if="${idea.status == null}">Без статуса</span>
                     </div>
-                    <div th:if="${user.role == roles.MODERATOR}" class="dropdown status-dropdown float-right">
+                    <div th:if="${currentUser.role == roles.MODERATOR}" class="dropdown status-dropdown float-right">
                         <button class="dropdown-toggle" data-toggle="dropdown">
                             <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
                             <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
@@ -44,7 +44,7 @@
                             </form>
                         </div>
                     </div>
-                    <a class="float-right" th:if="${user.id == idea.user.id}" th:href="@{'/ideas/idea-' + ${idea.id} + '/edit'}">FFFFFFF</a>
+                    <a class="float-right" th:if="${currentUser.id == idea.user.id}" th:href="@{'/ideas/idea-' + ${idea.id} + '/edit'}">FFFFFFF</a>
                 </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${idea.description}">~Description~</p>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
                 <div class="card-body border-top">
-                    <a th:href="@{'/profile/id' + ${idea.user.id}}" class="float-left"><em><small th:text="${idea.user.fullName + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                    <a th:href="@{'/profile/id' + ${idea.user.id}}" class="float-left"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
                     <p class="float-right" th:text="${idea.date}"></p>
                 </div>
             </div>

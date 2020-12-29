@@ -18,6 +18,8 @@ import java.util.List;
 public interface IdeaRepository extends JpaRepository<Idea, Integer>, JpaSpecificationExecutor<Idea> {
     Idea findById(int id);
 
+    Page<Idea> findAllByStatus(Pageable pageable, IdeaStatus status);
+
     @Query("SELECT i FROM Idea i WHERE i.title LIKE %?1%")
     List<Idea> findAllByKeyWord(String keyword);
 }

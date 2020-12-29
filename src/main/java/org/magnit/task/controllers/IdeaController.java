@@ -225,9 +225,35 @@ public class IdeaController {
             @RequestParam(required = false) IdeaStatus status,
             @RequestParam(required = false) String direction,
             @RequestParam(required = false) String property,
-            Pageable pageable, Model model) {
+            @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable,
+            Model model) {
 
-        String query = "Select * from Idea where status = " + status + " order by " + property + " " + direction;
+        PageRequest pages;
+        Page<Idea> ideas;
+
+        if(status != IdeaStatus.ALL) {
+
+            pages = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(Sort.Direction.fromString(direction), property)
+            );
+
+            ideas = ideaRepository.findAllByStatus(pages, status);
+
+        } else {
+
+            pages = PageRequest.of(
+                    pageable.getPageNumber(),
+                    pageable.getPageSize(),
+                    Sort.by(Sort.Direction.fromString(direction), property)
+            );
+
+            ideas = ideaRepository.findAll(pages);
+        }
+
+        model.addAttribute("ideas", ideas);
+        model.addAttribute("pageable", pageable);
 
         return model;
     }
