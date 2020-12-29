@@ -45,7 +45,6 @@ jQuery(document).ready(function($) {
 	// var chartsheight = $('.flotRealtime2').height();
 	// $('.traffic-chart').css('height', chartsheight-122);
 
-
 	// Counter Number
 	$('.count').each(function () {
 		$(this).prop('Counter',0).animate({
@@ -59,9 +58,6 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-
-	 
-	 
 	// Menu Trigger
 	$('#menuToggle').on('click', function(event) {
 		var windowWidth = $(window).width();   		 
@@ -90,7 +86,7 @@ jQuery(document).ready(function($) {
 
 	// Load Resize 
 	$(window).on("load resize", function(event) { 
-		var windowWidth = $(window).width();  		 
+		let windowWidth = $(window).width();
 		if (windowWidth<1010) {
 			$('body').addClass('small-device'); 
 		} else {
@@ -116,11 +112,11 @@ jQuery(document).ready(function($) {
 			switch (value){
 				case "Популярное":
 					direction = "DESC"
-					property = "likes"
+					property = "likeCount"
 					break
 				case "Менее популярное":
 					direction = "ASC"
-					property = "likes"
+					property = "likeCount"
 					break
 				case "Сначала свежее":
 					direction = "DESC"
@@ -185,6 +181,36 @@ jQuery(document).ready(function($) {
 					$('.ideas').fadeIn('slow','linear')
 				})
 			})
+		});
+	});
+
+	$("body").on('submit', '#likeForm', function(event) {
+		event.preventDefault()
+
+		let id = $(this).attr("name");
+
+		const formData = new FormData();
+		formData.append("flag", true)
+
+		send(formData, "/ideas/setLike-" + id, function(res) {
+			$(".ideas").html($('.ideas', res).html()).ready(function () {
+				$('.ideas').fadeIn('slow', 'linear')
+			});
+		});
+	});
+
+	$("body").on('submit', '#unLikeForm', function(event) {
+		event.preventDefault()
+
+		let id = $(this).attr("name");
+
+		const formData = new FormData();
+		formData.append("flag", false)
+
+		send(formData, "/ideas/setLike-" + id, function(res) {
+			$(".ideas").html($('.ideas', res).html()).ready(function () {
+				$('.ideas').fadeIn('slow', 'linear')
+			});
 		});
 	});
 

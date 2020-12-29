@@ -171,12 +171,19 @@ public class IdeaController {
     }
 
     @PostMapping("setLike-{idea}")
-    public void setLike(@PathVariable Idea idea, Principal principal, Model model){
+    public String setLike(@PathVariable Idea idea, Principal principal, Model model, @RequestParam boolean flag){
         User user = userRepository.findByUsername(principal.getName());
 
-        idea.like(user);
+        if (flag){
+            idea.addLike(user);
+        } else {
+            idea.remLike(user);
+        }
+
         ideaRepository.save(idea);
         ideaRepository.flush();
+
+        return "redirect:";
     }
 
     @PostMapping("getIdeasDataBase")

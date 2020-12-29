@@ -29,6 +29,14 @@ public class Idea {
     )
     private Set<User> likes = new HashSet<>();
 
+    @ManyToMany()
+    @JoinTable(
+            name = "idea_unlikes",
+            joinColumns = { @JoinColumn(name = "idea_id") },
+            inverseJoinColumns = { @JoinColumn(name = "user_id") }
+    )
+    private Set<User> unLikes = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private IdeaStatus status;
 
@@ -68,21 +76,63 @@ public class Idea {
         files.put(key, value);
     }
 
-    public void like(User user) {
-        boolean search = false;
+    public void addLike(User user) {
+        boolean searchLikes = false;
         for (User pair : likes) {
             if (pair.getId() == user.getId()) {
-                search = true;
+                searchLikes = true;
+                break;
+            }
+        }
+        boolean searchUnLikes = false;
+        for (User pair : unLikes) {
+            if (pair.getId() == user.getId()) {
+                searchUnLikes = true;
                 break;
             }
         }
 
-        if (search) {
-            setLikeCount(getLikeCount() - 1);
-            likes.remove(user);
-        } else {
+        if (searchUnLikes){
+            setLikeCount(getLikeCount() + 1);
+            unLikes.remove(user);
+        }
+
+        if (!searchLikes) {
             setLikeCount(getLikeCount() + 1);
             likes.add(user);
+        } else {
+            setLikeCount(getLikeCount() - 1);
+            likes.remove(user);
+        }
+    }
+
+    public void remLike(User user) {
+        boolean searchUnLikes = false;
+        for (User pair : unLikes) {
+            if (pair.getId() == user.getId()) {
+                searchUnLikes = true;
+                break;
+            }
+        }
+        boolean searchLikes = false;
+        for (User pair : likes) {
+            if (pair.getId() == user.getId()) {
+                searchLikes = true;
+                break;
+            }
+        }
+
+        if (searchLikes){
+            setLikeCount(getLikeCount() - 1);
+            likes.remove(user);
+        }
+
+        if (!searchUnLikes) {
+            setLikeCount(getLikeCount() - 1);
+            unLikes.add(user);
+        } else {
+            setLikeCount(getLikeCount() + 1);
+            unLikes.remove(user);
         }
     }
 }

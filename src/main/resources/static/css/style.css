@@ -2627,3 +2627,33 @@ footer.site-footer {
 .invalid-feedback{
   display: block;
 }
+
+#likeForm ,#unLikeForm{
+
+}
+
+#likeForm input, #unLikeForm input {
+  color: #f0808070;
+  /*color: bisque;*/
+  border: none;
+  background: none;
+}
+
+#likeForm input:hover, #unLikeForm input:hover {
+  color: #ff00009e;
+  /*color: bisque;*/
+}
+
+.custom-card-header .count{
+  color: #ff00009e;
+}
+
+.custom-card-header{
+  display: inline-flex;
+}
+
+.custom-card-header .small{
+  line-height: 2.1;
+  margin-left: 2%;
+  margin-right: 10%;
+}
