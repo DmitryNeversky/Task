@@ -1,5 +1,6 @@
 package org.magnit.task.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.magnit.task.entities.*;
@@ -7,11 +8,15 @@ import org.magnit.task.repositories.IdeaRepository;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
 import org.magnit.task.services.MailSender;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -19,14 +24,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
+import java.nio.file.*;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -186,44 +191,37 @@ public class IdeaController {
         return "redirect:";
     }
 
-    @PostMapping("getIdeasDataBase")
-    public String getIdeasDataBase(){
+    private final String DATA_FILE = "/home/koshey/Документы/task/src/main/resources/uploads/files/data.html";
 
-        JSONObject jo = new JSONObject();
+    @GetMapping("getIdeasData")
+    public ResponseEntity<InputStreamResource> getIdeasData(String param) throws IOException {
 
-        List<Idea> ideaList = ideaRepository.findAll();
+        if(!(new File(String.valueOf(Paths.get(DATA_FILE))).exists()))
+            Files.createFile(Paths.get(DATA_FILE));
 
-        for(Idea pair : ideaList){
-            try {
-                jo.put("Номер", pair.getId());
-                jo.put("Заголовок", pair.getTitle());
-                jo.put("Описание", pair.getDescription());
-                jo.put("Статус", pair.getStatus().getName());
-                jo.put("Лайков", pair.getLikeCount());
-                jo.put("Создано", pair.getDate());
-                jo.put("Автор", pair.getUser().getName() + " (" + pair.getUser().getDivision() + ") \n");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+        FileWriter fw = new FileWriter(DATA_FILE);
+
+        StringBuilder str = new StringBuilder();
+
+        str.append("<!DOCTYPE html>" + "<html lang='en'>" + "<head>" + "<meta charset='UTF-8'>" + "<title>Title</title>" + "</head>" + "<body>" + "<h1>Реестр идей</h1>");
+
+        for(Idea pair : ideaRepository.findAll()){
+            str.append("\n<p><b><u>Номер: ").append(pair.getId()).append("</u></b></p>").append("<p><b>Заголовок: </b><i>").append(pair.getTitle()).append("</i></p>").append("<p><b>Описание: </b><i>").append(pair.getDescription()).append("</i></p>").append("<p>Статус: <i>").append(pair.getStatus().getName()).append("</i></p>").append("<p>Рейтинг: <i>").append(pair.getLikeCount()).append("</i></p>").append("<p>Создано: <i>").append(pair.getDate()).append("</i></p>").append("<p>Автор: <i>").append(pair.getUser().getName()).append("</i></p>").append("<p>Подразделение: <i>").append(pair.getUser().getDivision()).append("</i></p><hr>");
         }
 
-        FileWriter fileWriter = null;
+        str.append("</body>" + "</html>");
 
-        try {
-            fileWriter = new FileWriter(UPLOAD_FILE_DIR + UUID.randomUUID() + ".txt");
-            fileWriter.write(String.valueOf(jo));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                fileWriter.flush();
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        fw.write(String.valueOf(str));
+        fw.close();
 
-        return "redirect:";
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(String.valueOf(Paths.get(DATA_FILE))));
+
+        Files.delete(Paths.get(DATA_FILE));
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.TEXT_HTML)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=data.html")
+                .body(resource);
     }
 
     @PostMapping

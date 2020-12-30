@@ -46,9 +46,7 @@
                     <input type="text" name="keyword">
                     <input type="submit" class="btn btn-outline-danger" value="Поиск">
                 </form>
-                <form action="#" th:method="POST" th:action="@{/ideas/getIdeasDataBase}">
-                    <input type="submit" value="Download">
-                </form>
+                <a id="getIdeasDataBase" href="/ideas/getIdeasData">Download</a>
             </div>
 
             <nav aria-label="Page navigation example" class="float-left">
@@ -86,7 +84,6 @@
                     <div class="card-body">
                         <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
                         <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
-<!--                        <a href="#" id="like"><i class="fa fa-heart"></i></a>-->
                     </div>
                 </div>
 

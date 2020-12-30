@@ -40,7 +40,7 @@ public class Idea {
     @Enumerated(EnumType.STRING)
     private IdeaStatus status;
 
-    @DateTimeFormat
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
