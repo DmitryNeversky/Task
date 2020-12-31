@@ -2662,3 +2662,7 @@ footer.site-footer {
   border-bottom: 1px solid silver;
   background-color: rgba(0,0,0,0);
 }
+
+.badge-danger{
+  background-color: #ff00009e;
+}
