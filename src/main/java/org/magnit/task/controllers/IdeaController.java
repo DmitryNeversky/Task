@@ -297,6 +297,13 @@ public class IdeaController {
         return model;
     }
 
+    @PostMapping("/remove-{idea}")
+    public String remove(@PathVariable Idea idea){
+        ideaRepository.delete(idea);
+
+        return "redirect:/ideas";
+    }
+
     @ModelAttribute
     public void getHeader(Principal principal, Model model){
 

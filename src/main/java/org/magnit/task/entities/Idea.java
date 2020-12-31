@@ -43,7 +43,7 @@ public class Idea {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date date;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
     private User user;
 
     public Idea(String title, String description, IdeaStatus status, Date date, User user) {
