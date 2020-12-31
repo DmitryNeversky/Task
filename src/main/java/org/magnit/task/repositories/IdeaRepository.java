@@ -18,10 +18,11 @@ import java.util.List;
 public interface IdeaRepository extends JpaRepository<Idea, Integer>, JpaSpecificationExecutor<Idea> {
     Idea findById(int id);
 
+    List<Idea> findTop3ByOrderByLikeCountDesc();
+    List<Idea> findTop3ByOrderByIdDesc();
+
     Page<Idea> findAll(Pageable pageable);
-
     Page<Idea> findAllByStatus(Pageable pageable, IdeaStatus status);
-
     Page<Idea> findAllByTitleContaining(Pageable pageable, String title);
     Page<Idea> findByTitleContainingAndStatus(Pageable pageable, String title, IdeaStatus status);
 }

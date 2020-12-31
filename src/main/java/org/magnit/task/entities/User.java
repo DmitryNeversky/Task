@@ -38,6 +38,8 @@ public class User {
 
     private String about;
 
+    private int ideaCount;
+
     @Enumerated(EnumType.STRING)
     private Roles role;
 

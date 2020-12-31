@@ -58,6 +58,78 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-4" th:each="idea : ${newIdeas}">
+                        <div class="card">
+                            <div class="card-header">
+                                <span th:text="${idea.title}">~Title~</span><span class="color-gray small" th:text="' #' + ${idea.id}">~ID~</span>
+                                <span class="badge badge-danger float-right mt-1" th:text="${idea.likeCount}">49</span>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text description" th:text="${idea.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                            <div class="card-body">
+                                <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                                <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4" th:each="idea : ${topIdeas}">
+                        <div class="card">
+                            <div class="card-header">
+                                <span th:text="${idea.title}">~Title~</span><span class="color-gray small" th:text="' #' + ${idea.id}">~ID~</span>
+                                <span class="badge badge-danger float-right mt-1" th:text="${idea.likeCount}">49</span>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text description" th:text="${idea.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                            <div class="card-body">
+                                <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
+                                <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4" th:each="user : ${topUsers}">
+                        <aside class="profile-nav alt">
+                            <section class="card">
+                                <div class="card-header user-header alt bg-dark">
+                                    <div class="media">
+                                        <a th:href="'/profile/id' + ${user.id}">
+                                            <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" th:src="${user.avatarPath}">
+                                        </a>
+                                        <div class="media-body">
+                                            <h4 class="text-light display-6" th:text="${user.name}">Jim Doe</h4>
+                                            <p th:text="${user.division}">Project Manager</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <p> <i class="fa fa-envelope-o"></i> Идеи <span class="badge badge-primary pull-right" th:text="${user.ideas.size()}">10</span></p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <p href="#"> <i class="fa fa-tasks"></i> Одобрено <span class="badge badge-danger pull-right">15</span></p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <p href="#"> <i class="fa fa-bell-o"></i> На рассмотрении <span class="badge badge-success pull-right">11</span></p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <p href="#"> <i class="fa fa-comments-o"></i> Отказано <span class="badge badge-warning pull-right r-activity">03</span></p>
+                                    </li>
+                                </ul>
+
+                            </section>
+                        </aside>
+                    </div>
+                </div>
             </div><!-- .animated -->
         </div><!-- /.content -->
 

@@ -2657,3 +2657,8 @@ footer.site-footer {
   margin-right: 10%;
 }
 
+.advanced-input{
+  border: none;
+  border-bottom: 1px solid silver;
+  background-color: rgba(0,0,0,0);
+}

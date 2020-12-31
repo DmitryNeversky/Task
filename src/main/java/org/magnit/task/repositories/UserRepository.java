@@ -8,7 +8,9 @@ import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    List<User> findAll();
+
+    List<User> findTop3ByOrderByIdeaCountDesc();
+
     User findByUsername(String username);
 
     @Override

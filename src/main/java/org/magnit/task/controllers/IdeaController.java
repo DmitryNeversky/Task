@@ -73,6 +73,7 @@ public class IdeaController {
     @GetMapping("/new")
     public String getNew(Model model){
         model.addAttribute("idea", new Idea());
+
         return "new";
     }
 
@@ -81,6 +82,18 @@ public class IdeaController {
         model.addAttribute("idea", idea);
 
         return "edit";
+    }
+
+    @PostMapping("/save")
+    public String save(@RequestParam int id, @RequestParam String title, @RequestParam String description){
+
+        Idea idea = ideaRepository.findById(id);
+        idea.setTitle(title);
+        idea.setDescription(description);
+
+        ideaRepository.save(idea);
+
+        return "redirect:/ideas/idea-" + id;
     }
 
     // It need for optimization
@@ -103,41 +116,43 @@ public class IdeaController {
 
         // Upload Images
 
-        for(MultipartFile pair : images) {
-            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
-                continue;
+//        for(MultipartFile pair : images) {
+//            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
+//                continue;
+//
+//            // normalize the file path
+//            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+//
+//            // save the file on the local file system
+//            try {
+//                Path path = Paths.get(UPLOAD_IMAGE_DIR + fileName);
+//                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+//                idea.addImage(pair.getOriginalFilename(), fileName);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        // Upload Files
+//
+//        for(MultipartFile pair : files) {
+//            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
+//                continue;
+//
+//            // normalize the file path
+//            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+//
+//            // save the file on the local file system
+//            try {
+//                Path path = Paths.get(UPLOAD_FILE_DIR + fileName);
+//                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+//                idea.addFile(pair.getOriginalFilename(), fileName);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
-            // normalize the file path
-            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
-
-            // save the file on the local file system
-            try {
-                Path path = Paths.get(UPLOAD_IMAGE_DIR + fileName);
-                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                idea.addImage(pair.getOriginalFilename(), fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        // Upload Files
-
-        for(MultipartFile pair : files) {
-            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
-                continue;
-
-            // normalize the file path
-            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
-
-            // save the file on the local file system
-            try {
-                Path path = Paths.get(UPLOAD_FILE_DIR + fileName);
-                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                idea.addFile(pair.getOriginalFilename(), fileName);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        user.setIdeaCount(user.getIdeaCount() + 1);
 
         ideaRepository.save(idea);
         ideaRepository.flush();

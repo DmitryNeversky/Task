@@ -32,17 +32,21 @@ public class IndexController {
     }
 
     @GetMapping
-    public String getIndexPage(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model){
+    public String getIndexPage(Model model){
 
-        Page<Idea> ideas = ideaRepository.findAll(pageable);
-        model.addAttribute("ideas", ideas);
+        List<Idea> newIdeas = ideaRepository.findTop3ByOrderByIdDesc();
+        model.addAttribute("newIdeas", newIdeas);
+
+        List<Idea> topIdeas = ideaRepository.findTop3ByOrderByLikeCountDesc();
+        model.addAttribute("topIdeas", topIdeas);
 
         model.addAttribute("userCount", userRepository.count());
         model.addAttribute("ideaCount", ideaRepository.count());
 
-        model.addAttribute("pageable", pageable);
+        List<User> topUsers = userRepository.findTop3ByOrderByIdeaCountDesc();
+        model.addAttribute("topUsers", topUsers);
 
-        return "index";
+        return "home";
     }
 
     @PostMapping("/add")
@@ -83,5 +87,9 @@ public class IndexController {
         List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
 
         model.addAttribute("userNotifyCount", notifications.size());
+
+        for(IdeaStatus pair : IdeaStatus.values()){
+            model.addAttribute("status", pair);
+        }
     }
 }
