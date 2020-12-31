@@ -154,8 +154,19 @@ public class IdeaController {
 
         user.setIdeaCount(user.getIdeaCount() + 1);
 
+        // Find moderators and send the message
+
         ideaRepository.save(idea);
         ideaRepository.flush();
+
+        for(User pair : userRepository.findAllByRole(Roles.MODERATOR)){
+            mailSender.send(
+                    pair.getUsername(),
+                    "Новая идея на портале Магнит IT для людей",
+                    "Новая идея от " + idea.getUser().getName()
+                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
+            );
+        }
 
         return "redirect:/";
     }
@@ -180,7 +191,7 @@ public class IdeaController {
                 "Статус идеи изменен",
                 "Статус вашей идеи " + idea.getTitle()
                         + " #" + idea.getId() + " изменен на " + ideaStatus.getName()
-                        + ". Просмотреть идею: " + "http://localhost:4040/ideas/idea-" + idea.getId()
+                        + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
         );
 
         return "redirect:idea-" + idea.getId();
