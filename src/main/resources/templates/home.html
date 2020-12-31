@@ -3,6 +3,14 @@
 <head>
     <title>Главная</title>
     <th:block th:insert="common/page :: head"/>
+    <style>
+        .border-bottom{
+            border-bottom: 2px double #ff000029 !important;
+        }
+        h2{
+            color: darkslategray;
+        }
+    </style>
 </head>
 
 <body class="open">
@@ -59,6 +67,8 @@
                     </div>
                 </div>
 
+                <h2 class="mb-4 border-bottom p-3">Свежие идеи <i class="fa fa-bullhorn"></i></h2>
+
                 <div class="row">
                     <div class="col-md-4" th:each="idea : ${newIdeas}">
                         <div class="card">
@@ -76,6 +86,8 @@
                         </div>
                     </div>
                 </div>
+
+                <h2 class="mb-4 border-bottom p-3">Популярные идеи <i class="fa fa-star-half"></i></h2>
 
                 <div class="row">
                     <div class="col-md-4" th:each="idea : ${topIdeas}">
@@ -95,34 +107,36 @@
                     </div>
                 </div>
 
+                <h2 class="mb-4 border-bottom p-3">Самые активные <i class="fa fa-bolt"></i></h2>
+
                 <div class="row">
                     <div class="col-md-4" th:each="user : ${topUsers}">
                         <aside class="profile-nav alt">
                             <section class="card">
-                                <div class="card-header user-header alt bg-dark">
+                                <div class="card-header user-header alt" style="background-color: #ff000075">
                                     <div class="media">
                                         <a th:href="'/profile/id' + ${user.id}">
                                             <img class="align-self-center rounded-circle mr-3" style="width:85px; height:85px;" alt="" th:src="${user.avatarPath}">
                                         </a>
-                                        <div class="media-body">
-                                            <h4 class="text-light display-6" th:text="${user.name}">Jim Doe</h4>
-                                            <p th:text="${user.division}">Project Manager</p>
+                                        <div class="media-body mt-3">
+                                            <h4 class="text-white font-weight-bold" th:text="${user.name}">Jim Doe</h4>
+                                            <p class="text-white" th:text="${user.division}">Project Manager</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
-                                        <p> <i class="fa fa-envelope-o"></i> Идеи <span class="badge badge-primary pull-right" th:text="${user.ideas.size()}">10</span></p>
+                                        <p class="my-2" style="color: #007bff"> <i class="fa fa-lightbulb-o"></i> Идеи <span class="badge badge-primary pull-right" th:text="${user.ideaSize}">10</span></p>
                                     </li>
                                     <li class="list-group-item">
-                                        <p href="#"> <i class="fa fa-tasks"></i> Одобрено <span class="badge badge-danger pull-right">15</span></p>
+                                        <p class="my-2" style="color: #28a745"> <i class="fa fa-check"></i> Одобрено <span class="badge badge-success pull-right" th:text="${user.ideaApprovedSize}">15</span></p>
                                     </li>
                                     <li class="list-group-item">
-                                        <p href="#"> <i class="fa fa-bell-o"></i> На рассмотрении <span class="badge badge-success pull-right">11</span></p>
+                                        <p class="my-2" style="color: #ffc107"> <i class="fa fa-eye"></i> На рассмотрении <span class="badge badge-warning pull-right" th:text="${user.ideaLookingSize}">11</span></p>
                                     </li>
                                     <li class="list-group-item">
-                                        <p href="#"> <i class="fa fa-comments-o"></i> Отказано <span class="badge badge-warning pull-right r-activity">03</span></p>
+                                        <p class="my-2" style="color: #dc3545"> <i class="fa fa-ban"></i> Отказано <span class="badge badge-danger pull-right r-activity" th:text="${user.ideaDeniedSize}">03</span></p>
                                     </li>
                                 </ul>
 

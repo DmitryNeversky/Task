@@ -7,6 +7,7 @@ import org.magnit.task.entities.User;
 import org.magnit.task.repositories.IdeaRepository;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
+import org.magnit.task.services.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -23,11 +25,13 @@ public class IndexController {
 
     private final IdeaRepository ideaRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final NotificationRepository notificationRepository;
 
-    public IndexController(IdeaRepository ideaRepository, UserRepository userRepository, NotificationRepository notificationRepository) {
+    public IndexController(IdeaRepository ideaRepository, UserRepository userRepository, UserService userService, NotificationRepository notificationRepository) {
         this.ideaRepository = ideaRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
         this.notificationRepository = notificationRepository;
     }
 
@@ -44,7 +48,17 @@ public class IndexController {
         model.addAttribute("ideaCount", ideaRepository.count());
 
         List<User> topUsers = userRepository.findTop3ByOrderByIdeaCountDesc();
-        model.addAttribute("topUsers", topUsers);
+        List<User> userList = new ArrayList<>();
+
+        for(User pair : topUsers) {
+            pair.setIdeaSize(userService.ideasCount(pair));
+            pair.setIdeaApprovedSize(userService.ideaStatusCount(pair, IdeaStatus.APPROVED));
+            pair.setIdeaLookingSize(userService.ideaStatusCount(pair, IdeaStatus.LOOKING));
+            pair.setIdeaDeniedSize(userService.ideaStatusCount(pair, IdeaStatus.DENIED));
+            userList.add(pair);
+        }
+
+        model.addAttribute("topUsers", userList);
 
         return "home";
     }

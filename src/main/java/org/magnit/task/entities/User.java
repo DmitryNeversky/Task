@@ -35,9 +35,12 @@ public class User {
     private Date birthday;
 
     private String lang;
-
     private String about;
 
+    private int ideaSize;
+    private int ideaApprovedSize;
+    private int ideaLookingSize;
+    private int ideaDeniedSize;
     private int ideaCount;
 
     @Enumerated(EnumType.STRING)
