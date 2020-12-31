@@ -2520,10 +2520,9 @@ footer.site-footer {
   background-color: white;
   border-radius: 5px;
   margin-bottom: 2rem;
-}
-
-.filter .form-inline{
+  display: flex;
   justify-content: space-around;
+  height: 66px;
 }
 
 .btn-danger{
@@ -2657,3 +2656,4 @@ footer.site-footer {
   margin-left: 2%;
   margin-right: 10%;
 }
+

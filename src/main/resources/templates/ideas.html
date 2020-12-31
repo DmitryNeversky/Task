@@ -23,30 +23,22 @@
 
             <!-- Filter -->
             <div class="filter">
-                <form class="form-filter" id="filter">
-                    <div class="form-group">
-                        <label>
-                            <select class="form-control" id="valStatus">
-                                <option th:each="pair : ${statuses}" th:text="${pair.name}" th:value="${pair}">~Status~</option>
-                            </select>
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <select class="form-control" id="valSort">
-                                <option>Сначала свежее</option>
-                                <option>Сначала старое</option>
-                                <option>Популярное</option>
-                                <option>Менее популярное</option>
-                            </select>
-                        </label>
-                    </div>
-                </form>
-                <form action="#" th:method="POST" th:action="@{/searchKeyWord}">
-                    <input type="text" name="keyword">
-                    <input type="submit" class="btn btn-outline-danger" value="Поиск">
-                </form>
-                <a id="getIdeasDataBase" href="/ideas/getIdeasData">Download</a>
+                <label>
+                    <select class="form-control" id="valStatus">
+                        <option th:each="pair : ${statuses}" th:text="${pair.name}" th:value="${pair}">~Status~</option>
+                    </select>
+                </label>
+                <label>
+                    <select class="form-control" id="valSort">
+                        <option>Сначала свежее</option>
+                        <option>Сначала старое</option>
+                        <option>Популярное</option>
+                        <option>Менее популярное</option>
+                    </select>
+                </label>
+                <input type="text" id="valTitle" placeholder="Найти">
+                <input type="button" id="filterButton" class="btn btn-outline-danger" value="Поиск">
+                <a id="getIdeasDataBase" class="mt-1" href="/ideas/getIdeasData">Скачать архив идей</a>
             </div>
 
             <nav aria-label="Page navigation example" class="float-left">

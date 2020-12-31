@@ -56,13 +56,9 @@ public class IdeaController {
     @GetMapping
     public String getIdeas(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model){
 
-//        PageRequest pageRequest = PageRequest.of(0, 5, Sort.Direction.ASC, "id");
-
         Page<Idea> ideas = ideaRepository.findAll(pageable);
         model.addAttribute("ideas", ideas);
         model.addAttribute("pageable", pageable);
-
-//        PageRequest.of(0, 5, Sort.by("price").descending().and(Sort.by("name")));
 
         return "ideas";
     }
@@ -230,6 +226,7 @@ public class IdeaController {
             @RequestParam(required = false) IdeaStatus status,
             @RequestParam(required = false) String direction,
             @RequestParam(required = false) String property,
+            @RequestParam(required = false) String title,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable,
             Model model) {
 
@@ -244,7 +241,10 @@ public class IdeaController {
                     Sort.by(Sort.Direction.fromString(direction), property)
             );
 
-            ideas = ideaRepository.findAllByStatus(pages, status);
+            if(title != null)
+                ideas = ideaRepository.findByTitleContainingAndStatus(pages, title, status);
+            else
+                ideas = ideaRepository.findAllByStatus(pages, status);
 
         } else {
 
@@ -254,7 +254,10 @@ public class IdeaController {
                     Sort.by(Sort.Direction.fromString(direction), property)
             );
 
-            ideas = ideaRepository.findAll(pages);
+            if(title == null)
+                ideas = ideaRepository.findAll(pages);
+            else
+                ideas = ideaRepository.findAllByTitleContaining(pages, title);
         }
 
         model.addAttribute("ideas", ideas);

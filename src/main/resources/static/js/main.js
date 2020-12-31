@@ -1,13 +1,5 @@
 jQuery(document).ready(function($) {
 
-	"use strict";
-
-	[].slice.call( document.querySelectorAll( 'select.cs-select' ) ).forEach( function(el) {
-		new SelectFx(el);
-	});
-
-	jQuery('.selectpicker').selectpicker;
-
 	$('.notify').on('click', function(event) {
 
 		const formData = new FormData();
@@ -101,89 +93,6 @@ jQuery(document).ready(function($) {
 
 	truncateText(".preDescription", 200);
 
-	$( "#valStatus" ).change(function(event) {
-		event.preventDefault()
-
-		$('.ideas').fadeOut('slow','linear', function(){
-			let status = $('#valStatus').val()
-			let value = $('#valSort').val()
-			let direction
-			let property
-			switch (value){
-				case "Популярное":
-					direction = "DESC"
-					property = "likeCount"
-					break
-				case "Менее популярное":
-					direction = "ASC"
-					property = "likeCount"
-					break
-				case "Сначала свежее":
-					direction = "DESC"
-					property = "id"
-					break
-				case "Сначала старое":
-					direction = "ASC"
-					property = "id"
-					break
-				default:
-					direction = "DESC"
-					property = "id"
-					break
-			}
-
-			const formData = new FormData();
-			formData.append("direction", direction);
-			formData.append("property", property);
-			formData.append("status", status);
-
-			send(formData, window.location, function(res) {
-				$(".ideas").html($('.ideas', res).html()).ready(function (){
-					$('.ideas').fadeIn('slow','linear')
-				})
-			})
-		});
-	});
-
-	$( "#valSort" ).change(function(event) {
-		event.preventDefault()
-
-		$('.ideas').fadeOut('slow','linear', function(){
-			let status = $('#valStatus').val()
-			let value = $('#valSort').val()
-			let direction
-			let property
-			switch (value){
-				case "Популярное":
-					direction = "DESC"
-					property = "likeCount"
-					break
-				case "Менее популярное":
-					direction = "ASC"
-					property = "likeCount"
-					break
-				case "Сначала свежее":
-					direction = "DESC"
-					property = "id"
-					break
-				case "Сначала старое":
-					direction = "ASC"
-					property = "id"
-					break
-			}
-			const formData = new FormData();
-			formData.append("direction", direction);
-			formData.append("property", property);
-			formData.append("status", status);
-
-			send(formData, window.location, function(res) {
-				$(".ideas").html($('.ideas', res).html()).ready(function (){
-					$('.ideas').fadeIn('slow','linear')
-				})
-			})
-		});
-	});
-
 	$("body").on('submit', '#likeForm', function(event) {
 		event.preventDefault()
 
@@ -211,6 +120,48 @@ jQuery(document).ready(function($) {
 			$(".ideas").html($('.ideas', res).html()).ready(function () {
 				$('.ideas').fadeIn('slow', 'linear')
 			});
+		});
+	});
+
+	$('#filterButton').click(function (event) {
+		event.preventDefault()
+
+		$('.ideas').fadeOut('slow','linear', function(){
+			let title = $('#valTitle').val()
+			let status = $('#valStatus').val()
+			let value = $('#valSort').val()
+			let direction
+			let property
+			switch (value){
+				case "Популярное":
+					direction = "DESC"
+					property = "likeCount"
+					break
+				case "Менее популярное":
+					direction = "ASC"
+					property = "likeCount"
+					break
+				case "Сначала свежее":
+					direction = "DESC"
+					property = "id"
+					break
+				case "Сначала старое":
+					direction = "ASC"
+					property = "id"
+					break
+			}
+
+			const formData = new FormData();
+			formData.append("direction", direction);
+			formData.append("property", property);
+			formData.append("status", status);
+			formData.append("title", title);
+
+			send(formData, window.location, function(res) {
+				$(".ideas").html($('.ideas', res).html()).ready(function (){
+					$('.ideas').fadeIn('slow','linear')
+				})
+			})
 		});
 	});
 
