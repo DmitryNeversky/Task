@@ -16,24 +16,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 
 @Controller
 @RequestMapping("ideas")
@@ -96,8 +90,6 @@ public class IdeaController {
 
         return "redirect:/ideas/idea-" + id;
     }
-
-    // It need for optimization
 
     private final String UPLOAD_IMAGE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/images/";
     private final String UPLOAD_FILE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/files/";
@@ -203,7 +195,7 @@ public class IdeaController {
     }
 
     @PostMapping("setLike-{idea}")
-    public String setLike(@PathVariable Idea idea, Principal principal, Model model, @RequestParam boolean flag){
+    public String setLike(@PathVariable Idea idea, Principal principal, @RequestParam boolean flag){
         User user = userRepository.findByUsername(principal.getName());
 
         if (flag){
@@ -218,11 +210,10 @@ public class IdeaController {
         return "redirect:";
     }
 
-    private final String DATA_FILE = "/home/koshey/Документы/task/src/main/resources/uploads/files/data.html";
-
     @GetMapping("getIdeasData")
-    public ResponseEntity<InputStreamResource> getIdeasData(String param) throws IOException {
+    public ResponseEntity<InputStreamResource> getIdeasData() throws IOException {
 
+        String DATA_FILE = "/home/koshey/Документы/task/src/main/resources/uploads/files/data.html";
         if(!(new File(String.valueOf(Paths.get(DATA_FILE))).exists()))
             Files.createFile(Paths.get(DATA_FILE));
 

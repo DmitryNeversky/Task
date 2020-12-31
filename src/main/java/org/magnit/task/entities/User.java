@@ -2,7 +2,6 @@ package org.magnit.task.entities;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -31,7 +30,8 @@ public class User {
 
     private String phone;
 
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @Basic
+    @Temporal(TemporalType.DATE)
     private Date birthday;
 
     private String lang;

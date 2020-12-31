@@ -1,7 +1,6 @@
 package org.magnit.task.entities;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -18,7 +17,8 @@ public class Notification {
     private String message;
     private long ideaId;
 
-    @DateTimeFormat
+    @Basic
+    @Temporal(TemporalType.DATE)
     private Date date;
 
     private boolean look;
