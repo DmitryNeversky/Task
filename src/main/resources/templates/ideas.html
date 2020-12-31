@@ -58,11 +58,11 @@
                         <div class="custom-card-header">
                             <span th:text="${idea.title}">~Title~</span><span class="color-gray small" th:text="' #' + ${idea.id}">~ID~</span>
                             <form id="unLikeForm" th:name="${idea.id}" action="#">
-                                <input type="submit" value="❮">
+                                <input type="submit" th:style="${idea.unLikes.contains(currentUser)} ? 'color: #ff00009e' : 'color: #f0808070'" value="❮">
                             </form>
                             <span th:text="${idea.likeCount}" class="count"></span>
                             <form id="likeForm" th:name="${idea.id}" action="#">
-                                <input type="submit" value="❯">
+                                <input type="submit" th:style="${idea.likes.contains(currentUser)} ? 'color: #ff00009e' : 'color: #f0808070'" value="❯">
                             </form>
                         </div>
                         <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
