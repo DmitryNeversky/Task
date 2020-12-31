@@ -18,6 +18,16 @@ jQuery(document).ready(function($) {
 		});
 	});
 
+	$("body").on('submit', '.removeNotify', function (event) {
+		event.preventDefault()
+
+		let location = $(this).attr("action")
+
+		send(null, location, function(res) {
+			$(".for-message").html($('.for-message', res).html())
+		});
+	});
+
 	$('.search-trigger').on('click', function(event) {
 		event.preventDefault();
 		event.stopPropagation();

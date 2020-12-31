@@ -20,6 +20,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.MessagingException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
@@ -186,13 +187,17 @@ public class IdeaController {
 
         notificationRepository.save(notification);
 
-        mailSender.send(
-                idea.getUser().getUsername(),
-                "Статус идеи изменен",
-                "Статус вашей идеи " + idea.getTitle()
-                        + " #" + idea.getId() + " изменен на " + ideaStatus.getName()
-                        + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
-        );
+        try {
+            mailSender.send(
+                    idea.getUser().getUsername(),
+                    "Статус идеи изменен",
+                    "Статус вашей идеи " + idea.getTitle()
+                            + " #" + idea.getId() + " изменен на " + ideaStatus.getName()
+                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
+            );
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         return "redirect:idea-" + idea.getId();
     }

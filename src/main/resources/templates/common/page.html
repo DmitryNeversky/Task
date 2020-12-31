@@ -44,13 +44,14 @@
                             <i class="fa fa-bell"></i>
                             <span class="count bg-danger notification-counter" th:if="${userNotifyCount > 0}" th:text="${userNotifyCount}">~1~</span>
                         </button>
-                        <div class="dropdown-menu border rounded" aria-labelledby="message">
+                        <div class="dropdown-menu notifies border rounded" aria-labelledby="message">
                             <a class="notify dropdown-item media border-bottom pb-2" th:href="@{'/notify-' + ${notify.id}}" th:each="notify : ${userNotifies}" th:data-id="${notify.id}" th:style="${notify.look eq false} ? 'background-color: #ff00000a'">
                                 <div class="message media-body">
                                     <span class="name float-left" th:text="${notify.title}">~Title~</span>
                                     <span class="time float-right" th:text="${notify.date}">~12:34~</span>
                                     <p th:text="${notify.message}">~Hello, this is an example msg~</p>
                                     <form th:method="POST" class="removeNotify" th:action="@{'/removeNotify-' + ${notify.id}}">
+                                        <input type="hidden" th:id="'notify-' + ${notify.id}">
                                         <input type="submit" value="удалить">
                                     </form>
                                 </div>
