@@ -2519,7 +2519,6 @@ footer.site-footer {
   padding: 1rem;
   background-color: white;
   border-radius: 5px;
-  margin-bottom: 2rem;
   display: flex;
   justify-content: space-around;
   height: 66px;
@@ -2625,10 +2624,6 @@ footer.site-footer {
 
 .invalid-feedback{
   display: block;
-}
-
-#likeForm ,#unLikeForm{
-
 }
 
 #likeForm input, #unLikeForm input {

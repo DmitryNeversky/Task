@@ -22,24 +22,32 @@
         <div class="animated fadeIn">
 
             <!-- Filter -->
-            <div class="filter">
-                <label>
-                    <select class="form-control" id="valStatus">
+            <div class="filter form-row align-items-center mb-2">
+                <div class="col-sm-3">
+                    <label for="valStatus" class="sr-only">Статус</label>
+                    <select class="custom-select" id="valStatus">
                         <option th:each="pair : ${statuses}" th:text="${pair.name}" th:value="${pair}">~Status~</option>
                     </select>
-                </label>
-                <label>
-                    <select class="form-control" id="valSort">
+                </div>
+                <div class="col-sm-3">
+                    <label for="valSort" class="sr-only">Сортировать</label>
+                    <select class="custom-select" id="valSort">
                         <option>Сначала свежее</option>
                         <option>Сначала старое</option>
                         <option>Популярное</option>
                         <option>Менее популярное</option>
                     </select>
-                </label>
-                <input type="text" id="valTitle" placeholder="Найти">
-                <input type="button" id="filterButton" class="btn btn-outline-danger" value="Поиск">
-                <a id="getIdeasDataBase" class="mt-1" href="/ideas/getIdeasData">Скачать архив идей</a>
+                </div>
+                <div class="col-sm-3">
+                    <label for="valTitle" class="sr-only">Поиск</label>
+                    <input type="text" id="valTitle" class="form-control" placeholder="Найти">
+                </div>
+                <div class="col-auto">
+                    <input type="button" id="filterButton" class="btn btn-outline-danger" value="Применить">
+                </div>
             </div>
+
+            <div class="mb-4"><a id="getIdeasDataBase" href="/ideas/getIdeasData">Скачать архив идей</a></div>
 
             <nav aria-label="Page navigation example" class="float-left">
                 <ul class="pagination">

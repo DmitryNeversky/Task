@@ -44,7 +44,7 @@
                             </form>
                         </div>
                     </div>
-                    <a class="float-right" th:if="${currentUser.id == idea.user.id}" th:href="@{'/ideas/idea-' + ${idea.id} + '/edit'}">Редактировать</a>
+                    <a class="float-right mr-2" th:if="${currentUser.id == idea.user.id}" th:href="@{'/ideas/idea-' + ${idea.id} + '/edit'}">Редактировать</a>
                 </div>
                 <div class="card-body">
                     <p class="card-text" th:text="${idea.description}">~Description~</p>
@@ -70,6 +70,9 @@
                     <p class="float-right" th:text="${idea.date}"></p>
                 </div>
             </div>
+            <form th:if="${currentUser.role == roles.MODERATOR}" action="#" th:method="POST" th:action="@{'/ideas/remove-' + ${idea.id}}">
+                <input type="submit" class="btn btn-outline-danger float-right" value="Удалить">
+            </form>
         </div><!-- .animated -->
     </div><!-- /.content -->
 

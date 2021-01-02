@@ -23,11 +23,11 @@
             <form class="card" th:method="POST" th:action="@{/ideas/save}">
                 <input type="hidden" name="id" th:value="${idea.id}">
                 <div class="card-header">
-                    <input type="text" class="float-left advanced-input w-20" name="title" th:value="${idea.title}"/>
+                    <input type="text" class="float-left advanced-input w-20" name="title" th:value="${idea.title}" required/>
                     <input type="submit" class="float-right" value="Сохранить">
                 </div>
                 <div class="card-body">
-                    <textarea type="text" class="card-text w-100 p-2" rows="7" name="description" th:text="${idea.description}"></textarea>
+                    <textarea type="text" class="card-text w-100 p-2" rows="7" name="description" th:text="${idea.description}" required></textarea>
                 </div>
 <!--                <div class="card-body border-top" th:if="!${idea.images.isEmpty()}">-->
 <!--                    <p class="font-italic">Прикрепленные изображения</p>-->

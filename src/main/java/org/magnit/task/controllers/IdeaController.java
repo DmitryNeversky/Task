@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,10 +25,13 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("ideas")
@@ -91,9 +95,6 @@ public class IdeaController {
         return "redirect:/ideas/idea-" + id;
     }
 
-    private final String UPLOAD_IMAGE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/images/";
-    private final String UPLOAD_FILE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/files/";
-
     @PostMapping("/add")
     public String add(
             @RequestParam String title,
@@ -109,41 +110,47 @@ public class IdeaController {
 
         // Upload Images
 
-//        for(MultipartFile pair : images) {
-//            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
-//                continue;
-//
-//            // normalize the file path
-//            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
-//
-//            // save the file on the local file system
-//            try {
-//                Path path = Paths.get(UPLOAD_IMAGE_DIR + fileName);
-//                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-//                idea.addImage(pair.getOriginalFilename(), fileName);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        // Upload Files
-//
-//        for(MultipartFile pair : files) {
-//            if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
-//                continue;
-//
-//            // normalize the file path
-//            String fileName = UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
-//
-//            // save the file on the local file system
-//            try {
-//                Path path = Paths.get(UPLOAD_FILE_DIR + fileName);
-//                Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-//                idea.addFile(pair.getOriginalFilename(), fileName);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        if(images != null) {
+            for (MultipartFile pair : images) {
+                if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
+                    continue;
+
+                // normalize the file path
+                String fileName = java.util.UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+
+                // save the file on the local file system
+                try {
+                    String UPLOAD_IMAGE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/images/";
+                    Path path = Paths.get(UPLOAD_IMAGE_DIR + fileName);
+                    Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    idea.addImage(pair.getOriginalFilename(), fileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        // Upload Files
+
+        if(files != null) {
+            for (MultipartFile pair : files) {
+                if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
+                    continue;
+
+                // normalize the file path
+                String fileName = java.util.UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
+
+                // save the file on the local file system
+                try {
+                    String UPLOAD_FILE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/files/";
+                    Path path = Paths.get(UPLOAD_FILE_DIR + fileName);
+                    Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                    idea.addFile(pair.getOriginalFilename(), fileName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         user.setIdeaCount(user.getIdeaCount() + 1);
 
@@ -152,14 +159,14 @@ public class IdeaController {
         ideaRepository.save(idea);
         ideaRepository.flush();
 
-        for(User pair : userRepository.findAllByRole(Roles.MODERATOR)){
-            mailSender.send(
-                    pair.getUsername(),
-                    "Новая идея на портале Магнит IT для людей",
-                    "Новая идея от " + idea.getUser().getName()
-                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
-            );
-        }
+//        for(User pair : userRepository.findAllByRole(Roles.MODERATOR)){
+//            mailSender.send(
+//                    pair.getUsername(),
+//                    "Новая идея на портале Магнит IT для людей",
+//                    "Новая идея от " + idea.getUser().getName()
+//                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
+//            );
+//        }
 
         return "redirect:/";
     }
