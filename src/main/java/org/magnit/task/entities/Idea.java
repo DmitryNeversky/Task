@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.util.*;
 
 @Entity
@@ -15,7 +16,10 @@ public class Idea {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Min(value = 5, message = "Заголовок слишком короткий (минимум 5 символов)")
     private String title;
+
+    @Min(value = 55, message = "Описание слишком короткое (минимум 55 символов).")
     private String description;
 
     private long likeCount;

@@ -4,6 +4,7 @@ import org.magnit.task.entities.*;
 import org.magnit.task.repositories.IdeaRepository;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
+import org.magnit.task.services.IdeaService;
 import org.magnit.task.services.MailSender;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.data.domain.Page;
@@ -16,22 +17,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("ideas")
@@ -41,19 +33,26 @@ public class IdeaController {
     private final UserRepository userRepository;
     private final NotificationRepository notificationRepository;
     private final MailSender mailSender;
+    private final IdeaService ideaService;
 
     public IdeaController(IdeaRepository ideaRepository,
                           UserRepository userRepository,
                           NotificationRepository notificationRepository,
-                          MailSender mailSender) {
+                          MailSender mailSender, IdeaService ideaService) {
         this.ideaRepository = ideaRepository;
         this.userRepository = userRepository;
         this.notificationRepository = notificationRepository;
         this.mailSender = mailSender;
+        this.ideaService = ideaService;
     }
 
     @GetMapping
-    public String getIdeas(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable, Model model){
+    public String getIdeas(
+            @PageableDefault(
+                    sort = {"id"},
+                    direction = Sort.Direction.DESC,
+                    size = 5) Pageable pageable,
+            Model model){
 
         Page<Idea> ideas = ideaRepository.findAll(pageable);
         model.addAttribute("ideas", ideas);
@@ -84,7 +83,11 @@ public class IdeaController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestParam int id, @RequestParam String title, @RequestParam String description){
+    public String save(
+            @RequestParam int id,
+            @RequestParam String title,
+            @RequestParam String description
+    ){
 
         Idea idea = ideaRepository.findById(id);
         idea.setTitle(title);
@@ -108,53 +111,10 @@ public class IdeaController {
 
         Idea idea = new Idea(title, description, IdeaStatus.LOOKING, new Date(), user);
 
-        // Upload Images
-
-        if(images != null) {
-            for (MultipartFile pair : images) {
-                if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
-                    continue;
-
-                // normalize the file path
-                String fileName = java.util.UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
-
-                // save the file on the local file system
-                try {
-                    String UPLOAD_IMAGE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/images/";
-                    Path path = Paths.get(UPLOAD_IMAGE_DIR + fileName);
-                    Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    idea.addImage(pair.getOriginalFilename(), fileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        // Upload Files
-
-        if(files != null) {
-            for (MultipartFile pair : files) {
-                if (Objects.requireNonNull(pair.getOriginalFilename()).isEmpty())
-                    continue;
-
-                // normalize the file path
-                String fileName = java.util.UUID.randomUUID() + "_" + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
-
-                // save the file on the local file system
-                try {
-                    String UPLOAD_FILE_DIR = "/home/koshey/Документы/task/src/main/resources/uploads/files/";
-                    Path path = Paths.get(UPLOAD_FILE_DIR + fileName);
-                    Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    idea.addFile(pair.getOriginalFilename(), fileName);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+        ideaService.uploadImages(images, idea);
+        ideaService.uploadFiles(files, idea);
 
         user.setIdeaCount(user.getIdeaCount() + 1);
-
-        // Find moderators and send the message
 
         ideaRepository.save(idea);
         ideaRepository.flush();
@@ -173,7 +133,6 @@ public class IdeaController {
 
     @PostMapping("setStatus-{idea}")
     public String setStatus(@PathVariable Idea idea, @RequestParam String status){
-        IdeaStatus ideaStatus = IdeaStatus.getValueByName(status);
         idea.setStatus(IdeaStatus.getValueByName(status));
         ideaRepository.save(idea);
 
@@ -186,17 +145,17 @@ public class IdeaController {
 
         notificationRepository.save(notification);
 
-        try {
-            mailSender.send(
-                    idea.getUser().getUsername(),
-                    "Статус идеи изменен",
-                    "Статус вашей идеи " + idea.getTitle()
-                            + " #" + idea.getId() + " изменен на " + ideaStatus.getName()
-                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
-            );
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+//        try {
+//            mailSender.send(
+//                    idea.getUser().getUsername(),
+//                    "Статус идеи изменен",
+//                    "Статус вашей идеи " + idea.getTitle()
+//                            + " #" + idea.getId() + " изменен на " + ideaStatus.getName()
+//                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
+//            );
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
 
         return "redirect:idea-" + idea.getId();
     }
@@ -205,11 +164,8 @@ public class IdeaController {
     public String setLike(@PathVariable Idea idea, Principal principal, @RequestParam boolean flag){
         User user = userRepository.findByUsername(principal.getName());
 
-        if (flag){
-            idea.addLike(user);
-        } else {
-            idea.remLike(user);
-        }
+        if (flag) idea.addLike(user);
+        else idea.remLike(user);
 
         ideaRepository.save(idea);
         ideaRepository.flush();
@@ -217,31 +173,13 @@ public class IdeaController {
         return "redirect:";
     }
 
-    @GetMapping("getIdeasData")
-    public ResponseEntity<InputStreamResource> getIdeasData() throws IOException {
+    @GetMapping("getIdeaBase")
+    public ResponseEntity<InputStreamResource> getIdeaBase() {
 
-        String DATA_FILE = "/home/koshey/Документы/task/src/main/resources/uploads/files/data.html";
-        if(!(new File(String.valueOf(Paths.get(DATA_FILE))).exists()))
-            Files.createFile(Paths.get(DATA_FILE));
+        InputStreamResource resource = null;
 
-        FileWriter fw = new FileWriter(DATA_FILE);
-
-        StringBuilder str = new StringBuilder();
-
-        str.append("<!DOCTYPE html>" + "<html lang='en'>" + "<head>" + "<meta charset='UTF-8'>" + "<title>Title</title>" + "</head>" + "<body>" + "<h1>Реестр идей</h1>");
-
-        for(Idea pair : ideaRepository.findAll()){
-            str.append("\n<p><b><u>Номер: ").append(pair.getId()).append("</u></b></p>").append("<p><b>Заголовок: </b><i>").append(pair.getTitle()).append("</i></p>").append("<p><b>Описание: </b><i>").append(pair.getDescription()).append("</i></p>").append("<p>Статус: <i>").append(pair.getStatus().getName()).append("</i></p>").append("<p>Рейтинг: <i>").append(pair.getLikeCount()).append("</i></p>").append("<p>Создано: <i>").append(pair.getDate()).append("</i></p>").append("<p>Автор: <i>").append(pair.getUser().getName()).append("</i></p>").append("<p>Подразделение: <i>").append(pair.getUser().getDivision()).append("</i></p><hr>");
-        }
-
-        str.append("</body>" + "</html>");
-
-        fw.write(String.valueOf(str));
-        fw.close();
-
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(String.valueOf(Paths.get(DATA_FILE))));
-
-        Files.delete(Paths.get(DATA_FILE));
+        try { resource = ideaService.downloadIdeaBase(); }
+        catch (IOException e) { e.printStackTrace(); }
 
         return ResponseEntity.ok()
                 .contentType(MediaType.TEXT_HTML)
@@ -297,6 +235,7 @@ public class IdeaController {
 
     @PostMapping("/remove-{idea}")
     public String remove(@PathVariable Idea idea){
+        idea.getUser().setIdeaCount(idea.getUser().getIdeaCount() - 1);
         ideaRepository.delete(idea);
 
         return "redirect:/ideas";
