@@ -23,13 +23,22 @@
 
             <!-- Filter -->
             <div class="filter form-row align-items-center mb-2">
-                <div class="col-sm-3">
+                <div class="col-sm-2">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination m-0">
+                            <li class="page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
+                                <a class="page-link" th:href="@{/ideas/(page=0, size=${i})}" th:text="${i}">~1~</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-sm-2">
                     <label for="valStatus" class="sr-only">Статус</label>
                     <select class="custom-select none-focus" id="valStatus">
                         <option th:each="pair : ${statuses}" th:text="${pair.name}" th:value="${pair}">~Status~</option>
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label for="valSort" class="sr-only">Сортировать</label>
                     <select class="custom-select none-focus" id="valSort">
                         <option>Сначала свежее</option>
@@ -38,25 +47,22 @@
                         <option>Менее популярное</option>
                     </select>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <label for="valTitle" class="sr-only">Поиск</label>
                     <input type="text" id="valTitle" class="form-control red-focus" placeholder="Найти">
                 </div>
-                <div class="col-auto">
+                <div class="col-sm-1">
                     <input type="button" id="filterButton" class="btn btn-outline-danger" value="Применить">
+                </div>
+                <div class="col-sm-2">
+                    <a th:href="@{/ideas/new}" class="btn btn-danger float-right">Добавить <i class="fa fa-plus"></i></a>
                 </div>
             </div>
 
             <div class="mb-4"><a id="getIdeasDataBase" href="/ideas/getIdeaBase">Скачать архив идей</a></div>
 
-            <nav aria-label="Page navigation example" class="float-left">
-                <ul class="pagination">
-                    <li class="page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
-                        <a class="page-link" th:href="@{/ideas/(page=0, size=${i})}" th:text="${i}">~1~</a>
-                    </li>
-                </ul>
-            </nav>
-            <a th:href="@{/ideas/new}" class="btn btn-danger float-right">Добавить <i class="fa fa-plus"></i></a>
+
+
 
             <div class="ideas">
 

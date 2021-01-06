@@ -35,7 +35,7 @@ public class IdeaService {
     }
 
     public InputStreamResource downloadIdeaBase() throws IOException {
-        String DATA_FILE = "/home/koshey/Документы/task/src/main/resources/uploads/files/data.html";
+        String DATA_FILE = "/home/koshey/task/src/main/resources/uploads/files/data.html";
         if(!(new File(String.valueOf(Paths.get(DATA_FILE))).exists()))
             Files.createFile(Paths.get(DATA_FILE));
 
