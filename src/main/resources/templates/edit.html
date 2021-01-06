@@ -24,7 +24,7 @@
                 <input type="hidden" name="id" th:value="${idea.id}">
                 <div class="card-header">
                     <input type="text" class="float-left advanced-input w-20" name="title" th:value="${idea.title}" required/>
-                    <input type="submit" class="float-right" value="Сохранить">
+                    <input type="submit" class="btn btn-outline-danger float-right mt-2" value="Сохранить">
                 </div>
                 <div class="card-body">
                     <textarea type="text" class="card-text w-100 p-2" rows="7" name="description" th:text="${idea.description}" required></textarea>
@@ -56,7 +56,7 @@
                 </div>
             </form>
             <form action="#" th:method="POST" th:action="@{'/ideas/remove-' + ${idea.id}}">
-                <input type="submit" class="btn btn-outline-danger float-right" value="Удалить">
+                <input type="submit" class="text-danger border-0 btn float-right" value="Удалить">
             </form>
         </div><!-- .animated -->
     </div><!-- /.content -->

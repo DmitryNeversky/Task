@@ -25,13 +25,13 @@
             <div class="filter form-row align-items-center mb-2">
                 <div class="col-sm-3">
                     <label for="valStatus" class="sr-only">Статус</label>
-                    <select class="custom-select" id="valStatus">
+                    <select class="custom-select none-focus" id="valStatus">
                         <option th:each="pair : ${statuses}" th:text="${pair.name}" th:value="${pair}">~Status~</option>
                     </select>
                 </div>
                 <div class="col-sm-3">
                     <label for="valSort" class="sr-only">Сортировать</label>
-                    <select class="custom-select" id="valSort">
+                    <select class="custom-select none-focus" id="valSort">
                         <option>Сначала свежее</option>
                         <option>Сначала старое</option>
                         <option>Популярное</option>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-sm-3">
                     <label for="valTitle" class="sr-only">Поиск</label>
-                    <input type="text" id="valTitle" class="form-control" placeholder="Найти">
+                    <input type="text" id="valTitle" class="form-control red-focus" placeholder="Найти">
                 </div>
                 <div class="col-auto">
                     <input type="button" id="filterButton" class="btn btn-outline-danger" value="Применить">

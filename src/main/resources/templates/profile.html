@@ -53,7 +53,7 @@
                                 <p><span>День рождения: </span><b th:text="${user.birthday != null} ? ${user.birthday} : 'Не указано'">~birthday~</b></p>
                                 <p><span>Телефон: </span><b th:text="${user.phone != 0} ? ${user.phone} : 'Не указано'">~phone~</b></p>
                                 <p><span>Языки: </span><b th:text="${user.lang != null} ? ${user.lang} : 'Не указано'">~lang~</b></p>
-                                <p><span>О мне: </span><b th:text="${user.about != null} ? ${user.about} : 'Не указано'">~about~</b></p>
+                                <p><span>О себе: </span><b th:text="${user.about != null} ? ${user.about} : 'Не указано'">~about~</b></p>
                                 <a th:if="${user.username == currentUser.username}" href="/profile/edit" class="btn btn-danger float-left">Изменить</a>
                             </div>
                         </div>

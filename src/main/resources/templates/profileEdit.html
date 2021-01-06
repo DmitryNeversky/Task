@@ -32,8 +32,14 @@
                                         <small id="cancelLoad" style="visibility: hidden; cursor: pointer">Отменить</small>
                                     </div>
                                     <div class="col-md-6 pt-2 text-left mt-3">
-                                        <input type="text" class="advanced-input" placeholder="Иванов Д.С" id="name" th:value="${currentUser.name}" name="name" required>
-                                        <input type="text" class="advanced-input" placeholder="Маркетолог" id="division" th:value="${currentUser.division}" name="division" required>
+                                        <input type="text" class="advanced-input w-100" placeholder="Иванов Д.С" id="name" th:value="${currentUser.name}" name="name" required>
+                                        <select class="form-control" id="division" name="division" required>
+                                            <option th:value="${currentUser.division}" th:text="${currentUser.division}"></option>
+                                            <option th:if="${currentUser.division} != 'Грузчик'" value="Грузчик">Грузчик</option>
+                                            <option th:if="${currentUser.division} != 'Кассир'" value="Кассир">Кассир</option>
+                                            <option th:if="${currentUser.division} != 'Маркетолог'" value="Маркетолог">Маркетолог</option>
+                                            <option th:if="${currentUser.division} != 'Уборщик'" value="Уборщик">Уборщик</option>
+                                        </select>
                                     </div>
                                 </center>
                             </div>
@@ -43,10 +49,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-body">
-                                    <p><span>День рождения </span><input type="date" class="advanced-input" th:value="${currentUser.birthday} != null ? ${currentUser.birthday} : ''" name="birthday"></p>
-                                    <p><input type="tel" class="advanced-input" placeholder="Телефон" th:value="${currentUser.phone} != 0 ? ${currentUser.phone} : ''" name="phone"></p>
-                                    <p><input type="text" class="advanced-input" placeholder="Языки" th:value="${currentUser.lang} != null ? ${currentUser.lang} : ''" name="lang"></p>
-                                    <p><input type="text" class="advanced-input" placeholder="О себе" th:value="${currentUser.about} != null ? ${currentUser.about} : ''" name="about"></p>
+                                    <p><span>День рождения </span><input type="date" class="advanced-input w-100" th:value="${currentUser.birthday} != null ? ${currentUser.birthday} : ''" name="birthday"></p>
+                                    <p><input type="tel" class="advanced-input w-100" placeholder="Телефон" th:value="${currentUser.phone} != 0 ? ${currentUser.phone} : ''" name="phone"></p>
+                                    <p><input type="text" class="advanced-input w-100" placeholder="Языки" th:value="${currentUser.lang} != null ? ${currentUser.lang} : ''" name="lang"></p>
+                                    <p><input type="text" class="advanced-input w-100" placeholder="О себе" th:value="${currentUser.about} != null ? ${currentUser.about} : ''" name="about"></p>
                                 </div>
                                 <input type="submit" class="btn btn-outline-danger" value="Сохранить">
                             </div>

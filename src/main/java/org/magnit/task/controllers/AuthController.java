@@ -1,5 +1,6 @@
 package org.magnit.task.controllers;
 
+import org.magnit.task.entities.Roles;
 import org.magnit.task.entities.User;
 import org.magnit.task.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,6 +53,10 @@ public class AuthController {
             model.addAttribute("codeError", false);
             return "registration";
         }
+        else if(code.isEmpty())
+            user.setRole(Roles.USER);
+        else
+            user.setRole(Roles.MODERATOR);
 
         User userFromData = userRepository.findByUsername(user.getUsername());
 
