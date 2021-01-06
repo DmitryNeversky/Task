@@ -9,10 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,6 +19,9 @@ public class UserService{
     @Value("${upload.avatar.path}")
     private String uploadAvatarPath;
 
+    @Value("${resources.path}")
+    private String resourcesPath;
+
     public void uploadAvatar(MultipartFile avatar, User user){
         if(!Objects.requireNonNull(avatar.getOriginalFilename()).isEmpty()) {
 
@@ -30,7 +30,11 @@ public class UserService{
 
             try {
                 Path path = Paths.get(uploadAvatarPath + fileName);
-                avatar.transferTo(path);
+                Files.copy(avatar.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+                if(Files.exists(Paths.get(resourcesPath + user.getAvatarPath())))
+                    Files.delete(Paths.get(resourcesPath + user.getAvatarPath()));
+
                 user.setAvatarPath("/uploads/avatar/" + fileName);
             } catch (IOException e) {
                 e.printStackTrace();
