@@ -2,18 +2,20 @@ package org.magnit.task.controllers;
 
 import org.magnit.task.entities.User;
 import org.magnit.task.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @Controller
 public class AuthController {
+
+    @Value("${moderator.code}")
+    private String moderatorCode;
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -37,10 +39,19 @@ public class AuthController {
     }
 
     @PostMapping("/registration")
-    public String registration(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult){
+    public String registration(
+            Model model,
+            @ModelAttribute @Valid User user,
+            BindingResult bindingResult,
+            @RequestParam String code){
 
         if (bindingResult.hasErrors())
             return "registration";
+
+        if(!code.equals(moderatorCode) && !code.isEmpty()) {
+            model.addAttribute("codeError", false);
+            return "registration";
+        }
 
         User userFromData = userRepository.findByUsername(user.getUsername());
 

@@ -34,15 +34,15 @@
                             <p class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">~error~</p>
                         </div>
                     </div>
-                <div class="form-group">
-                    <label for="partImages"><i class="fa fa-file-image-o"></i></label>
-                    <input type="file" class="custom-file-input" id="partImages" name="images" accept="image/*" multiple />
-                </div>
-                    <div id="images" class="images"></div>
-                <div class="form-group">
-                    <label for="partFiles"><i class="fa fa-file-o"></i></label>
-                    <input type="file" id="partFiles" name="files" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple />
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <label for="partImages"><i class="fa fa-file-image-o"></i></label>-->
+<!--                    <input type="file" class="custom-file-input" id="partImages" name="images" accept="image/*" multiple />-->
+<!--                </div>-->
+<!--                    <div id="images" class="images"></div>-->
+<!--                <div class="form-group">-->
+<!--                    <label for="partFiles"><i class="fa fa-file-o"></i></label>-->
+<!--                    <input type="file" id="partFiles" name="files" accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple />-->
+<!--                </div>-->
                     <div class="card-body">
                         <button type="submit" class="btn btn-danger float-right">Готово</button>
                     </div>

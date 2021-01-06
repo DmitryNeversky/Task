@@ -19,36 +19,41 @@
     <div class="content">
         <!-- Animated -->
         <div class="animated fadeIn">
-            <div class="row">
-                <div class="col-md-12">
-                    <form th:method="post" th:action="@{/profile/edit}" id="editProfileForm" enctype="multipart/form-data">
+            <form th:method="post" th:action="@{/profile/edit}" id="editProfileForm" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card">
                             <div class="card-body">
                                 <center class="m-t-30 row">
                                     <div class="col-md-6">
-                                        <img th:src="${currentUser.avatarPath}" id="previewAvatar" class="img-circle rounded-circle" width="150" height="150">
-                                        <input type="file" accept="image/*" name="avatar"/>
+                                        <img th:src="${currentUser.avatarPath}" id="previewAvatar" class="img-circle rounded-circle mb-2" width="150" height="150">
+                                        <input type="file" class="input-file" id="input-file" accept="image/*" name="avatar"/>
+                                        <label for="input-file">Изменить</label><br>
+                                        <small id="cancelLoad" style="visibility: hidden; cursor: pointer">Отменить</small>
                                     </div>
-                                    <div class="col-md-6 pt-2 text-left">
-                                        <span>ФИО: </span><br><input type="text" id="name" th:value="${currentUser.name}" name="name"><br><br>
-                                        <span>Подразделение: </span><br><input type="text" id="division" th:value="${currentUser.division}" name="division">
+                                    <div class="col-md-6 pt-2 text-left mt-3">
+                                        <input type="text" class="advanced-input" placeholder="Иванов Д.С" id="name" th:value="${currentUser.name}" name="name" required>
+                                        <input type="text" class="advanced-input" placeholder="Маркетолог" id="division" th:value="${currentUser.division}" name="division" required>
                                     </div>
                                 </center>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-8 col-xlg-9 col-md-7">
                         <div class="card">
-                            <!-- Tab panes -->
                             <div class="card-body">
-                                <p><span>День рождения: </span><input type="date" th:value="${currentUser.birthday} != null ? ${currentUser.birthday} : ''" name="birthday">
-                                <p><span>Телефон: </span><input type="tel" th:value="${currentUser.phone} != 0 ? ${currentUser.phone} : ''" name="phone">
-                                <p><span>Доп. язык: </span><input type="text" th:value="${currentUser.lang} != null ? ${currentUser.lang} : ''" name="lang">
-                                <p><span>Обо мне: </span><input type="text" th:value="${currentUser.about} != null ? ${currentUser.about} : ''" name="about">
+                                <div class="card-body">
+                                    <p><span>День рождения </span><input type="date" class="advanced-input" th:value="${currentUser.birthday} != null ? ${currentUser.birthday} : ''" name="birthday"></p>
+                                    <p><input type="tel" class="advanced-input" placeholder="Телефон" th:value="${currentUser.phone} != 0 ? ${currentUser.phone} : ''" name="phone"></p>
+                                    <p><input type="text" class="advanced-input" placeholder="Языки" th:value="${currentUser.lang} != null ? ${currentUser.lang} : ''" name="lang"></p>
+                                    <p><input type="text" class="advanced-input" placeholder="О себе" th:value="${currentUser.about} != null ? ${currentUser.about} : ''" name="about"></p>
+                                </div>
+                                <input type="submit" class="btn btn-outline-danger" value="Сохранить">
                             </div>
                         </div>
-                        <input type="submit" value="Сохранить">
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div><!-- .animated -->
     </div><!-- /.content -->
 

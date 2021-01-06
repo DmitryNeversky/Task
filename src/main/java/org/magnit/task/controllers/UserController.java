@@ -5,12 +5,16 @@ import org.magnit.task.entities.User;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
 import org.magnit.task.services.UserService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -52,12 +56,12 @@ public class UserController {
             @RequestParam(required = false) MultipartFile avatar,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String division,
-            @RequestParam(required = false) Date birthday,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date birthday,
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) String lang,
             @RequestParam(required = false) String about,
             Principal principal
-            ){
+            ) {
 
         User user = userRepository.findByUsername(principal.getName());
 
@@ -67,6 +71,8 @@ public class UserController {
         user.setPhone(phone);
         user.setLang(lang);
         user.setAbout(about);
+
+        System.out.println(birthday);
 
         userService.uploadAvatar(avatar, user);
 

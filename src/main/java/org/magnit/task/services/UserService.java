@@ -30,7 +30,7 @@ public class UserService{
 
             try {
                 Path path = Paths.get(uploadAvatarPath + fileName);
-                Files.copy(avatar.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+                avatar.transferTo(path);
                 user.setAvatarPath("/uploads/avatar/" + fileName);
             } catch (IOException e) {
                 e.printStackTrace();

@@ -2653,11 +2653,36 @@ footer.site-footer {
 }
 
 .advanced-input{
+  width: 100%;
   border: none;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
   border-bottom: 1px solid silver;
   background-color: rgba(0,0,0,0);
 }
 
 .badge-danger{
   background-color: #ff00009e;
+}
+
+.text-danger{
+  color: #ff41419e;
+}
+
+.bootstrap-select .dropdown-menu{
+  max-width: 120px;
+  top: 37px !important;
+}
+
+.input-file{
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.input-file + label{
+  cursor: pointer;
 }

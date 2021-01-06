@@ -18,7 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -102,17 +101,12 @@ public class IdeaController {
     public String add(
             @RequestParam String title,
             @RequestParam String description,
-            @RequestParam(required = false) List<MultipartFile> images,
-            @RequestParam(required = false) List<MultipartFile> files,
             Principal principal
     ) {
 
         User user = userRepository.findByUsername(principal.getName());
 
         Idea idea = new Idea(title, description, IdeaStatus.LOOKING, new Date(), user);
-
-        ideaService.uploadImages(images, idea);
-        ideaService.uploadFiles(files, idea);
 
         user.setIdeaCount(user.getIdeaCount() + 1);
 

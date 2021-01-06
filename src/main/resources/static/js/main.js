@@ -1,24 +1,52 @@
 jQuery(document).ready(function($) {
 
-	$('.notify').on('click', function(event) {
+	let oldAvatar = $('#previewAvatar').attr('src');
+
+	function readURL(input) {
+
+		if (input.files && input.files[0]) {
+			let reader = new FileReader();
+
+			reader.onload = function(e) {
+				$('#previewAvatar').attr('src', e.target.result);
+			}
+
+			reader.readAsDataURL(input.files[0]); // convert to base64 string
+
+			$('#cancelLoad').css('visibility', 'visible')
+		}
+	}
+
+	$('#input-file').change(function() {
+		readURL(this);
+	});
+
+	$('#cancelLoad').click(function () {
+		$('#previewAvatar').attr('src', oldAvatar);
+		$('#input-file').val(null)
+		$(this).css('visibility', 'hidden')
+	});
+
+	if( window.location.toString() === "http://localhost:8080/" )
+		$('#home-href').addClass("active")
+	if( window.location.toString().includes("/ideas") )
+		$('#ideas-href').addClass("active")
+	if( window.location.toString().includes("/profile") )
+		$('#user-href').addClass("active")
+
+	let body = $('body')
+
+	$('.notify').on('click', function() {
 
 		const formData = new FormData();
 		formData.append("look", $('.notify').data("id"));
 
-		$.ajax ({
-			url: location,
-			type: "POST",
-			data: formData,
-			dataType: "html",
-			processData: false,
-			contentType: false,
-			success: function() {
-				$(".notification-button").load(" .notification-counter");
-			}
-		});
+		send(formData, location, function (){
+			$(".notification-button").load(" .notification-counter");
+		})
 	});
 
-	$("body").on('submit', '.removeNotify', function (event) {
+	body.on('submit', '.removeNotify', function (event) {
 		event.preventDefault()
 
 		let location = $(this).attr("action")
@@ -44,9 +72,6 @@ jQuery(document).ready(function($) {
 		property: 'max-height'
 	});
 
-	// var chartsheight = $('.flotRealtime2').height();
-	// $('.traffic-chart').css('height', chartsheight-122);
-
 	// Counter Number
 	$('.count').each(function () {
 		$(this).prop('Counter',0).animate({
@@ -61,8 +86,8 @@ jQuery(document).ready(function($) {
 	});
 
 	// Menu Trigger
-	$('#menuToggle').on('click', function(event) {
-		var windowWidth = $(window).width();   		 
+	$('#menuToggle').on('click', function() {
+		let windowWidth = $(window).width();
 		if (windowWidth<1010) { 
 			$('body').removeClass('open'); 
 			if (windowWidth<760){ 
@@ -77,17 +102,15 @@ jQuery(document).ready(function($) {
 			 
 	}); 
 
-	 
 	$(".menu-item-has-children.dropdown").each(function() {
 		$(this).on('click', function() {
-			var $temp_text = $(this).children('.dropdown-toggle').html();
+			let $temp_text = $(this).children('.dropdown-toggle').html();
 			$(this).children('.sub-menu').prepend('<li class="subtitle">' + $temp_text + '</li>'); 
 		});
 	});
 
-
 	// Load Resize 
-	$(window).on("load resize", function(event) { 
+	$(window).on("load resize", function() {
 		let windowWidth = $(window).width();
 		if (windowWidth<1010) {
 			$('body').addClass('small-device'); 
@@ -103,13 +126,13 @@ jQuery(document).ready(function($) {
 
 	truncateText(".preDescription", 200);
 
-	$("body").on('submit', '#likeForm', function(event) {
+	body.on('submit', '#likeForm', function(event) {
 		event.preventDefault()
 
 		let id = $(this).attr("name");
 
 		const formData = new FormData();
-		formData.append("flag", true)
+		formData.append("flag", 'true')
 
 		send(formData, "/ideas/setLike-" + id, function(res) {
 			$(".ideas").html($('.ideas', res).html()).ready(function () {
@@ -118,13 +141,13 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$("body").on('submit', '#unLikeForm', function(event) {
+	body.on('submit', '#unLikeForm', function(event) {
 		event.preventDefault()
 
 		let id = $(this).attr("name");
 
 		const formData = new FormData();
-		formData.append("flag", false)
+		formData.append("flag", 'false')
 
 		send(formData, "/ideas/setLike-" + id, function(res) {
 			$(".ideas").html($('.ideas', res).html()).ready(function () {
