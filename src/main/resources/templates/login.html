@@ -13,6 +13,7 @@
                 </div>
                 <div class="card-body">
                     <form class="form" th:action="@{/login}" method="post">
+                        <p id="error" class="text-danger"></p>
                         <div class="form-group">
                             <input type="text" name="username" placeholder="Email" class="form-control form-control-lg rounded-0" autofocus="autofocus" />
                         </div>

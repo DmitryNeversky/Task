@@ -20,10 +20,11 @@
 
         <!-- Animated -->
         <div class="animated fadeIn">
-            <form method="post" th:action="@{/ideas/add}" enctype="multipart/form-data" th:object="${idea}">
+            <form method="post" id="addIdeaForm" th:action="@{/ideas/add}" enctype="multipart/form-data" th:object="${idea}">
                 <div class="card">
                     <div class="card-header">
                         <div class="form-group">
+                            <label for="title" class="text-danger"></label>
                             <input type="text" class="float-left advanced-input w-20" name="title" placeholder="Название идеи" id="title">
                             <p class="invalid-feedback" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">~error~</p>
                         </div>
@@ -31,6 +32,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <textarea type="text" class="card-text w-100 p-2" rows="7" placeholder="Начните описывть идею и я пропаду =)" name="description" id="description"></textarea>
+                            <label for="description" class="text-danger"></label>
                             <p class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">~error~</p>
                         </div>
                     </div>

@@ -13,29 +13,39 @@
                     <h3 class="mb-0">Регистрация</h3>
                 </div>
                 <div class="card-body">
-                    <form class="form" method="post" th:action="@{registration}" th:object="${user}">
+                    <form class="form" id="regForm" method="post" th:action="@{registration}" th:object="${user}">
 
-                        <p class="invalid-feedback" th:text="${error}"></p>
+                        <p id="serverError" class="text-danger" th:text="${error}"></p>
 
                         <div class="form-group">
-                            <input type="text" placeholder="Email" th:field="*{username}" class="form-control form-control-lg rounded-0" />
+                            <label for="username" class="text-danger"></label>
+                            <input type="text" id="username" placeholder="Email" th:field="*{username}" class="form-control form-control-lg rounded-0" />
                             <p class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">~error~</p>
                         </div>
                         <div class="form-group">
-                            <input type="text" placeholder="Пароль" th:field="*{password}" class="form-control form-control-lg rounded-0" />
+                            <label for="password" class="text-danger"></label>
+                            <input type="text" id="password" placeholder="Пароль" th:field="*{password}" class="form-control form-control-lg rounded-0" />
                             <p class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">~error~</p>
                         </div>
                         <div class="form-group">
-                            <input type="text" placeholder="Имя" th:field="*{name}" class="form-control form-control-lg rounded-0" />
+                            <label for="name" class="text-danger"></label>
+                            <input type="text" id="name" placeholder="Имя" th:field="*{name}" class="form-control form-control-lg rounded-0" />
                             <p class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">~error~</p>
                         </div>
                         <div class="form-group">
-                            <input type="text" placeholder="Подразделение" th:field="*{division}" class="form-control form-control-lg rounded-0" />
+                            <select class="form-control" id="division" name="division" required>
+                                <option></option>
+                                <option value="Грузчик">Грузчик</option>
+                                <option value="Кассир">Кассир</option>
+                                <option value="Маркетолог">Маркетолог</option>
+                                <option value="Уборщик">Уборщик</option>
+                            </select>
                             <p class="invalid-feedback" th:if="${#fields.hasErrors('division')}" th:errors="*{division}">~error~</p>
                         </div>
                         <div class="form-group">
+                            <label for="code" class="text-danger"></label>
                             <input type="text" id="code" name="code" placeholder="Код модератора">
-                            <p class="invalid-feedback" th:if="${codeError == false}">Введен неправильный код</p>
+                            <p class="text-danger" th:if="${codeError == false}">Введен неправильный код</p>
                         </div>
 
                         <a href="/login">Уже есть аккаунт?</a>

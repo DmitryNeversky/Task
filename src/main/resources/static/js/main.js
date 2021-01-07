@@ -33,6 +33,8 @@ jQuery(document).ready(function($) {
 		$('#ideas-href').addClass("active")
 	if( window.location.toString().includes("/profile") )
 		$('#user-href').addClass("active")
+	if( window.location.toString().includes("/login?error"))
+		$('#error').text("Неправильный email или пароль.")
 
 	let body = $('body')
 
