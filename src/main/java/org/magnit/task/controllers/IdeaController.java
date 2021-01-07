@@ -113,14 +113,14 @@ public class IdeaController {
         ideaRepository.save(idea);
         ideaRepository.flush();
 
-//        for(User pair : userRepository.findAllByRole(Roles.MODERATOR)){
-//            mailSender.send(
-//                    pair.getUsername(),
-//                    "Новая идея на портале Магнит IT для людей",
-//                    "Новая идея от " + idea.getUser().getName()
-//                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
-//            );
-//        }
+        for(User pair : userRepository.findAllByRole(Roles.MODERATOR)){
+            mailSender.send(
+                    pair.getUsername(),
+                    "Новая идея на портале Магнит IT для людей",
+                    "Новая идея от " + idea.getUser().getName()
+                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
+            );
+        }
 
         return "redirect:/";
     }
@@ -139,17 +139,17 @@ public class IdeaController {
 
         notificationRepository.save(notification);
 
-//        try {
-//            mailSender.send(
-//                    idea.getUser().getUsername(),
-//                    "Статус идеи изменен",
-//                    "Статус вашей идеи " + idea.getTitle()
-//                            + " #" + idea.getId() + " изменен на " + ideaStatus.getName()
-//                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
-//            );
-//        } catch (Exception e){
-//            e.printStackTrace();
-//        }
+        try {
+            mailSender.send(
+                    idea.getUser().getUsername(),
+                    "Статус идеи изменен",
+                    "Статус вашей идеи " + idea.getTitle()
+                            + " #" + idea.getId() + " изменен на " + idea.getStatus()
+                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
+            );
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
         return "redirect:idea-" + idea.getId();
     }
@@ -158,8 +158,8 @@ public class IdeaController {
     public String setLike(@PathVariable Idea idea, Principal principal, @RequestParam boolean flag){
         User user = userRepository.findByUsername(principal.getName());
 
-        if (flag) idea.addLike(user);
-        else idea.remLike(user);
+        if (flag) ideaService.addLike(user, idea);
+        else ideaService.remLike(user, idea);
 
         ideaRepository.save(idea);
         ideaRepository.flush();

@@ -1,6 +1,7 @@
 package org.magnit.task.services;
 
 import org.magnit.task.entities.Idea;
+import org.magnit.task.entities.User;
 import org.magnit.task.repositories.IdeaRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -118,11 +119,75 @@ public class IdeaService {
                 try {
                     Path path = Paths.get(uploadFilePath + fileName);
                     Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    idea.addFile(pair.getOriginalFilename(), fileName);
+                    addFile(pair.getOriginalFilename(), fileName, idea);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
+        }
+    }
+
+    public void addFile(String key, String value, Idea idea){
+        idea.getFiles().put(key, value);
+    }
+
+    public void addLike(User user, Idea idea) {
+        boolean searchLikes = false;
+        for (User pair : idea.getLikes()) {
+            if (pair.getId() == user.getId()) {
+                searchLikes = true;
+                break;
+            }
+        }
+        boolean searchUnLikes = false;
+        for (User pair : idea.getUnLikes()) {
+            if (pair.getId() == user.getId()) {
+                searchUnLikes = true;
+                break;
+            }
+        }
+
+        if (searchUnLikes){
+            idea.setLikeCount(idea.getLikeCount() + 1);
+            idea.getUnLikes().remove(user);
+        }
+
+        if (!searchLikes) {
+            idea.setLikeCount(idea.getLikeCount() + 1);
+            idea.getLikes().add(user);
+        } else {
+            idea.setLikeCount(idea.getLikeCount() - 1);
+            idea.getLikes().remove(user);
+        }
+    }
+
+    public void remLike(User user, Idea idea) {
+        boolean searchUnLikes = false;
+        for (User pair : idea.getUnLikes()) {
+            if (pair.getId() == user.getId()) {
+                searchUnLikes = true;
+                break;
+            }
+        }
+        boolean searchLikes = false;
+        for (User pair : idea.getLikes()) {
+            if (pair.getId() == user.getId()) {
+                searchLikes = true;
+                break;
+            }
+        }
+
+        if (searchLikes){
+            idea.setLikeCount(idea.getLikeCount() - 1);
+            idea.getLikes().remove(user);
+        }
+
+        if (!searchUnLikes) {
+            idea.setLikeCount(idea.getLikeCount() - 1);
+            idea.getUnLikes().add(user);
+        } else {
+            idea.setLikeCount(idea.getLikeCount() + 1);
+            idea.getUnLikes().remove(user);
         }
     }
 }
