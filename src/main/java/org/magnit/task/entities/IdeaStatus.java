@@ -17,11 +17,11 @@ public enum IdeaStatus {
     }
 
     public static IdeaStatus getValueByName(String name){
-        return switch (name) {
-            case "Одобрено" -> APPROVED;
-            case "На рассмотрении" -> LOOKING;
-            case "Отказано" -> DENIED;
-            default -> null;
-        };
+        switch (name) {
+            case "Одобрено": return IdeaStatus.APPROVED;
+            case "На рассмотрении": return IdeaStatus.LOOKING;
+            case "Отказано": return IdeaStatus.DENIED;
+            default: return null;
+        }
     }
 }

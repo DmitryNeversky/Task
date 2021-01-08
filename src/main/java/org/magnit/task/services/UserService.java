@@ -17,10 +17,7 @@ import java.util.UUID;
 public class UserService{
 
     @Value("${upload.avatar.path}")
-    private String uploadAvatarPath;
-
-    @Value("${resources.path}")
-    private String resourcesPath;
+    private String AVATAR_PATH;
 
     public void uploadAvatar(MultipartFile avatar, User user){
         if(!Objects.requireNonNull(avatar.getOriginalFilename()).isEmpty()) {
@@ -29,11 +26,11 @@ public class UserService{
                     + StringUtils.cleanPath(Objects.requireNonNull(avatar.getOriginalFilename()));
 
             try {
-                Path path = Paths.get(uploadAvatarPath + fileName);
-                Files.copy(avatar.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-
-                if(Files.exists(Paths.get(resourcesPath + user.getAvatarPath())))
-                    Files.delete(Paths.get(resourcesPath + user.getAvatarPath()));
+                Path path = Paths.get(AVATAR_PATH + fileName);
+                //Files.copy(avatar.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+avatar.transferTo(path);
+                if(Files.exists(Paths.get(AVATAR_PATH + user.getAvatarPath())))
+                    Files.delete(Paths.get(AVATAR_PATH + user.getAvatarPath()));
 
                 user.setAvatarPath("/uploads/avatar/" + fileName);
             } catch (IOException e) {
