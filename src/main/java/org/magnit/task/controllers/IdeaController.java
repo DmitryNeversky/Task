@@ -187,7 +187,6 @@ public class IdeaController {
     }
 
     @GetMapping
-    @ResponseBody
     public Model doFilter(
             @RequestParam(required = false) IdeaStatus status,
             @RequestParam(required = false) String direction,

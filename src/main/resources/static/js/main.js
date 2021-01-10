@@ -147,7 +147,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$('#filterButton').click(function (event) {
-
+		event.preventDefault()
 
 		$('.ideas').fadeOut('slow','linear', function(){
 			let title = $('#valTitle').val()
@@ -182,7 +182,7 @@ jQuery(document).ready(function($) {
 			}
 
 			send(formData, window.location, "GET", function(res) {
-				$(".ideas").html($('.ideas', res)).ready(function () {
+				$(".ideas").html($('.ideas', res).html()).ready(function () {
 					$('.ideas').fadeIn('slow', 'linear')
 				});
 			})
@@ -195,10 +195,10 @@ jQuery(document).ready(function($) {
 			url: url,
 			method: method,
 			data: formData,
-			dataType: 'json',
+			dataType: 'html',
 			success: func,
-			error : function(e) {
-				console.log("ERROR: ", e);
+			error: function(e) {
+				console.log(e);
 			}
 		});
 	}
