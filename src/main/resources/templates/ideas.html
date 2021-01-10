@@ -61,7 +61,7 @@
 
             <div class="mb-4"><a id="getIdeasDataBase" href="/ideas/getIdeaBase">Скачать архив идей</a></div>
 
-            <div class="ideas">
+            <div id="ideas" class="ideas">
 
                 <!-- Idea -->
                 <div class="card" th:each="idea : ${ideas}">
@@ -72,7 +72,7 @@
 
                             <input type="button" class="advanced-button" id="remLike" th:data-id="${idea.id}" th:style="${idea.unLikes.contains(currentUser)} ? 'color: #ff00009e' : 'color: #f0808070'" value="❮">
 
-                            <span th:text="${idea.likeCount}" class="count"></span>
+                            <span id="likeCount" th:text="${idea.likeCount}" class="count"></span>
 
                             <input type="button" class="advanced-button" id="addLike" th:data-id="${idea.id}" th:style="${idea.likes.contains(currentUser)} ? 'color: #ff00009e' : 'color: #f0808070'" value="❯">
 

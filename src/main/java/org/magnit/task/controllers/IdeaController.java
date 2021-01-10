@@ -15,6 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -45,20 +46,20 @@ public class IdeaController {
         this.ideaService = ideaService;
     }
 
-    @GetMapping
-    public String getIdeas(
-            @PageableDefault(
-                    sort = {"id"},
-                    direction = Sort.Direction.DESC,
-                    size = 5) Pageable pageable,
-            Model model){
-
-        Page<Idea> ideas = ideaRepository.findAll(pageable);
-        model.addAttribute("ideas", ideas);
-        model.addAttribute("pageable", pageable);
-
-        return "ideas";
-    }
+//    @GetMapping
+//    public String getIdeas(
+//            @PageableDefault(
+//                    sort = {"id"},
+//                    direction = Sort.Direction.DESC,
+//                    size = 5) Pageable pageable,
+//            Model model){
+//
+//        Page<Idea> ideas = ideaRepository.findAll(pageable);
+//        model.addAttribute("ideas", ideas);
+//        model.addAttribute("pageable", pageable);
+//
+//        return "ideas";
+//    }
 
     @GetMapping("/idea-{idea}")
     public String getIdea(@PathVariable Idea idea, Model model){
@@ -114,15 +115,19 @@ public class IdeaController {
         ideaRepository.flush();
 
         for(User pair : userRepository.findAllByRole(Roles.MODERATOR)){
-            mailSender.send(
-                    pair.getUsername(),
-                    "Новая идея на портале Магнит IT для людей",
-                    "Новая идея от " + idea.getUser().getName()
-                            + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
-            );
+            try {
+                mailSender.send(
+                        pair.getUsername(),
+                        "Новая идея на портале Магнит IT для людей",
+                        "Новая идея от " + idea.getUser().getName()
+                                + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
+                );
+            } catch (MailSendException e){
+                System.out.print(e.getMessage());
+            }
         }
 
-        return "redirect:/";
+        return "redirect:/ideas";
     }
 
     @PostMapping("setStatus-{idea}")
@@ -181,7 +186,7 @@ public class IdeaController {
                 .body(resource);
     }
 
-    @PostMapping
+    @GetMapping
     @ResponseBody
     public Model doFilter(
             @RequestParam(required = false) IdeaStatus status,
@@ -190,6 +195,13 @@ public class IdeaController {
             @RequestParam(required = false) String title,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable,
             Model model) {
+
+        if(direction == null)
+            direction = "DESC";
+        if(status == null)
+            status = IdeaStatus.ALL;
+        if(property == null)
+            property = "id";
 
         PageRequest pages;
         Page<Idea> ideas;

@@ -38,22 +38,12 @@ jQuery(document).ready(function($) {
 
 	let body = $('body')
 
-	$('.notify').on('click', function() {
-
-		const formData = new FormData();
-		formData.append("look", $('.notify').data("id"));
-
-		send(formData, location, function (){
-			$(".notification-button").load(" .notification-counter");
-		})
-	});
-
 	body.on('submit', '.removeNotify', function (event) {
 		event.preventDefault()
 
 		let location = $(this).attr("action")
 
-		send(null, location, function(res) {
+		send(null, location, "POST", function(res) {
 			$(".for-message").html($('.for-message', res).html())
 		});
 	});
@@ -90,36 +80,36 @@ jQuery(document).ready(function($) {
 	// Menu Trigger
 	$('#menuToggle').on('click', function() {
 		let windowWidth = $(window).width();
-		if (windowWidth<1010) { 
-			$('body').removeClass('open'); 
-			if (windowWidth<760){ 
-				$('#left-panel').slideToggle(); 
+		if (windowWidth<1010) {
+			$('body').removeClass('open');
+			if (windowWidth<760){
+				$('#left-panel').slideToggle();
 			} else {
-				$('#left-panel').toggleClass('open-menu');  
-			} 
+				$('#left-panel').toggleClass('open-menu');
+			}
 		} else {
 			$('body').toggleClass('open');
-			$('#left-panel').removeClass('open-menu');  
-		} 
-			 
-	}); 
+			$('#left-panel').removeClass('open-menu');
+		}
+
+	});
 
 	$(".menu-item-has-children.dropdown").each(function() {
 		$(this).on('click', function() {
 			let $temp_text = $(this).children('.dropdown-toggle').html();
-			$(this).children('.sub-menu').prepend('<li class="subtitle">' + $temp_text + '</li>'); 
+			$(this).children('.sub-menu').prepend('<li class="subtitle">' + $temp_text + '</li>');
 		});
 	});
 
-	// Load Resize 
+	// Load Resize
 	$(window).on("load resize", function() {
 		let windowWidth = $(window).width();
 		if (windowWidth<1010) {
-			$('body').addClass('small-device'); 
+			$('body').addClass('small-device');
 		} else {
-			$('body').removeClass('small-device');  
-		} 
-		
+			$('body').removeClass('small-device');
+		}
+
 	});
 
 	function truncateText(selector, maxLength) {
@@ -128,30 +118,28 @@ jQuery(document).ready(function($) {
 
 	truncateText(".preDescription", 200);
 
-	body.on('submit', '#likeForm', function(event) {
+	body.on('click', '#addLike', function(event) {
 		event.preventDefault()
 
-		let id = $(this).attr("name");
+		let id = $(this).data('id')
 
-		const formData = new FormData();
-		formData.append("flag", 'true')
+		let formData = {'flag': true}
 
-		send(formData, "/ideas/setLike-" + id, function(res) {
+		send(formData, "/ideas/setLike-" + id, "POST", function(res) {
 			$(".ideas").html($('.ideas', res).html()).ready(function () {
 				$('.ideas').fadeIn('slow', 'linear')
 			});
 		});
 	});
 
-	body.on('submit', '#unLikeForm', function(event) {
+	body.on('click', '#remLike', function(event) {
 		event.preventDefault()
 
-		let id = $(this).attr("name");
+		let id = $(this).data('id')
 
-		const formData = new FormData();
-		formData.append("flag", 'false')
+		let formData = {'flag': false}
 
-		send(formData, "/ideas/setLike-" + id, function(res) {
+		send(formData, "/ideas/setLike-" + id, "POST", function(res) {
 			$(".ideas").html($('.ideas', res).html()).ready(function () {
 				$('.ideas').fadeIn('slow', 'linear')
 			});
@@ -159,7 +147,7 @@ jQuery(document).ready(function($) {
 	});
 
 	$('#filterButton').click(function (event) {
-		event.preventDefault()
+
 
 		$('.ideas').fadeOut('slow','linear', function(){
 			let title = $('#valTitle').val()
@@ -186,30 +174,39 @@ jQuery(document).ready(function($) {
 					break
 			}
 
-			const formData = new FormData();
-			formData.append("direction", direction);
-			formData.append("property", property);
-			formData.append("status", status);
-			formData.append("title", title);
+			let formData = {
+				"direction": direction,
+				"property": property,
+				"status": status,
+				"title": title
+			}
 
-			send(formData, window.location, function(res) {
-				$(".ideas").html($('.ideas', res).html()).ready(function (){
-					$('.ideas').fadeIn('slow','linear')
-				})
+			send(formData, window.location, "GET", function(res) {
+				$(".ideas").html($('.ideas', res)).ready(function () {
+					$('.ideas').fadeIn('slow', 'linear')
+				});
 			})
 		});
 	});
 
-	function send(formData, url, func){
+	function send(formData, url, method, func){
+
 		$.ajax ({
 			url: url,
-			type: "POST",
+			method: method,
 			data: formData,
-			dataType: "html",
-			processData: false,
-			contentType: false,
-			async: false,
-			success: func
+			dataType: 'json',
+			success: func,
+			error : function(e) {
+				console.log("ERROR: ", e);
+			}
 		});
 	}
+
+	$(document).ajaxSend(function(e, xhr, options) {
+		let token = $("meta[name='_csrf']").attr("content");
+		let header = $("meta[name='_csrf_header']").attr("content");
+
+		xhr.setRequestHeader(header, token);
+	});
 });
