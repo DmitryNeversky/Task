@@ -2642,10 +2642,6 @@ footer.site-footer {
   color: #ff00009e;
 }
 
-.custom-card-header{
-  display: inline-flex;
-}
-
 .custom-card-header .small{
   line-height: 2.1;
   margin-left: 2%;
@@ -2698,4 +2694,9 @@ footer.site-footer {
 
 select{
   border-radius: 0 !important;
+}
+
+.advanced-button{
+  background: none;
+  border: none;
 }

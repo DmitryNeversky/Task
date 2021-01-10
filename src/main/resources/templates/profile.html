@@ -30,16 +30,16 @@
                                     <div class="text-center justify-content-md-center mt-3">
                                         <ul class="list-group list-group-flush text-left">
                                             <li class="list-group-item">
-                                                <p class="my-2" style="color: #007bff"> <i class="fa fa-lightbulb-o"></i> Идеи <span class="badge badge-primary pull-right" th:text="${user.ideaSize}">10</span></p>
+                                                <p class="my-2" style="color: #007bff"> <i class="fa fa-lightbulb-o"></i> Идеи <span class="badge badge-primary pull-right" th:text="${ideaCount}">10</span></p>
                                             </li>
                                             <li class="list-group-item">
-                                                <p class="my-2" style="color: #28a745"> <i class="fa fa-check"></i> Одобрено <span class="badge badge-success pull-right" th:text="${user.ideaApprovedSize}">15</span></p>
+                                                <p class="my-2" style="color: #28a745"> <i class="fa fa-check"></i> Одобрено <span class="badge badge-success pull-right" th:text="${approvedIdeas}">15</span></p>
                                             </li>
                                             <li class="list-group-item">
-                                                <p class="my-2" style="color: #ffc107"> <i class="fa fa-eye"></i> На рассмотрении <span class="badge badge-warning pull-right" th:text="${user.ideaLookingSize}">11</span></p>
+                                                <p class="my-2" style="color: #ffc107"> <i class="fa fa-eye"></i> На рассмотрении <span class="badge badge-warning pull-right" th:text="${lookingIdeas}">11</span></p>
                                             </li>
                                             <li class="list-group-item">
-                                                <p class="my-2" style="color: #ff00009e"> <i class="fa fa-ban"></i> Отказано <span class="badge badge-danger pull-right r-activity" th:text="${user.ideaDeniedSize}">03</span></p>
+                                                <p class="my-2" style="color: #ff00009e"> <i class="fa fa-ban"></i> Отказано <span class="badge badge-danger pull-right r-activity" th:text="${deniedIdeas}">03</span></p>
                                             </li>
                                         </ul>
                                     </div>
@@ -51,7 +51,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <p><span>День рождения: </span><b th:text="${user.birthday != null} ? ${user.birthday} : 'Не указано'">~birthday~</b></p>
-                                <p><span>Телефон: </span><b th:text="${user.phone != 0} ? ${user.phone} : 'Не указано'">~phone~</b></p>
+                                <p><span>Телефон: </span><b th:text="${user.phone != null} ? ${user.phone} : 'Не указано'">~phone~</b></p>
                                 <p><span>Языки: </span><b th:text="${user.lang != null} ? ${user.lang} : 'Не указано'">~lang~</b></p>
                                 <p><span>О себе: </span><b th:text="${user.about != null} ? ${user.about} : 'Не указано'">~about~</b></p>
                                 <a th:if="${user.username == currentUser.username}" href="/profile/edit" class="btn btn-danger float-left">Изменить</a>

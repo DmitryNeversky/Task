@@ -1,5 +1,6 @@
 package org.magnit.task.controllers;
 
+import org.magnit.task.entities.IdeaStatus;
 import org.magnit.task.entities.Notification;
 import org.magnit.task.entities.User;
 import org.magnit.task.repositories.NotificationRepository;
@@ -12,9 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -34,6 +32,11 @@ public class UserController {
     @GetMapping("/profile/id{user}")
     public String getUserPage(@PathVariable User user, Model model){
         model.addAttribute("user", user);
+
+        model.addAttribute("ideaCount", userService.ideasCount(user));
+        model.addAttribute("approvedIdeas", userService.ideaStatusCount(user, IdeaStatus.APPROVED));
+        model.addAttribute("lookingIdeas", userService.ideaStatusCount(user, IdeaStatus.LOOKING));
+        model.addAttribute("deniedIdeas", userService.ideaStatusCount(user, IdeaStatus.DENIED));
 
         return "profile";
     }

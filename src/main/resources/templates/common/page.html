@@ -5,6 +5,9 @@
     <meta name="keywords" content="">
     <meta name="description" content="">
 
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
     <title>Index</title>
 
     <link rel="shortcut icon" href="/static/images/ico.png" type="image/x-icon">

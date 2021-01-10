@@ -2,6 +2,7 @@ package org.magnit.task.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -43,8 +44,8 @@ public class Idea {
     @Enumerated(EnumType.STRING)
     private IdeaStatus status;
 
-    @Basic
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd-MM-yyyy", iso = DateTimeFormat.ISO.DATE)
     private Date date;
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
