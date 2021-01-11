@@ -126,23 +126,19 @@ jQuery(document).ready(function($) {
 		let formData = {'flag': true}
 
 		send(formData, "/ideas/setLike-" + id, "POST", function(res) {
-			$(".ideas").html($('.ideas', res).html()).ready(function () {
-				$('.ideas').fadeIn('slow', 'linear')
-			});
+			location.reload()
 		});
 	});
 
 	body.on('click', '#remLike', function(event) {
-		event.preventDefault()
+
 
 		let id = $(this).data('id')
 
 		let formData = {'flag': false}
 
 		send(formData, "/ideas/setLike-" + id, "POST", function(res) {
-			$(".ideas").html($('.ideas', res).html()).ready(function () {
-				$('.ideas').fadeIn('slow', 'linear')
-			});
+			location.reload()
 		});
 	});
 
@@ -206,6 +202,7 @@ jQuery(document).ready(function($) {
 	$(document).ajaxSend(function(e, xhr, options) {
 		let token = $("meta[name='_csrf']").attr("content");
 		let header = $("meta[name='_csrf_header']").attr("content");
+		console.log(options)
 
 		xhr.setRequestHeader(header, token);
 	});

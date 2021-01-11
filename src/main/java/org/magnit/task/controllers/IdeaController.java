@@ -19,6 +19,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -159,8 +160,8 @@ public class IdeaController {
         return "redirect:idea-" + idea.getId();
     }
 
-    @PostMapping("setLike-{idea}")
-    public String setLike(@PathVariable Idea idea, Principal principal, @RequestParam boolean flag){
+    @PostMapping("/setLike-{idea}")
+    public ModelAndView setLike(@PathVariable Idea idea, Principal principal, Model model, @RequestParam boolean flag){
         User user = userRepository.findByUsername(principal.getName());
 
         if (flag) ideaService.addLike(user, idea);
@@ -169,7 +170,7 @@ public class IdeaController {
         ideaRepository.save(idea);
         ideaRepository.flush();
 
-        return "redirect:";
+        return new ModelAndView("redirect:/ideas").addAllObjects(model.asMap());
     }
 
     @GetMapping("getIdeaBase")
