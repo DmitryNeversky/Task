@@ -12,7 +12,7 @@
 
     <groupId>org.magnit</groupId>
     <artifactId>task</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>ROOT</version>
     <name>task</name>
     <packaging>war</packaging>
     <description>Magnit project for Spring Boot</description>

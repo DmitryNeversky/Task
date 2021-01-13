@@ -66,7 +66,7 @@ public class AuthController {
         }
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setAvatarPath("/static/images/user.png");
+        user.setAvatarPath("/static/images/avatar/user.png");
 
         userRepository.save(user);
 

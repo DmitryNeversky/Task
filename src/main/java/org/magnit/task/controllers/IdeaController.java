@@ -19,7 +19,6 @@ import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -47,40 +46,54 @@ public class IdeaController {
         this.ideaService = ideaService;
     }
 
-//    @GetMapping
-//    public String getIdeas(
-//            @PageableDefault(
-//                    sort = {"id"},
-//                    direction = Sort.Direction.DESC,
-//                    size = 5) Pageable pageable,
-//            Model model){
-//
-//        Page<Idea> ideas = ideaRepository.findAll(pageable);
-//        model.addAttribute("ideas", ideas);
-//        model.addAttribute("pageable", pageable);
-//
-//        return "ideas";
-//    }
-
     @GetMapping("/idea-{idea}")
-    public String getIdea(@PathVariable Idea idea, Model model){
-        model.addAttribute("idea", idea);
+    public String getIdea(@PathVariable Idea idea, Model model, Principal principal){
+        getMeta(idea, model, principal);
 
         return "idea";
     }
 
     @GetMapping("/new")
-    public String getNew(Model model){
+    public String getNew(Model model, Principal principal){
         model.addAttribute("idea", new Idea());
+
+        getMeta(model, principal);
 
         return "new";
     }
 
     @GetMapping("/idea-{idea}/edit")
-    public String getEdit(@PathVariable Idea idea, Model model){
-        model.addAttribute("idea", idea);
+    public String getEdit(@PathVariable Idea idea, Model model, Principal principal){
+        getMeta(idea, model, principal);
 
         return "edit";
+    }
+
+    private void getMeta(@PathVariable Idea idea, Model model, Principal principal) {
+        model.addAttribute("idea", idea);
+
+        getMeta(model, principal);
+    }
+
+    private void getMeta(Model model, Principal principal) {
+        User user = userRepository.findByUsername(principal.getName());
+        model.addAttribute("currentUser", user);
+
+        if(user.getNotifications() != null)
+            model.addAttribute("userNotifies", user.getNotifications());
+
+        List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
+
+        model.addAttribute("userNotifyCount", notifications.size());
+
+        for(IdeaStatus pair : IdeaStatus.values()){
+            model.addAttribute("status", pair);
+        }
+        for(Roles pair : Roles.values()){
+            model.addAttribute("roles", pair);
+        }
+
+        model.addAttribute("statuses", IdeaStatus.values());
     }
 
     @PostMapping("/save")
@@ -128,7 +141,7 @@ public class IdeaController {
             }
         }
 
-        return "redirect:/ideas";
+        return "redirect:/ideas/idea-" + idea.getId();
     }
 
     @PostMapping("setStatus-{idea}")
@@ -148,9 +161,9 @@ public class IdeaController {
         try {
             mailSender.send(
                     idea.getUser().getUsername(),
-                    "Статус идеи изменен",
+                    "Магнит IT для людей: Статус идеи изменен",
                     "Статус вашей идеи " + idea.getTitle()
-                            + " #" + idea.getId() + " изменен на " + idea.getStatus()
+                            + " #" + idea.getId() + " изменен на " + idea.getStatus().getName()
                             + ". Просмотреть идею: " + "http://localhost:8080/ideas/idea-" + idea.getId()
             );
         } catch (Exception e){
@@ -161,7 +174,7 @@ public class IdeaController {
     }
 
     @PostMapping("/setLike-{idea}")
-    public ModelAndView setLike(@PathVariable Idea idea, Principal principal, Model model, @RequestParam boolean flag){
+    public String setLike(@PathVariable Idea idea, @PageableDefault Pageable pageable, Model model, Principal principal, @RequestParam boolean flag){
         User user = userRepository.findByUsername(principal.getName());
 
         if (flag) ideaService.addLike(user, idea);
@@ -170,7 +183,14 @@ public class IdeaController {
         ideaRepository.save(idea);
         ideaRepository.flush();
 
-        return new ModelAndView("redirect:/ideas").addAllObjects(model.asMap());
+        model.addAttribute("ideas", ideaRepository.findAll(pageable));
+        for(IdeaStatus pair : IdeaStatus.values()){
+            model.addAttribute("status", pair);
+        }
+        model.addAttribute("currentUser", user);
+        model.addAttribute("pageable", pageable);
+
+        return "ideas :: #ideas";
     }
 
     @GetMapping("getIdeaBase")
@@ -188,13 +208,15 @@ public class IdeaController {
     }
 
     @GetMapping
-    public Model doFilter(
+    public String getPage(
             @RequestParam(required = false) IdeaStatus status,
             @RequestParam(required = false) String direction,
             @RequestParam(required = false) String property,
             @RequestParam(required = false) String title,
             @PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC, size = 5) Pageable pageable,
-            Model model) {
+            Model model, Principal principal) {
+
+        getMeta(model, principal);
 
         if(direction == null)
             direction = "DESC";
@@ -236,7 +258,7 @@ public class IdeaController {
         model.addAttribute("ideas", ideas);
         model.addAttribute("pageable", pageable);
 
-        return model;
+        return "ideas";
     }
 
     @PostMapping("/remove-{idea}")
@@ -245,28 +267,5 @@ public class IdeaController {
         ideaRepository.delete(idea);
 
         return "redirect:/ideas";
-    }
-
-    @ModelAttribute
-    public void getHeader(Principal principal, Model model){
-
-        User user = userRepository.findByUsername(principal.getName());
-        model.addAttribute("currentUser", user);
-
-        if(user.getNotifications() != null)
-            model.addAttribute("userNotifies", user.getNotifications());
-
-        List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
-
-        model.addAttribute("userNotifyCount", notifications.size());
-
-        for(IdeaStatus pair : IdeaStatus.values()){
-            model.addAttribute("status", pair);
-        }
-        for(Roles pair : Roles.values()){
-            model.addAttribute("roles", pair);
-        }
-
-        model.addAttribute("statuses", IdeaStatus.values());
     }
 }

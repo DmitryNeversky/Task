@@ -81,10 +81,18 @@ public class IndexController {
     }
 
     @PostMapping("/removeNotify-{notify}")
-    public String removeNotify(@PathVariable Notification notify){
+    public String removeNotify(@PathVariable Notification notify, Model model, Principal principal){
         notificationRepository.delete(notify);
 
-        return "redirect:";
+        User user = userRepository.findByUsername(principal.getName());
+        model.addAttribute("userNotifies", user.getNotifications());
+        model.addAttribute("currentUser", user);
+
+        List<Notification> notifications = notificationRepository.findByLookAndUser(false, user);
+
+        model.addAttribute("userNotifyCount", notifications.size());
+
+        return "index";
     }
 
     // Header panel

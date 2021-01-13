@@ -26,7 +26,7 @@
                 <div class="col-sm-2">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination m-0">
-                            <li class="page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
+                            <li class="page-item my-page-item" th:each="i : ${#numbers.sequence( 5, 20, 5)}" th:classappend="${pageable.pageSize eq i} ? 'active'">
                                 <a class="page-link" th:href="@{/ideas/(page=0, size=${i})}" th:text="${i}">~1~</a>
                             </li>
                         </ul>
@@ -64,7 +64,7 @@
             <div id="ideas" class="ideas">
 
                 <!-- Idea -->
-                <div class="card" th:each="idea : ${ideas}">
+                <div class="card" th:each="idea : ${ideas}" th:id="'idea-' + ${idea.id}">
                     <div class="card-header">
                         <div class="custom-card-header">
                             <span th:text="${idea.title}">~Title~</span>

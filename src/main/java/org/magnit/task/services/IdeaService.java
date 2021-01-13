@@ -23,11 +23,8 @@ import java.util.Objects;
 @Service
 public class IdeaService {
 
-    @Value("${upload.images.path}")
-    private String IMAGES_PATH;
-
-    @Value("${upload.files.path}")
-    private String FILES_PATH;
+    @Value("${upload.path}")
+    private String UPLOAD_PATH;
 
     private final IdeaRepository ideaRepository;
 
@@ -37,10 +34,10 @@ public class IdeaService {
 
     public InputStreamResource downloadIdeaBase() throws IOException {
 
-        if(!(new File(String.valueOf(Paths.get(FILES_PATH + "data.html"))).exists()))
-            Files.createFile(Paths.get(FILES_PATH + "data.html"));
+        if(!(new File(String.valueOf(Paths.get(UPLOAD_PATH + "static/files/" + "data.html"))).exists()))
+            Files.createFile(Paths.get(UPLOAD_PATH + "static/files/" + "data.html"));
 
-        FileWriter fw = new FileWriter(FILES_PATH + "data.html");
+        FileWriter fw = new FileWriter(UPLOAD_PATH + "static/files/" + "data.html");
 
         StringBuilder str = new StringBuilder();
 
@@ -78,9 +75,9 @@ public class IdeaService {
         fw.write(String.valueOf(str));
         fw.close();
 
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(String.valueOf(Paths.get(FILES_PATH + "data.html"))));
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(String.valueOf(Paths.get(UPLOAD_PATH + "static/files/" + "data.html"))));
 
-        Files.delete(Paths.get(FILES_PATH + "data.html"));
+        Files.delete(Paths.get(UPLOAD_PATH + "static/files/" + "data.html"));
 
         return resource;
     }
@@ -96,7 +93,7 @@ public class IdeaService {
                         + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
 
                 try {
-                    Path path = Paths.get(IMAGES_PATH + fileName);
+                    Path path = Paths.get(UPLOAD_PATH + "static/images/" + fileName);
                     Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                     idea.addImage(pair.getOriginalFilename(), fileName);
                 } catch (IOException e) {
@@ -117,7 +114,7 @@ public class IdeaService {
                         + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
 
                 try {
-                    Path path = Paths.get(FILES_PATH + fileName);
+                    Path path = Paths.get(UPLOAD_PATH + "static/images/" + fileName);
                     Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
                     addFile(pair.getOriginalFilename(), fileName, idea);
                 } catch (IOException e) {

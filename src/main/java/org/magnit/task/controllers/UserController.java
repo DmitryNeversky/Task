@@ -75,8 +75,6 @@ public class UserController {
         user.setLang(lang);
         user.setAbout(about);
 
-        System.out.println(birthday);
-
         userService.uploadAvatar(avatar, user);
 
         userRepository.save(user);

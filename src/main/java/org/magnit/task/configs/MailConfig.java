@@ -40,11 +40,10 @@ public class MailConfig {
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", protocol);
-/*
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-*/
+
         props.put("mail.debug", debug);
+
+        mailSender.setDefaultEncoding("UTF-8");
 
         return mailSender;
     }

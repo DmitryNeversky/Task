@@ -27,7 +27,7 @@ jQuery(document).ready(function($) {
 		$(this).css('visibility', 'hidden')
 	});
 
-	if( window.location.toString() === "http://localhost:8080/" )
+	if( window.location.toString() === "http://82.146.35.210:8080/" )
 		$('#home-href').addClass("active")
 	if( window.location.toString().includes("/ideas") )
 		$('#ideas-href').addClass("active")
@@ -41,10 +41,10 @@ jQuery(document).ready(function($) {
 	body.on('submit', '.removeNotify', function (event) {
 		event.preventDefault()
 
-		let location = $(this).attr("action")
+		let loc = $(this).attr('action')
 
-		send(null, location, "POST", function(res) {
-			$(".for-message").html($('.for-message', res).html())
+		$.post( loc, function( data ) {
+			$(".for-message").html($('.for-message', data).html());
 		});
 	});
 
@@ -125,22 +125,94 @@ jQuery(document).ready(function($) {
 
 		let formData = {'flag': true}
 
-		send(formData, "/ideas/setLike-" + id, "POST", function(res) {
-			location.reload()
-		});
+		setLike("/ideas/setLike-" + id, formData, id)
 	});
 
 	body.on('click', '#remLike', function(event) {
-
+		event.preventDefault()
 
 		let id = $(this).data('id')
 
 		let formData = {'flag': false}
 
-		send(formData, "/ideas/setLike-" + id, "POST", function(res) {
-			location.reload()
-		});
+		setLike("/ideas/setLike-" + id, formData, id)
 	});
+
+	function setLike(url, formData, id){
+		$.ajax ({
+			url: url,
+			method: "POST",
+			data: formData,
+			dataType: 'html',
+			success: function (fragment) {
+				$("#idea-" + id).html($('#idea-' + id, fragment).html())
+				console.log(fragment)
+			},
+			error: function(e) {
+				console.log(e);
+			}
+		});
+	}
+
+	body.on('click', '.my-page-item', function () {
+		$('.my-page-item').removeClass('active')
+
+		$(this).addClass('active')
+	})
+
+	body.on('click', '.page-link', function (event) {
+		event.preventDefault()
+
+		let url = $(this).attr('href')
+
+		$('.ideas').fadeOut('slow','linear', function() {
+			let title = $('#valTitle').val()
+			let status = $('#valStatus').val()
+			let value = $('#valSort').val()
+			let direction
+			let property
+			switch (value) {
+				case "Популярное":
+					direction = "DESC"
+					property = "likeCount"
+					break
+				case "Менее популярное":
+					direction = "ASC"
+					property = "likeCount"
+					break
+				case "Сначала свежее":
+					direction = "DESC"
+					property = "id"
+					break
+				case "Сначала старое":
+					direction = "ASC"
+					property = "id"
+					break
+			}
+
+			let formData = {
+				"direction": direction,
+				"property": property,
+				"status": status,
+				"title": title
+			}
+
+			$.ajax({
+				url: url,
+				method: "GET",
+				data: formData,
+				dataType: 'html',
+				success: function (fragment) {
+					$(".ideas").html($('.ideas', fragment).html()).ready(function () {
+						$('.ideas').fadeIn('slow', 'linear')
+					});
+				},
+				error: function (e) {
+					console.log(e);
+				}
+			});
+		});
+	})
 
 	$('#filterButton').click(function (event) {
 		event.preventDefault()
@@ -177,32 +249,26 @@ jQuery(document).ready(function($) {
 				"title": title
 			}
 
-			send(formData, window.location, "GET", function(res) {
-				$(".ideas").html($('.ideas', res).html()).ready(function () {
-					$('.ideas').fadeIn('slow', 'linear')
-				});
-			})
+			$.ajax ({
+				url: window.location,
+				method: "GET",
+				data: formData,
+				dataType: 'html',
+				success: function (fragment) {
+					$(".ideas").html($('.ideas', fragment).html()).ready(function () {
+						$('.ideas').fadeIn('slow', 'linear')
+					});
+				},
+				error: function(e) {
+					console.log(e);
+				}
+			});
 		});
 	});
-
-	function send(formData, url, method, func){
-
-		$.ajax ({
-			url: url,
-			method: method,
-			data: formData,
-			dataType: 'html',
-			success: func,
-			error: function(e) {
-				console.log(e);
-			}
-		});
-	}
 
 	$(document).ajaxSend(function(e, xhr, options) {
 		let token = $("meta[name='_csrf']").attr("content");
 		let header = $("meta[name='_csrf_header']").attr("content");
-		console.log(options)
 
 		xhr.setRequestHeader(header, token);
 	});

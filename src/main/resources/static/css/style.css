@@ -2157,9 +2157,6 @@ footer.site-footer {
   .timeline li {
     padding: 2px 0; } }
 @media (max-width: 1368px) {
-  .menutoggle{
-    visibility: hidden;
-  }
 
   .dropdown-menu{
     width: 30rem; }
@@ -2204,9 +2201,6 @@ footer.site-footer {
   .weather span {
     font-size: 12px; } }
 @media (max-width: 1024px) {
-  .menutoggle{
-    visibility: hidden;
-  }
 
   .open aside.left-panel {
     width: 280px;
@@ -2487,6 +2481,19 @@ footer.site-footer {
   .order-table .avatar, .order-table .serial {
     display: none; } }
 @media (max-width: 575px) {
+  .notifies{
+    width: 280px;
+  }
+  #filterButton{
+    margin-top: 2%;
+  }
+  .filter{
+    display: inline-flex !important;
+    height: auto !important;
+  }
+  .filter .col-sm-2{
+    margin-top: 2%;
+  }
   #left-panel .navbar {
     display: inherit; }
     #left-panel .navbar .main-menu {
@@ -2699,4 +2706,8 @@ select{
 .advanced-button{
   background: none;
   border: none;
+}
+
+.my-page-item a:focus{
+  box-shadow: none;
 }

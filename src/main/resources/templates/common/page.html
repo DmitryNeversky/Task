@@ -51,12 +51,12 @@
                         </button>
                         <div class="dropdown-menu notifies border rounded" aria-labelledby="message">
                             <p class="text-center" th:if="${userNotifies.size == 0}">Уведомлений нет</p>
-                            <a class="notify dropdown-item media border-bottom pb-2" th:href="@{'/notify-' + ${notify.id}}" th:each="notify : ${userNotifies}" th:data-id="${notify.id}" th:style="${notify.look eq false} ? 'background-color: #ff00000a'">
+                            <a class="notify dropdown-item media border-bottom pb-2" th:id="'notify-' + ${notify.id}" th:href="@{'/notify-' + ${notify.id}}" th:each="notify : ${userNotifies}" th:data-id="${notify.id}" th:style="${notify.look eq false} ? 'background-color: #ff00000a'">
                                 <div class="message media-body">
                                     <span class="name float-left" th:text="${notify.title}">~Title~</span>
                                     <span class="time float-right" th:text="${notify.date}">~12:34~</span>
                                     <p th:text="${notify.message}">~Hello, this is an example msg~</p>
-                                    <form th:method="POST" class="removeNotify" th:action="@{'/removeNotify-' + ${notify.id}}">
+                                    <form th:method="POST" th:id="${notify.id}" class="removeNotify" th:action="@{'/removeNotify-' + ${notify.id}}">
                                         <input type="hidden" th:id="'notify-' + ${notify.id}">
                                         <input type="submit" value="удалить">
                                     </form>
