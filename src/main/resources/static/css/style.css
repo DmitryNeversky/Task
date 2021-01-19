@@ -2599,8 +2599,38 @@ footer.site-footer {
   text-decoration: underline;
 }
 
-.card-body .images img{
-  width: 10%;
+.images{
+  display: -webkit-box;
+  display: -ms-flexbox;
+   display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+
+.images img{
+  display: block;
+  max-width: 25%;
+  height: 10rem;
+  margin-top: 1%;
+  margin-right: 1%;
+  border-radius: 15px;
+  transition: .3s;
+}
+
+.images img:hover{
+  cursor: pointer;
+  border-radius: 0;
+  transition: .3s;
+}
+
+.files>div{
+  transition: .3s;
+}
+
+.files>div:hover{
+  cursor: pointer;
+  opacity: .6;
+  transition: .3s;
 }
 
 .logout{
@@ -2676,17 +2706,20 @@ footer.site-footer {
   top: 37px !important;
 }
 
-.input-file{
-  width: 0.1px;
-  height: 0.1px;
-  opacity: 0;
-  overflow: hidden;
-  position: absolute;
-  z-index: -1;
+.label-file-input{
+  margin-top: 1rem;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+  padding: 1%;
+  border-radius: 25%;
+  background-color: #ab8ce4a1;
+  transition: .3s;
 }
 
-.input-file + label{
-  cursor: pointer;
+.label-file-input:hover{
+  opacity: .5;
+  transition: .3s;
 }
 
 .red-focus:focus{
@@ -2711,3 +2744,37 @@ select{
 .my-page-item a:focus{
   box-shadow: none;
 }
+
+.custom-file-input{
+  display: none;
+}
+
+.overlay-dark{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: black;
+  opacity: .6;
+}
+
+.overlay-image{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-image: url("/static/images/magnit.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /*background-position: center;*/
+}
+
+.block-center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+
+.z-1{ z-index: 1 }
+.z-2{ z-index: 2 }
+.z-3{ z-index: 3 }

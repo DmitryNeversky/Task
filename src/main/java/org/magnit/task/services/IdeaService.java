@@ -17,7 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -93,9 +95,9 @@ public class IdeaService {
                         + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
 
                 try {
-                    Path path = Paths.get(UPLOAD_PATH + "static/images/" + fileName);
+                    Path path = Paths.get(UPLOAD_PATH + "static/images/uploads/" + fileName);
                     Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    idea.addImage(pair.getOriginalFilename(), fileName);
+                    addImage(fileName, "/static/images/uploads/" + fileName, idea);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -114,9 +116,9 @@ public class IdeaService {
                         + StringUtils.cleanPath(Objects.requireNonNull(pair.getOriginalFilename()));
 
                 try {
-                    Path path = Paths.get(UPLOAD_PATH + "static/images/" + fileName);
+                    Path path = Paths.get(UPLOAD_PATH + "static/files/uploads/" + fileName);
                     Files.copy(pair.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-                    addFile(pair.getOriginalFilename(), fileName, idea);
+                    addFile(fileName, "/static/files/uploads/" + fileName, idea);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -126,6 +128,50 @@ public class IdeaService {
 
     public void addFile(String key, String value, Idea idea){
         idea.getFiles().put(key, value);
+    }
+    public void addImage(String key, String value, Idea idea){
+        idea.getImages().put(key, value);
+    }
+
+    public void removeImages(List<String> remList, Idea idea){
+        if(remList == null) return;
+
+        for(String pair : remList) {
+            if(Files.exists(Paths.get(UPLOAD_PATH + idea.getImages().get(pair)))) {
+                try {
+                    Files.delete(Paths.get(UPLOAD_PATH + idea.getImages().get(pair)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Map<String, String> map = idea.getImages();
+
+            if(idea.getImages().containsKey(pair)) {
+                map.remove(pair);
+                idea.setImages(map);
+            }
+        }
+    }
+    public void removeFiles(List<String> remList, Idea idea){
+        if(remList == null) return;
+
+        for(String pair : remList) {
+            if(Files.exists(Paths.get(UPLOAD_PATH + idea.getFiles().get(pair)))) {
+                try {
+                    Files.delete(Paths.get(UPLOAD_PATH + idea.getFiles().get(pair)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Map<String, String> map = idea.getFiles();
+
+            if(idea.getFiles().containsKey(pair)) {
+                map.remove(pair);
+                idea.setFiles(map);
+            }
+        }
     }
 
     public void addLike(User user, Idea idea) {

@@ -20,36 +20,38 @@
 
         <!-- Animated -->
         <div class="animated fadeIn">
-            <form class="card" th:method="POST" th:action="@{/ideas/save}">
-                <input type="hidden" name="id" th:value="${idea.id}">
+            <form class="card" id="editForm" action="#">
+                <input type="hidden" id="id" name="id" th:value="${idea.id}">
                 <div class="card-header">
-                    <input type="text" class="float-left advanced-input w-20" name="title" th:value="${idea.title}" required/>
-                    <input type="submit" class="btn btn-outline-danger float-right mt-2" value="Сохранить">
+                    <input type="text" class="float-left advanced-input w-20" id="title" name="title" th:value="${idea.title}" required/>
+                    <input type="submit" id="formButton" class="btn btn-outline-danger float-right mt-2" value="Сохранить">
                 </div>
                 <div class="card-body">
-                    <textarea type="text" class="card-text w-100 p-2" rows="7" name="description" th:text="${idea.description}" required></textarea>
+                    <textarea type="text" class="card-text w-100 p-2" rows="7" name="description" id="description" th:text="${idea.description}" required></textarea>
+                    <div class="form-group">
+                        <label for="partImages" class="label-file-input ti-gallery"></label>
+                        <input type="file" class="custom-file-input" id="partImages" name="images" accept="image/*" multiple />
+                        <label for="partFiles" class="label-file-input ti-files"></label>
+                        <input type="file" class="custom-file-input" id="partFiles" name="files" accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf,.xml" multiple />
+                    </div>
                 </div>
-<!--                <div class="card-body border-top" th:if="!${idea.images.isEmpty()}">-->
-<!--                    <p class="font-italic">Прикрепленные изображения</p>-->
-<!--                    <div th:each="image : ${idea.images}">-->
-<!--                        <img class="editImage" th:src="${'/uploads/images/' + image.value}" alt="image">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="card-body" th:if="!${idea.files.isEmpty()}">-->
-<!--                    <p class="font-italic">Прикрепленные файлы</p>-->
-<!--                    <div class="attachments files">-->
-<!--                        <div th:each="file, p : ${idea.files}" th:id="${p.index}" th:data-index="${file.value}">-->
-<!--                            <a class="mx-2 editFile" th:if="${idea.files != null}" href="#">-->
-<!--                                <img th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">-->
-<!--                                <img th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">-->
-<!--                                <img th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">-->
-<!--                                <br>-->
-<!--                                <span class="subdescription" th:text="${file.key}"></span>-->
-<!--                            </a>-->
-<!--                            <input type="button" th:onclick="'remFile(' + ${p.index} + ')'">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="card-body images border-top">
+                    <p class="font-italic w-100">Прикрепленные изображения</p><br>
+                    <img class="oldImage" th:data-key="${image.key}" th:each="image : ${idea.images}" th:src="${image.value}" alt="image">
+                </div>
+                <div class="card-body border-top">
+                    <p class="font-italic w-100">Прикрепленные файлы</p>
+                    <div class="files text-center row">
+                        <div class="col-md-2 oldFile text-center" th:if="${idea.files != null}" th:each="file : ${idea.files}">
+                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">
+                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">
+                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">
+                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.pdf')}" src="/static/images/pdf.png" alt="pdf">
+                            <br>
+                            <span th:text="${file.key}"></span>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body border-top">
                     <a th:href="@{'/profile/id' + ${idea.user.id}}" class="float-left"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
                     <p class="float-right" th:text="${idea.date}"></p>

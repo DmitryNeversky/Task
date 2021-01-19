@@ -3,7 +3,7 @@ package org.magnit.task.entities;
 public enum Roles {
 
     USER("Сотрудник"),
-    MODERATOR("Модератор");
+    MODERATOR("Эксперт");
 
     private final String name;
 

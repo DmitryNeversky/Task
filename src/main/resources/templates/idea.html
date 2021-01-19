@@ -49,22 +49,23 @@
                 <div class="card-body">
                     <p class="card-text" th:text="${idea.description}">~Description~</p>
                 </div>
-<!--                <div class="card-body images border-top" th:if="!${idea.images.isEmpty()}">-->
-<!--                    <p class="font-italic">Прикрепленные изображения</p>-->
-<!--                    <img th:each="image : ${idea.images}" th:src="${'/uploads/images/' + image.value}" alt="image">-->
-<!--                </div>-->
-<!--                <div class="card-body" th:if="!${idea.files.isEmpty()}">-->
-<!--                    <p class="font-italic">Прикрепленные файлы</p>-->
-<!--                    <div class="attachments">-->
-<!--                        <a class="mx-2" th:if="${idea.files != null}" th:each="file : ${idea.files}" th:href="@{'/uploads/files/' + ${file.value}}" th:target="_blank">-->
-<!--                            <img th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">-->
-<!--                            <img th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">-->
-<!--                            <img th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">-->
-<!--                            <br>-->
-<!--                            <span class="subdescription" th:text="${file.key}"></span>-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div class="card-body images border-top" th:if="!${idea.images.isEmpty()}">
+                    <p class="font-italic w-100">Прикрепленные изображения</p><br>
+                    <img th:each="image : ${idea.images}" th:src="${image.value}" alt="image">
+                </div>
+                <div class="card-body border-top" th:if="!${idea.files.isEmpty()}">
+                    <p class="font-italic w-100">Прикрепленные файлы</p>
+                    <div class="attachments">
+                        <a class="mx-2" th:if="${idea.files != null}" th:each="file : ${idea.files}" th:href="@{${file.value}}" th:target="_blank">
+                            <img th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">
+                            <img th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">
+                            <img th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">
+                            <img th:if="${#strings.contains(file.key, '.pdf')}" src="/static/images/pdf.png" alt="pdf">
+                            <br>
+                            <span class="subdescription" th:text="${file.key}"></span>
+                        </a>
+                    </div>
+                </div>
                 <div class="card-body border-top">
                     <a th:href="@{'/profile/id' + ${idea.user.id}}" class="float-left"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>
                     <p class="float-right" th:text="${idea.date}"></p>

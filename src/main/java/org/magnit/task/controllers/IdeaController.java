@@ -19,6 +19,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -96,26 +97,36 @@ public class IdeaController {
         model.addAttribute("statuses", IdeaStatus.values());
     }
 
-    @PostMapping("/save")
-    public String save(
-            @RequestParam int id,
+    @PostMapping("/edit-{idea}")
+    public String edit(
+            @PathVariable Idea idea,
             @RequestParam String title,
-            @RequestParam String description
+            @RequestParam String description,
+            @RequestParam(required = false) List<MultipartFile> images,
+            @RequestParam(required = false) List<MultipartFile> files,
+            @RequestParam(required = false) List<String> remImages,
+            @RequestParam(required = false) List<String> remFiles
     ){
 
-        Idea idea = ideaRepository.findById(id);
+        ideaService.uploadImages(images, idea);
+        ideaService.uploadFiles(files, idea);
+        ideaService.removeImages(remImages, idea);
+        ideaService.removeFiles(remFiles, idea);
+
         idea.setTitle(title);
         idea.setDescription(description);
 
         ideaRepository.save(idea);
 
-        return "redirect:/ideas/idea-" + id;
+        return "redirect:/ideas";
     }
 
     @PostMapping("/add")
     public String add(
             @RequestParam String title,
             @RequestParam String description,
+            @RequestParam(required = false) List<MultipartFile> images,
+            @RequestParam(required = false) List<MultipartFile> files,
             Principal principal
     ) {
 
@@ -124,6 +135,9 @@ public class IdeaController {
         Idea idea = new Idea(title, description, IdeaStatus.LOOKING, new Date(), user);
 
         user.setIdeaCount(user.getIdeaCount() + 1);
+
+        ideaService.uploadImages(images, idea);
+        ideaService.uploadFiles(files, idea);
 
         ideaRepository.save(idea);
         ideaRepository.flush();
@@ -141,7 +155,7 @@ public class IdeaController {
             }
         }
 
-        return "redirect:/ideas/idea-" + idea.getId();
+        return "redirect:/ideas";
     }
 
     @PostMapping("setStatus-{idea}")

@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import java.util.*;
 
 @Entity
@@ -17,10 +16,9 @@ public class Idea {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @Min(value = 5, message = "Заголовок слишком короткий (минимум 5 символов)")
     private String title;
 
-    @Min(value = 55, message = "Описание слишком короткое (минимум 55 символов).")
+    @Lob
     private String description;
 
     private long likeCount;
@@ -31,6 +29,7 @@ public class Idea {
             joinColumns = { @JoinColumn(name = "idea_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") }
     )
+
     private Set<User> likes = new HashSet<>();
 
     @ManyToMany()
@@ -65,10 +64,6 @@ public class Idea {
     @MapKeyColumn(name = "image_name")
     @Column(name = "image_uuid")
     private Map<String, String> images = new HashMap<>();
-
-    public void addImage(String key, String value){
-        images.put(key, value);
-    }
 
     @ElementCollection
     @CollectionTable(name = "idea_files_mapping",
