@@ -51,7 +51,7 @@
                 </div>
                 <div class="card-body images border-top" th:if="!${idea.images.isEmpty()}">
                     <p class="font-italic w-100">Прикрепленные изображения</p><br>
-                    <img th:each="image : ${idea.images}" th:src="${image.value}" alt="image">
+                    <img id="mayZoom" th:each="image : ${idea.images}" th:src="${image.value}" alt="image">
                 </div>
                 <div class="card-body border-top" th:if="!${idea.files.isEmpty()}">
                     <p class="font-italic w-100">Прикрепленные файлы</p>
@@ -62,7 +62,7 @@
                             <img th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">
                             <img th:if="${#strings.contains(file.key, '.pdf')}" src="/static/images/pdf.png" alt="pdf">
                             <br>
-                            <span class="subdescription" th:text="${file.key}"></span>
+                            <span class="subdescription" th:text="${#strings.substringAfter(file.key,'_')}"></span>
                         </a>
                     </div>
                 </div>

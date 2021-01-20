@@ -1,5 +1,17 @@
 jQuery(document).ready(function($) {
 
+	let zoom = false
+
+	$('#mayZoom').click(function (){
+		if(zoom){
+			$(this).removeClass('block-center img-zoom z-5')
+			zoom = false
+		} else {
+			$(this).addClass('block-center img-zoom z-5')
+			zoom = true
+		}
+	})
+
 	let oldAvatar = $('#previewAvatar').attr('src');
 
 	function readURL(input) {

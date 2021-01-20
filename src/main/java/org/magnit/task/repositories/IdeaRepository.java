@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 public interface IdeaRepository extends JpaRepository<Idea, Integer>, JpaSpecificationExecutor<Idea> {
+    Page<Idea> findById(Pageable pageable, int id);
     Idea findById(int id);
 
     List<Idea> findTop3ByOrderByLikeCountDesc();

@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("ideas")
@@ -231,6 +233,24 @@ public class IdeaController {
             Model model, Principal principal) {
 
         getMeta(model, principal);
+
+        if(title != null && title.contains("#")) {
+
+            Pattern pattern = Pattern.compile("[#]\\d+");
+            Matcher matcher = pattern.matcher(title);
+
+            int id = 0;
+            while (matcher.find())
+                id += Integer.parseInt(title.substring(matcher.start() + 1, matcher.end()));
+
+            if(ideaRepository.findById(id) != null && id != 0)
+                model.addAttribute("ideas", ideaRepository.findById(pageable, id));
+            else model.addAttribute("findTitleError", "Идей по заданным критериям не найдено.");
+
+            model.addAttribute("pageable", pageable);
+
+            return "ideas";
+        }
 
         if(direction == null)
             direction = "DESC";

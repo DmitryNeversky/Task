@@ -63,6 +63,8 @@
 
             <div id="ideas" class="ideas">
 
+                <p class="text-center" th:text="${findTitleError}"></p>
+
                 <!-- Idea -->
                 <div class="card" th:each="idea : ${ideas}" th:id="'idea-' + ${idea.id}">
                     <div class="card-header">
@@ -90,8 +92,7 @@
                         <a th:href="@{'/ideas/idea-' + ${idea.id}}" class="text-danger float-right">Подробнее</a>
                     </div>
                 </div>
-
-                <nav aria-label="Page navigation example">
+                <nav th:if="${ideas != null}" aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item" th:classappend="${pageable.pageNumber eq 0} ? 'disabled'">
                             <a class="page-link" th:href="@{/ideas/(page=${pageable.pageNumber -1}, size=${pageable.pageSize})}"><i class="fa fa-arrow-left"></i></a>
