@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
+    User findById(int id);
+
     List<User> findTop3ByOrderByIdeaCountDesc();
     List<User> findAllByRole(Roles role);
 

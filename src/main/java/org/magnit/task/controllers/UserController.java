@@ -6,14 +6,12 @@ import org.magnit.task.entities.User;
 import org.magnit.task.repositories.NotificationRepository;
 import org.magnit.task.repositories.UserRepository;
 import org.magnit.task.services.UserService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -49,38 +47,40 @@ public class UserController {
     }
 
     @GetMapping("/profile/edit")
-    public String getEditUserPage(){
+    public String getEditUserPage(Model model, Principal principal){
+        model.addAttribute("user", userRepository.findByUsername(principal.getName()));
 
         return "profileEdit";
     }
 
-    @PostMapping("/profile/edit")
+    @PostMapping("/profile/edit-{id}")
     public String editUser(
-            @RequestParam(required = false) MultipartFile avatar,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String division,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date birthday,
-            @RequestParam(required = false) String phone,
-            @RequestParam(required = false) String lang,
-            @RequestParam(required = false) String about,
-            Principal principal
+            @PathVariable int id,
+            @ModelAttribute User userModel,
+            @RequestParam(required = false) MultipartFile avatar
             ) {
 
-        User user = userRepository.findByUsername(principal.getName());
+        User user = userRepository.findById(id);
 
-        user.setName(name);
-        user.setDivision(division);
-        user.setBirthday(birthday);
-        user.setPhone(phone);
-        user.setLang(lang);
-        user.setAbout(about);
+        if(!userModel.getName().equals(user.getName()))
+            user.setName(userModel.getName());
+        if(!userModel.getDivision().equals(user.getDivision()))
+            user.setDivision(userModel.getDivision());
+        if(userModel.getBirthday() != user.getBirthday())
+            user.setBirthday(userModel.getBirthday());
+        if(!userModel.getPhone().equals(user.getPhone()))
+            user.setPhone(userModel.getPhone());
+        if(!userModel.getLang().equals(user.getLang()))
+            user.setLang(userModel.getLang());
+        if(!userModel.getAbout().equals(user.getAbout()))
+            user.setAbout(userModel.getAbout());
 
         userService.uploadAvatar(avatar, user);
 
         userRepository.save(user);
         userRepository.flush();
 
-        return "redirect:/profile/id" + user.getId();
+        return "redirect:/profile/id" + id;
     }
 
     @ModelAttribute

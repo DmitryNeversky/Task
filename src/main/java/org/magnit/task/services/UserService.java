@@ -9,7 +9,10 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,7 +32,8 @@ public class UserService{
                 Path path = Paths.get(UPLOAD_PATH + "static/images/avatar/" + fileName);
                 Files.copy(avatar.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
 
-                if(Files.exists(Paths.get(UPLOAD_PATH + user.getAvatarPath())))
+                if(Files.exists(Paths.get(UPLOAD_PATH + user.getAvatarPath())) &&
+                        !user.getAvatarPath().equals("/static/images/avatar/user.png"))
                     Files.delete(Paths.get(UPLOAD_PATH + user.getAvatarPath()));
 
                 user.setAvatarPath("/static/images/avatar/" + fileName);

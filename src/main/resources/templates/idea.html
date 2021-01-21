@@ -56,11 +56,15 @@
                 <div class="card-body border-top" th:if="!${idea.files.isEmpty()}">
                     <p class="font-italic w-100">Прикрепленные файлы</p>
                     <div class="attachments">
-                        <a class="mx-2" th:if="${idea.files != null}" th:each="file : ${idea.files}" th:href="@{${file.value}}" th:target="_blank">
-                            <img th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">
-                            <img th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">
-                            <img th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">
-                            <img th:if="${#strings.contains(file.key, '.pdf')}" src="/static/images/pdf.png" alt="pdf">
+                        <a class="mx-2" th:if="${idea.files != null}" th:each="file : ${idea.files}" th:href="@{${file.value}}" th:target="_blank" th:switch="${file.key}">
+                            <img th:case=".docx" src="/static/images/word.png" alt="docx">
+                            <img th:case=".doc" src="/static/images/word.png" alt="docx">
+                            <img th:case=".xlsx" src="/static/images/excel.png" alt="excel">
+                            <img th:case=".xls" src="/static/images/excel.png" alt="excel">
+                            <img th:case=".pptx" src="/static/images/powerpoint.png" alt="pptx">
+                            <img th:case=".ppt" src="/static/images/powerpoint.png" alt="pptx">
+                            <img th:case=".pdf" src="/static/images/pdf.png" alt="pdf">
+                            <img th:case="*" src="/static/images/file.png" alt="file">
                             <br>
                             <span class="subdescription" th:text="${#strings.substringAfter(file.key,'_')}"></span>
                         </a>

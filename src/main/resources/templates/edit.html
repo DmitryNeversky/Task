@@ -42,11 +42,15 @@
                 <div class="card-body border-top">
                     <p class="font-italic w-100">Прикрепленные файлы</p>
                     <div class="files text-center row">
-                        <div class="col-md-2 oldFile text-center" th:if="${idea.files != null}" th:each="file : ${idea.files}">
-                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.docx')}" src="/static/images/word.png" alt="docx">
-                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.xlsx')}" src="/static/images/excel.png" alt="excel">
-                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.pptx')}" src="/static/images/powerpoint.png" alt="pptx">
-                            <img th:data-key="${file.key}" th:if="${#strings.contains(file.key, '.pdf')}" src="/static/images/pdf.png" alt="pdf">
+                        <div class="col-md-2 oldFile text-center" th:if="${idea.files != null}" th:each="file : ${idea.files}" th:switch="${file.key}">
+                            <img th:data-key="${file.key}" th:case=".docx" src="/static/images/word.png" alt="docx">
+                            <img th:data-key="${file.key}" th:case=".doc" src="/static/images/word.png" alt="docx">
+                            <img th:data-key="${file.key}" th:case=".xlsx" src="/static/images/excel.png" alt="excel">
+                            <img th:data-key="${file.key}" th:case=".xls" src="/static/images/excel.png" alt="excel">
+                            <img th:data-key="${file.key}" th:case=".pptx" src="/static/images/powerpoint.png" alt="pptx">
+                            <img th:data-key="${file.key}" th:case=".ppt" src="/static/images/powerpoint.png" alt="pptx">
+                            <img th:data-key="${file.key}" th:case=".pdf" src="/static/images/pdf.png" alt="pdf">
+                            <img th:data-key="${file.key}" th:case="*" src="/static/images/file.png" alt="pdf">
                             <br>
                             <span th:text="${file.key}"></span>
                         </div>

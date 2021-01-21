@@ -19,27 +19,27 @@
     <div class="content">
         <!-- Animated -->
         <div class="animated fadeIn">
-            <form th:method="post" th:action="@{/profile/edit}" id="editProfileForm" enctype="multipart/form-data">
+            <form th:method="POST" th:action="@{'/profile/edit-' + ${user.id}}" enctype="multipart/form-data" th:object="${user}">
                 <div class="row">
                     <div class="col-lg-4 col-xlg-3 col-md-5">
                         <div class="card">
                             <div class="card-body">
                                 <center class="m-t-30 row">
                                     <div class="col-md-6">
-                                        <img th:src="${currentUser.avatarPath}" id="previewAvatar" class="img-circle rounded-circle mb-2" width="150" height="150">
-                                        <input type="file" class="input-file" id="input-file" accept="image/*" name="avatar"/>
+                                        <img th:src="${user.avatarPath}" id="previewAvatar" class="img-circle rounded-circle mb-2" width="150" height="150">
+                                        <input type="file" class="custom-file-input" id="input-file" accept="image/*" name="avatar"/>
                                         <label for="input-file">Изменить</label><br>
                                         <small id="cancelLoad" style="visibility: hidden; cursor: pointer">Отменить</small>
                                     </div>
                                     <div class="col-md-6 pt-2 text-left mt-3">
                                         <label for="name" class="text-danger"></label>
-                                        <input type="text" class="advanced-input w-100" placeholder="Имя" id="name" th:value="${currentUser.name}" name="name" required>
-                                        <select class="form-control" id="division" name="division" required>
-                                            <option th:value="${currentUser.division}" th:text="${currentUser.division}"></option>
-                                            <option th:if="${currentUser.division} != 'Грузчик'" value="Грузчик">Грузчик</option>
-                                            <option th:if="${currentUser.division} != 'Кассир'" value="Кассир">Кассир</option>
-                                            <option th:if="${currentUser.division} != 'Маркетолог'" value="Маркетолог">Маркетолог</option>
-                                            <option th:if="${currentUser.division} != 'Уборщик'" value="Уборщик">Уборщик</option>
+                                        <input type="text" class="advanced-input w-100" placeholder="Имя" id="name" th:value="${user.name}" th:field="*{name}" required>
+                                        <select class="form-control" id="division" th:field="*{division}" required>
+                                            <option th:value="${user.division}" th:text="${user.division}"></option>
+                                            <option th:if="${user.division} != 'Грузчик'" value="Грузчик">Грузчик</option>
+                                            <option th:if="${user.division} != 'Кассир'" value="Кассир">Кассир</option>
+                                            <option th:if="${user.division} != 'Маркетолог'" value="Маркетолог">Маркетолог</option>
+                                            <option th:if="${user.division} != 'Уборщик'" value="Уборщик">Уборщик</option>
                                         </select>
                                     </div>
                                 </center>
@@ -50,13 +50,13 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="card-body">
-                                    <p><span>День рождения </span><input type="date" id="birthday" class="advanced-input w-100" th:value="${currentUser.birthday} != null ? ${currentUser.birthday} : ''" name="birthday"></p>
+                                    <p><span>День рождения </span><input type="date" id="birthday" class="advanced-input w-100" th:value="${user.birthday} != null ? ${user.birthday} : ''" th:field="*{birthday}"></p>
                                     <label for="birthday"></label>
-                                    <p><input type="tel" id="phone" class="advanced-input w-100" placeholder="Телефон" th:value="${currentUser.phone} != 0 ? ${currentUser.phone} : ''" name="phone"></p>
+                                    <p><input type="tel" id="phone" class="advanced-input w-100" placeholder="Телефон" th:value="${user.phone} != 0 ? ${user.phone} : ''" th:field="*{phone}"></p>
                                     <label for="phone"></label>
-                                    <p><input type="text" id="lang" class="advanced-input w-100" placeholder="Языки" th:value="${currentUser.lang} != null ? ${currentUser.lang} : ''" name="lang"></p>
+                                    <p><input type="text" id="lang" class="advanced-input w-100" placeholder="Языки" th:value="${user.lang} != null ? ${user.lang} : ''" th:field="*{lang}"></p>
                                     <label for="lang"></label>
-                                    <p><input type="text" id="about" class="advanced-input w-100" placeholder="О себе" th:value="${currentUser.about} != null ? ${currentUser.about} : ''" name="about"></p>
+                                    <p><input type="text" id="about" class="advanced-input w-100" placeholder="О себе" th:value="${user.about} != null ? ${user.about} : ''" th:field="*{about}"></p>
                                     <label for="about"></label>
                                 </div>
                                 <input type="submit" class="btn btn-outline-danger" value="Сохранить">

@@ -2675,7 +2675,7 @@ footer.site-footer {
   /*color: bisque;*/
 }
 
-.custom-card-header .count{
+.custom-card-header .count-likes{
   color: #ff00009e;
 }
 
@@ -2747,6 +2747,11 @@ select{
 
 .custom-file-input{
   display: none;
+}
+
+.custom-file-input + label:hover{
+  color: #ff00009e;
+  cursor: pointer;
 }
 
 .overlay-dark{

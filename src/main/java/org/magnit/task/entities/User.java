@@ -32,7 +32,7 @@ public class User {
     private String phone;
 
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date birthday;
 
     private String lang;

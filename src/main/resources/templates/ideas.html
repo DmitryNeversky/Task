@@ -74,7 +74,7 @@
 
                             <input type="button" class="advanced-button" id="remLike" th:data-id="${idea.id}" th:style="${idea.unLikes.contains(currentUser)} ? 'color: #ff00009e' : 'color: #f0808070'" value="❮">
 
-                            <span th:id="'likeCount-' + ${idea.id}" th:text="${idea.likeCount}" class="count"></span>
+                            <span th:id="'likeCount-' + ${idea.id}" th:text="${idea.likeCount}" class="count-likes"></span>
 
                             <input type="button" class="advanced-button" id="addLike" th:data-id="${idea.id}" th:style="${idea.likes.contains(currentUser)} ? 'color: #ff00009e' : 'color: #f0808070'" value="❯">
 
