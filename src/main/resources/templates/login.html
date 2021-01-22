@@ -2,35 +2,31 @@
 <head>
     <th:block th:insert="/common/page :: head" />
     <title>Авторизация</title>
+
+    <script src="/static/js/animation.js"></script>
 </head>
 <body>
 <div class="overlay-dark z-2"></div>
 <div class="overlay-image z-1"></div>
-    <div class="container position-relative z-3 pt-5">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-body border-bottom">
-                    <h3 class="mb-0">Авторизация</h3>
-                </div>
-                <div class="card-body">
-                    <form class="form" th:action="@{/login}" method="post">
-                        <p id="error" class="text-danger"></p>
-                        <div class="form-group">
-                            <input type="text" name="username" placeholder="Email" class="form-control form-control-lg rounded-0" autofocus="autofocus" />
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" placeholder="Пароль" class="form-control form-control-lg rounded-0" />
-                        </div>
-                        <div class="form-group pt-3">
-                            <a href="/registration" class="float-left">Зарегистрироваться</a>
-                            <input type="submit" class="btn btn-danger btn-lg float-right" value="Авторизоваться" />
-                        </div>
-                    </form>
-                </div>
+    <div class="advanced-form pie block-center z-5">
+        <h3 class="text-center text-white mb-3 text-uppercase">Вход</h3>
+        <form class="form" th:action="@{/login}" method="post">
+            <p id="error" class="text-danger"></p>
+            <div class="form-group">
+                <i class="fa fa-envelope"></i>
+                <label for="username">Email</label>
+                <input type="text" id="username" name="username" class="form-control text-white advanced-input form-control-lg rounded-0 pl-5" autofocus="autofocus" />
             </div>
-        </div>
+            <div class="form-group">
+                <i class="fa fa-lock"></i>
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" class="form-control text-white advanced-input form-control-lg rounded-0 pl-5" />
+            </div>
+            <div class="form-group text-center pt-3">
+                <input type="submit" class="btn w-75 mb-3 btn-danger btn-lg" value="Войти" /><br>
+                <a href="/registration" class="advanced-href">Регистрация</a>
+            </div>
+        </form>
     </div>
-</div>
 </body>
 </html>
