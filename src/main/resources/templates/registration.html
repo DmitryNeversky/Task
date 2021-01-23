@@ -1,63 +1,76 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:insert="/common/page :: head" />
-
     <title>Регистрация</title>
+
+    <script src="/static/js/animation.js"></script>
 </head>
 <body>
 <div class="overlay-dark z-2"></div>
 <div class="overlay-image z-1"></div>
-<div class="container block-center z-3">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-body border-bottom">
-                    <h3 class="mb-0">Регистрация</h3>
+    <div class="advanced-form registration-form block-center z-5">
+        <h3 class="mb-0 text-white text-uppercase text-center">Регистрация</h3>
+
+        <p id="serverError" class="error" th:text="${error}"></p>
+
+        <form class="form" id="regForm" method="post" th:action="@{registration}" th:object="${user}">
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="form-group">
+                        <i class="fa fa-envelope"></i>
+                        <input type="text" id="username" placeholder="Email" th:field="*{username}" class="form-control text-white advanced-input form-control-lg rounded-0 pl-5" />
+                        <p class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">~error~</p>
+                        <span id="username-error" class="error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fa fa-lock"></i>
+                        <input type="password" placeholder="Пароль" id="password" th:field="*{password}" class="form-control text-white advanced-input form-control-lg rounded-0 pl-5" />
+                        <p class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">~error~</p>
+                        <span id="password-error" class="error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <i class="fa fa-lock"></i>
+                        <input type="text" id="code" placeholder="Код эксперта" class="form-control text-white advanced-input form-control-lg rounded-0 pl-5" name="code">
+                        <p class="error" th:if="${codeError == false}">Введен неправильный код</p>
+                        <span id="code-error" class="error"></span>
+                    </div>
+
                 </div>
-                <div class="card-body">
-                    <form class="form" id="regForm" method="post" th:action="@{registration}" th:object="${user}">
 
-                        <p id="serverError" class="text-danger" th:text="${error}"></p>
+                <div class="col-md-6">
 
-                        <div class="form-group">
-                            <label for="username" class="text-danger"></label>
-                            <input type="text" id="username" placeholder="Email" th:field="*{username}" class="form-control form-control-lg rounded-0" />
-                            <p class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">~error~</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="text-danger"></label>
-                            <input type="text" id="password" placeholder="Пароль" th:field="*{password}" class="form-control form-control-lg rounded-0" />
-                            <p class="invalid-feedback" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">~error~</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="name" class="text-danger"></label>
-                            <input type="text" id="name" placeholder="Имя" th:field="*{name}" class="form-control form-control-lg rounded-0" />
-                            <p class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">~error~</p>
-                        </div>
-                        <div class="form-group">
-                            <select class="form-control" id="division" name="division" required>
-                                <option></option>
-                                <option value="Грузчик">Грузчик</option>
-                                <option value="Кассир">Кассир</option>
-                                <option value="Маркетолог">Маркетолог</option>
-                                <option value="Уборщик">Уборщик</option>
-                            </select>
-                            <p class="invalid-feedback" th:if="${#fields.hasErrors('division')}" th:errors="*{division}">~error~</p>
-                        </div>
-                        <div class="form-group">
-                            <label for="code" class="text-danger"></label>
-                            <input type="text" id="code" name="code" placeholder="Код модератора">
-                            <p class="text-danger" th:if="${codeError == false}">Введен неправильный код</p>
-                        </div>
+                    <div class="form-group" style="margin-bottom: 67px">
+                        <i class="fa fa-user"></i>
+                        <input type="text" id="name" th:field="*{name}" placeholder="Имя" class="form-control text-white advanced-input form-control-lg rounded-0 pl-5" />
+                        <p class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">~error~</p>
+                        <span id="name-error" class="error"></span>
+                    </div>
 
-                        <a href="/login">Уже есть аккаунт?</a>
+                    <div class="form-group">
+                        <select class="form-control" id="division" name="division" required>
+                            <option>Подразделение</option>
+                            <option value="Грузчик">Грузчик</option>
+                            <option value="Кассир">Кассир</option>
+                            <option value="Маркетолог">Маркетолог</option>
+                            <option value="Уборщик">Уборщик</option>
+                        </select>
+                        <span id="division-error" class="error"></span>
+                    </div>
 
-                        <input type="submit" class="btn btn-danger btn-lg w-100" value="Зарегистрироваться"/>
-                    </form>
                 </div>
+
             </div>
-        </div>
+
+            <div class="form-group text-center mt-3 mb-0">
+                <input type="submit" class="btn btn-danger btn-lg mb-3 w-75" value="Зарегистрироваться"/><br>
+                <a href="/login" class="advanced-href">Уже есть аккаунт?</a>
+            </div>
+        </form>
     </div>
-</div>
 </body>
 </html>

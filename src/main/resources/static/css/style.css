@@ -2481,6 +2481,12 @@ footer.site-footer {
   .order-table .avatar, .order-table .serial {
     display: none; } }
 @media (max-width: 575px) {
+  .registration-form{
+    position: absolute;
+  }
+  .overlay-image{
+    height: 135%;
+  }
   .notifies{
     width: 280px;
   }
@@ -2845,20 +2851,56 @@ select{
 .advanced-form label{
   position: relative;
   color: white;
+  top: 1.4em;
+  left: -3rem;
 }
 
-.advanced-form .fa:before{
-  position: relative;
-  top: 3.6em;
-  margin: 15px;
+.advanced-form input::placeholder{
   color: white;
 }
 
+.advanced-form .fa:before{
+    position: relative;
+    top: 3.6em;
+    margin: 15px;
+    color: white;
+}
+
+.advanced-form select{
+  color: white;
+  background: none;
+  border: none;
+  border-bottom: 1px solid white;
+}
+
+.advanced-form select:focus{
+  color: white;
+  border-color: white;
+}
+
+.advanced-form select>option{
+  color: black;
+}
+
 .advanced-href{
-  color: rgb(255 255 255 / 80%);
-  /*text-decoration: underline;*/
+    color: rgb(255 255 255 / 80%);
+    /*text-decoration: underline;*/
 }
 
 .advanced-href:hover{
-  color: rgb(255 255 255 / 60%);
+    color: rgb(255 255 255 / 60%);
+}
+
+.registration-form .fa:before{
+  top: 2.8em;
+}
+
+.registration-form .form-group{
+  margin-bottom: 30px;
+}
+
+.advanced-form .error{
+  color: #ff7c7c;
+  font-weight: 600;
+  position: absolute;
 }

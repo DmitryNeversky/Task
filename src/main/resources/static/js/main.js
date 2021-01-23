@@ -121,6 +121,10 @@ jQuery(document).ready(function($) {
 		} else {
 			$('body').removeClass('small-device');
 		}
+		if(window.location.toString().includes("registration") && windowWidth<=575){
+			$('.registration-form').removeClass('block-center')
+			$('.overlay-image').css('height', '135%')
+		}
 
 	});
 

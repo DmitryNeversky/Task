@@ -2,6 +2,7 @@ jQuery(document).ready(function($){
     let username = $('#username')
     let password = $('#password')
     let name = $('#name')
+    let division = $('#division')
 
     $('#regForm').submit(function (event){
         let code = $('#code')
@@ -9,31 +10,35 @@ jQuery(document).ready(function($){
         $('#serverError').hide()
 
         if(!username.val().includes('@') || username.val().trim().includes(' ')){
-            $("label[for='" + username.attr('id') + "']").text("Email содержит неверный формат.")
-        } else $("label[for='" + username.attr('id') + "']").text('')
+            $('#username-error').text("Email содержит неверный формат.")
+        } else $('#username-error').text('')
 
         if (password.val().trim().length < 6 || password.val().trim().length > 24){
             event.preventDefault()
 
-            $("label[for='" + password.attr('id') + "']")
-                .text("Пароль должен содержать от 6 до 24 символов (сейчас " + password.val().length + ").")
-        } else $("label[for='" + password.attr('id') + "']").text('')
+            $('#password-error').text("Пароль должен содержать от 6 до 24 символов (сейчас " + password.val().length + ").")
+        } else $('#password-error').text('')
+
         if(password.val().trim().includes(' '))
-            $("label[for='" + password.attr('id') + "']").text("Пароль имеет неверный формат.")
+            $('#password-error').text("Пароль имеет неверный формат.")
 
         if (name.val().trim().length < 2 || name.val().trim().length > 64){
             event.preventDefault()
 
-            $("label[for='" + name.attr('id') + "']")
-                .text("Имя должно содержать от 2 до 64 символов (сейчас " + name.val().trim().length + ").")
-        } else $("label[for='" + name.attr('id') + "']").text('')
+            $('#name-error').text("Имя должно содержать от 2 до 64 символов (сейчас " + name.val().trim().length + ").")
+        } else $('#name-error').text('')
 
         if(code.val().trim().length > 64){
             event.preventDefault()
 
-            $("label[for='" + code.attr('id') + "']")
-                .text("Поле может содержать до 64 символов (сейчас " + code.val().trim().length + ").")
-        } else $("label[for='" + code.attr('id') + "']").text('')
+            $('#code-error').text("Поле может содержать до 64 символов (сейчас " + code.val().trim().length + ").")
+        } else $('#code-error').text('')
+
+        if(division.val() === "Подразделение"){
+            event.preventDefault()
+
+            $('#division-error').text("Выберите подразделение")
+        } else $('#division-error').text('')
     });
 
     $('#editProfileForm').submit(function (event) {
