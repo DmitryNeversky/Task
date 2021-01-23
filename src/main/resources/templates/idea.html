@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Идея</title>
+    <title th:text="${'Идея #' + idea.id}">Идея</title>
     <th:block th:insert="common/page :: head"/>
 </head>
 
@@ -23,6 +23,7 @@
             <div class="card">
                 <div class="card-header">
                     <span class="float-left" th:text="${idea.title}">~Title~</span>
+                    <span class="color-gray ml-1 mr-2 small" th:text="' #' + ${idea.id}">~ID~</span>
                     <div th:if="${currentUser.role == roles.USER}">
                         <span class="badge badge-success float-right mt-1" th:if="${idea.status == status.APPROVED}">Одобрено</span>
                         <span class="badge badge-warning float-right mt-1" th:if="${idea.status == status.LOOKING}">На рассмотрении</span>
