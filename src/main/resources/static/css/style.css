@@ -563,7 +563,6 @@ aside.left-panel {
   height: 100vh;
   padding: 0;
   vertical-align: top;
-  width: 280px;
   -webkit-box-shadow: 1px 0 20px rgba(0, 0, 0, 0.08);
           box-shadow: 1px 0 20px rgba(0, 0, 0, 0.08);
   position: fixed;
@@ -571,8 +570,6 @@ aside.left-panel {
   bottom: 0;
   top: 55px;
   z-index: 999; }
-  aside.left-panel:hover {
-    overflow-x: scroll; }
 
 .open aside.left-panel:hover {
   overflow-x: inherit; }
@@ -813,11 +810,6 @@ aside.left-panel {
     line-height: 0;
     opacity: 0;
     padding: 0; }
-  .open aside.left-panel .menutoggle {
-    background-color: #dc3545;
-    color: #fff !important;
-    right: -20px;
-    text-align: center; }
 
 /* Right panel */
 .right-panel {
@@ -873,8 +865,6 @@ aside.left-panel {
   z-index: 4; }
 .right-panel .navbar-brand {
   display: inline-block; }
-.right-panel .menutoggle {
-  padding-top: 7px; }
 .right-panel .navbar-header {
   width: 100%;
   background-color: #fff;
@@ -896,16 +886,6 @@ aside.left-panel {
 header.fixed-top {
   background: #fff;
   padding: 20px; }
-
-.menutoggle {
-  background-color: transparent;
-  color: #99abb4 !important;
-  cursor: pointer;
-  font-size: 1em;
-  height: 40px;
-  line-height: 40px;
-  display: block;
-  text-align: right; }
 
 .search-trigger {
   background: transparent;
@@ -1150,9 +1130,6 @@ header .form-inline {
             align-items: center; }
     .user-area .dropdown-toggle:after {
       display: none; }
-
-#menuToggle2 {
-  padding-left: 25px; }
 
 #language-select {
   color: #f1f2f7;
@@ -2202,10 +2179,6 @@ footer.site-footer {
     font-size: 12px; } }
 @media (max-width: 1024px) {
 
-  .open aside.left-panel {
-    width: 280px;
-    max-width: 280px; }
-
   aside.left-panel:hover {
     overflow-x: inherit; }
 
@@ -2290,11 +2263,6 @@ footer.site-footer {
       line-height: 0;
       opacity: 0;
       padding: 0; }
-    aside.left-panel .menutoggle {
-      display: none; }
-    aside.left-panel.open-menu {
-      max-width: 280px;
-      width: 280px; }
       aside.left-panel.open-menu .navbar .navbar-nav li > a {
         width: 100%;
         max-width: 100%;
@@ -2441,8 +2409,6 @@ footer.site-footer {
     width: 100%;
     float: none;
     background: white; }
-  .right-panel .menutoggle {
-    float: right; }
   .right-panel .navbar-header {
     padding: 0; }
   .right-panel header.header {
@@ -2511,9 +2477,7 @@ footer.site-footer {
 
   .right-panel .navbar-brand {
     width: 220px;
-    padding-bottom: 5px; }
-  .right-panel .menutoggle {
-    width: 20px; } }
+    padding-bottom: 5px; }  }
 #cellPaiChart {
   height: 160px; }
   #cellPaiChart .pieLabel {
@@ -2903,4 +2867,26 @@ select{
   color: #ff7c7c;
   font-weight: 600;
   position: absolute;
+}
+
+.open .menutoggle{
+  display: block;
+  transform: rotate(0deg);
+  float: none;
+  text-align: center;
+  margin: 0;
+  margin-top: 50%;
+}
+
+.menutoggle{
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+  margin-top: 10%;
+  margin-right: 20px;
+  transform: rotate(180deg);
+}
+
+.menutoggle:hover{
+  color: #ff000075;
 }

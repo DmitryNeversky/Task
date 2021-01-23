@@ -60,18 +60,6 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$('.search-trigger').on('click', function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		$('.search-trigger').parent('.header-left').addClass('open');
-	});
-
-	$('.search-close').on('click', function(event) {
-		event.preventDefault();
-		event.stopPropagation();
-		$('.search-trigger').parent('.header-left').removeClass('open');
-	});
-
 	$('.equal-height').matchHeight({
 		property: 'max-height'
 	});
@@ -100,8 +88,8 @@ jQuery(document).ready(function($) {
 				$('#left-panel').toggleClass('open-menu');
 			}
 		} else {
+			$('.left-panel').animate({width: "280px"}, 100)
 			$('body').toggleClass('open');
-			$('#left-panel').removeClass('open-menu');
 		}
 
 	});

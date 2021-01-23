@@ -37,9 +37,8 @@
     <header id="header" class="header">
         <div class="top-left">
             <div class="navbar-header">
-                <a class="navbar-brand" href="/"><img src="/static/images/logo3.png" alt="Logo"></a>
-                <a class="navbar-brand hidden" href="/"><img src="/static/images/logo3.png" alt="Logo"></a>
-                <a id="menuToggle" class="menutoggle"><i class="fa fa-bars"></i></a>
+                <a class="navbar-brand" href="/"><img src="/static/images/logo.png" alt="Logo"></a>
+                <a class="navbar-brand hidden" href="/"><img src="/static/images/logo.png" alt="Logo"></a>
             </div>
         </div>
         <div class="top-right">
@@ -106,7 +105,7 @@
 <!-- Left Panel -->
 <th:block th:fragment="leftPanel" xmlns:th="http://www.thymeleaf.org">
     <aside id="left-panel" class="left-panel">
-        <nav class="navbar navbar-expand-sm navbar-default">
+        <nav class="navbar navbar-expand-sm h-75 navbar-default">
             <div id="main-menu" class="main-menu collapse navbar-collapse">
                 <ul class="nav navbar-nav">
                     <li id="home-href"><a href="/"><i class="menu-icon fa fa-home"></i>Главная</a></li>
@@ -115,5 +114,6 @@
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
+        <a id="menuToggle" class="menutoggle"><i class="fa menu-icon fa-arrow-right"></i></a>
     </aside>
 </th:block>
