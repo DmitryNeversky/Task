@@ -35,13 +35,12 @@
 
 <th:block th:fragment="header" xmlns:th="http://www.thymeleaf.org">
     <header id="header" class="header">
-        <div class="top-left">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="/"><img src="/static/images/logo.png" alt="Logo"></a>
-                <a class="navbar-brand hidden" href="/"><img src="/static/images/logo.png" alt="Logo"></a>
-            </div>
-        </div>
         <div class="top-right">
+            <div class="top-left">
+                <div class="navbar-header d-flex">
+                    <a class="navbar-brand" href="/"><img src="/static/images/logo.png" id="logo" alt="Logo"></a>
+                </div>
+            </div>
             <div class="header-menu">
                 <div class="header-left">
                     <div class="dropdown for-message">
