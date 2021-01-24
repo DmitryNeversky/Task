@@ -77,7 +77,7 @@
                                 <span class="badge badge-danger float-right mt-1" th:text="${idea.likeCount}">49</span>
                             </div>
                             <div class="card-body">
-                                <p class="card-text description" th:text="${idea.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                <p class="card-text preDescription description" th:text="${idea.description}">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                             </div>
                             <div class="card-body">
                                 <a th:href="@{'/profile/id' + ${idea.user.id}}"><em><small th:text="${idea.user.name + ' ( ' + idea.user.division + ' ) '}">~Full Name~ (~division~)</small></em></a>

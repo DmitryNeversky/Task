@@ -2829,8 +2829,8 @@ select{
 .advanced-form label{
   position: relative;
   color: white;
-  top: 1.4em;
-  left: -3rem;
+  top: 3.6em;
+  left: 0;
 }
 
 .advanced-form input::placeholder{

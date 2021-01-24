@@ -126,7 +126,8 @@ jQuery(document).ready(function($) {
 		$(selector).text((i, txt) => txt.length > maxLength ? txt.substr(0,maxLength) + "..." : txt);
 	}
 
-	truncateText(".preDescription", 200);
+	truncateText(".preDescription", 100);
+	truncateText(".preTitle", 40);
 
 	body.on('click', '#addLike', function(event) {
 		event.preventDefault()
